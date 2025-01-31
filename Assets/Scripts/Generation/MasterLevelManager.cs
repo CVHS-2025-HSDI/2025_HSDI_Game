@@ -37,7 +37,16 @@ public class MasterLevelManager : MonoBehaviour
         // Try to find the existing player and merchant (from PersistentManager)
         player = GameObject.FindWithTag("Player");
         merchant = GameObject.FindWithTag("Merchant");
-
+        
+        if (player != null)
+        {
+            Debug.Log("[MasterLevelManager] Found existing Player in scene.");
+        }
+        if (merchant != null)
+        {
+            Debug.Log("[MasterLevelManager] Found existing Merchant in scene.");
+        }
+        
         // Listen for scene load events
         SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -97,14 +106,15 @@ public class MasterLevelManager : MonoBehaviour
             // Move player to new spawn position
             if (player != null)
             {
+                // Move the existing Player
                 player.transform.position = playerSpawnWorld;
             }
-
-            // Move merchant (only if it's the first floor)
             if (_isFirstFloorLoad && merchant != null)
             {
+                // Remove or comment out the instantiation logic
                 merchant.transform.position = merchantSpawnWorld;
             }
+
             
             var playerObj = GameObject.FindWithTag("Player"); // Or FindAnyObjectByType<PlayerController>(), etc.
             if (playerObj != null)
