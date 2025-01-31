@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public static class RandomSeed
 {
     public static System.Random RNG = new System.Random();

@@ -50,6 +50,7 @@
     <Compile Include="Assets\Scripts\Data\FloorConfig.cs" />
     <Compile Include="Assets\Scripts\Generation\TilemapFloorGenerator.cs" />
     <Compile Include="Assets\Scripts\Generation\RandomSeed.cs" />
+    <Compile Include="Assets\Scripts\Loaders\TowerSceneLoader.cs" />
     <Compile Include="Assets\Scripts\Generation\MasterLevelManager.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.dll</HintPath>
