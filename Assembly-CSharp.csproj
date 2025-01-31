@@ -47,9 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Data\FloorData.cs" />
+    <Compile Include="Assets\Scripts\Player\MerchantController.cs" />
     <Compile Include="Assets\Scripts\Data\FloorConfig.cs" />
     <Compile Include="Assets\Scripts\Generation\TilemapFloorGenerator.cs" />
     <Compile Include="Assets\Scripts\Generation\RandomSeed.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Loaders\TowerSceneLoader.cs" />
     <Compile Include="Assets\Scripts\Generation\MasterLevelManager.cs" />
     <None Include="Library\PackageCache\com.unity.collections@56bff8827a7e\Unity.Collections.LowLevel.ILSupport\README.txt" />

@@ -8,7 +8,7 @@ public class MasterLevelManager : MonoBehaviour
     public int totalFloors = 5; // Can be changed; maybe load from global settings later?
     public int globalSeed = 12345;
 
-    // Prefabs for the player and merchant
+    // Prefabs for player and merchant (only used if they don't already exist)
     public GameObject playerPrefab;
     public GameObject merchantPrefab;
 
@@ -25,9 +25,8 @@ public class MasterLevelManager : MonoBehaviour
 
     void Awake()
     {
-        // If this is your global manager, you might do:
-        // DontDestroyOnLoad(gameObject);
-        // And store a static Instance reference, etc.
+        // Ensure this manager persists across scene changes
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -35,14 +34,14 @@ public class MasterLevelManager : MonoBehaviour
         // Set global seed
         RandomSeed.SetSeed(globalSeed);
 
-        // Find existing player/merchant in scene if they exist
+        // Try to find the existing player and merchant (from PersistentManager)
         player = GameObject.FindWithTag("Player");
         merchant = GameObject.FindWithTag("Merchant");
 
-        // listen for scene load events
+        // Listen for scene load events
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-        // For demonstration: generate the first floor right away
+        // Generate the first floor right away
         GenerateAndLoadFloor(1, isFirstFloor: true);
     }
 
@@ -64,7 +63,6 @@ public class MasterLevelManager : MonoBehaviour
         }
 
         // Now load a fresh "TowerFloorTemplate"
-        // Once loaded, OnSceneLoaded() will be called
         SceneManager.LoadScene("TowerFloorTemplate", LoadSceneMode.Additive);
     }
 
@@ -74,11 +72,10 @@ public class MasterLevelManager : MonoBehaviour
     /// </summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // We only care if the newly loaded scene is "TowerFloorTemplate"
         if (scene.name == "TowerFloorTemplate")
         {
-            // At this point, the floor scene is in memory. Let's find the FloorGenerator.
-            FloorGenerator floorGen = Object.FindFirstObjectByType<FloorGenerator>();
+            // Find the FloorGenerator
+            FloorGenerator floorGen = FindAnyObjectByType<FloorGenerator>(); // Unity 2023+ version of FindObjectOfType
             if (floorGen == null)
             {
                 Debug.LogError("[MasterLevelManager] No FloorGenerator found in TowerFloorTemplate scene!");
@@ -87,38 +84,29 @@ public class MasterLevelManager : MonoBehaviour
 
             // Generate the floor
             FloorData data = floorGen.GenerateFloor(floorConfig, _isFirstFloorLoad);
-
-            // Store the result
             floorsData[_currentFloorNumber] = data;
 
             // Convert tile coordinates to world (with 0.5 offset)
             Vector3 playerSpawnWorld = floorGen.floorTilemap.CellToWorld(data.playerSpawn) + new Vector3(0.5f, 0.5f, 0);
             Vector3 merchantSpawnWorld = floorGen.floorTilemap.CellToWorld(data.merchantSpawn) + new Vector3(0.5f, 0.5f, 0);
 
-            // Move or instantiate the player
+            // Find existing Player and Merchant
+            player = GameObject.FindWithTag("Player");
+            merchant = GameObject.FindWithTag("Merchant");
+
+            // Move player to new spawn position
             if (player != null)
             {
                 player.transform.position = playerSpawnWorld;
             }
-            else
+
+            // Move merchant (only if it's the first floor)
+            if (_isFirstFloorLoad && merchant != null)
             {
-                player = Instantiate(playerPrefab, playerSpawnWorld, Quaternion.identity);
+                merchant.transform.position = merchantSpawnWorld;
             }
 
-            // If it's the first floor, also handle the merchant
-            if (_isFirstFloorLoad)
-            {
-                if (merchant != null)
-                {
-                    merchant.transform.position = merchantSpawnWorld;
-                }
-                else
-                {
-                    merchant = Instantiate(merchantPrefab, merchantSpawnWorld, Quaternion.identity);
-                }
-            }
-
-            Debug.Log($"[MasterLevelManager] Floor {_currentFloorNumber} generated. FirstFloor? {_isFirstFloorLoad}");
+            Debug.Log($"[MasterLevelManager] Floor {_currentFloorNumber} loaded. First Floor? {_isFirstFloorLoad}");
         }
     }
 }
