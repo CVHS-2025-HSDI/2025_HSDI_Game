@@ -105,6 +105,21 @@ public class MasterLevelManager : MonoBehaviour
             {
                 merchant.transform.position = merchantSpawnWorld;
             }
+            
+            var playerObj = GameObject.FindWithTag("Player"); // Or FindAnyObjectByType<PlayerController>(), etc.
+            if (playerObj != null)
+            {
+                // Try to find a CameraFollow in the loaded scenes
+                CameraFollow camFollow = FindAnyObjectByType<CameraFollow>();
+                if (camFollow != null)
+                {
+                    camFollow.SetTarget(playerObj.transform);
+                }
+                else
+                {
+                    Debug.LogWarning("[MasterLevelManager] No CameraFollow found! Did you forget to add it to a persistent camera?");
+                }
+            }
 
             Debug.Log($"[MasterLevelManager] Floor {_currentFloorNumber} loaded. First Floor? {_isFirstFloorLoad}");
         }
