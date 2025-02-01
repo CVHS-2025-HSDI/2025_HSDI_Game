@@ -12,6 +12,17 @@ public class Movement : MonoBehaviour
     private void Update(){
         rb.AddForce(dir * movespeed,ForceMode2D.Force);
         processInputs();
+
+        if(Input.GetKey(KeyCode.W)){
+            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0f);
+        }if(Input.GetKey(KeyCode.A)){
+            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 90f);
+        }if(Input.GetKey(KeyCode.S)){
+            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 180f);
+        }if(Input.GetKey(KeyCode.D)){
+            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 270f);
+        }
+
     }
 
     void FixedUpdate(){
