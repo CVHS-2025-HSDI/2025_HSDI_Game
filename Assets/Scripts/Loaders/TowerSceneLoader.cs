@@ -3,18 +3,20 @@ using UnityEngine.SceneManagement;
 
 public class TowerSceneLoader : MonoBehaviour
 {
-    private bool _loaded = false;
-
+    
+    // Load PersistentManager & UIOverlay if not already loaded
     void Start()
     {
-        // Load PersistentManager & UIOverlay if not already loaded
-        if (!_loaded)
+        // Check if PersistentManager is already loaded
+        if (!SceneManager.GetSceneByName("PersistentManager").isLoaded)
         {
             SceneManager.LoadScene("PersistentManager", LoadSceneMode.Additive);
+        }
+
+        // Do the same for UIOverlay
+        if (!SceneManager.GetSceneByName("UIOverlay").isLoaded)
+        {
             SceneManager.LoadScene("UIOverlay", LoadSceneMode.Additive);
-            // Optionally load an initial floor; could leave this alone
-            // SceneManager.LoadScene("TowerFloorTemplate", LoadSceneMode.Additive);
-            _loaded = true;
         }
     }
 

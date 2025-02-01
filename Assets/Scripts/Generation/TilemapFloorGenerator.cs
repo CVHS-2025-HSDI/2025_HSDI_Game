@@ -219,7 +219,7 @@ public class FloorGenerator : MonoBehaviour
         // Example threshold: if (width + height) < 16 => no rooms.
         if ((width + height) < 16)
         {
-            Debug.Log($"[FloorGenerator] Floor too small ({width}x{height}), skipping rooms.");
+            // Debug.Log($"[FloorGenerator] Floor too small ({width}x{height}), skipping rooms.");
             return;
         }
 
@@ -242,7 +242,7 @@ public class FloorGenerator : MonoBehaviour
             // If there's no space for even a 4x4, skip
             if (maxRoomWidth < 4 || maxRoomHeight < 4)
             {
-                Debug.Log($"[FloorGenerator] Not enough space for room #{i} in {width}x{height} floor.");
+                // Debug.Log($"[FloorGenerator] Not enough space for room #{i} in {width}x{height} floor.");
                 break;
             }
 
@@ -280,7 +280,7 @@ public class FloorGenerator : MonoBehaviour
             if (!validRoom)
             {
                 // Something went wrong. May be hard to debug, good luck
-                Debug.LogWarning($"[FloorGenerator] Could not place room #{i} after {attempts} attempts.");
+                Debug.Log($"[FloorGenerator] Could not place room #{i} after {attempts} attempts. Most likely, the floor is full.");
                 continue;
             }
 
@@ -340,7 +340,7 @@ public class FloorGenerator : MonoBehaviour
             }
 
             // Log the final success for debug purposes:
-            Debug.Log($"[FloorGenerator] Placed room #{i} at {startPos} (size {roomW}x{roomH}).");
+            // Debug.Log($"[FloorGenerator] Placed room #{i} at {startPos} (size {roomW}x{roomH}).");
         }
     }
 
