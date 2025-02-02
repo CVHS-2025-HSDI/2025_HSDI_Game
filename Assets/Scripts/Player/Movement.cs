@@ -13,13 +13,13 @@ public class Movement : MonoBehaviour
         rb.AddForce(dir * movespeed,ForceMode2D.Force);
         processInputs();
 
-        if(Input.GetKey(KeyCode.W)){
+        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)){
             transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0f);
-        }if(Input.GetKey(KeyCode.A)){
+        }if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)){
             transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 90f);
-        }if(Input.GetKey(KeyCode.S)){
+        }if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)){
             transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 180f);
-        }if(Input.GetKey(KeyCode.D)){
+        }if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
             transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 270f);
         }
 
