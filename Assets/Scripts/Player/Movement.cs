@@ -1,16 +1,28 @@
 using UnityEngine;
+using UnityEngine.UI;   
 
 public class Movement : MonoBehaviour
 {
     Rigidbody2D rb;
     public float movespeed;
     Vector2 dir;
+    public float hp;
+    public Text HPText;
+
+
+
     private void Start(){
         rb = GetComponent<Rigidbody2D>();
+        hp = 100;
+      
     }
 
     private void Update(){
+
+        HPText.text = "Health: " + hp.ToString();
+
         rb.AddForce(dir * movespeed,ForceMode2D.Force);
+
         processInputs();
 
         if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)){
@@ -22,6 +34,7 @@ public class Movement : MonoBehaviour
         }if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
             transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 270f);
         }
+
 
     }
 
