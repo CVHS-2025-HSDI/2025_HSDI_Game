@@ -5,7 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Merchant
-  - Health
+  - Enemy
   layers:
   - Default
   - TransparentFX
