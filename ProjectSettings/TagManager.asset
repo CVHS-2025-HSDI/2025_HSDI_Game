@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Merchant
   - Enemy
+  - EnemyTemplate
   layers:
   - Default
   - TransparentFX

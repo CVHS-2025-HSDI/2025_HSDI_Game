@@ -257,7 +257,7 @@ MonoBehaviour:
     hasDoor: 1
     stairsCount: 1
   totalFloors: 5
-  globalSeed: 193205
+  globalSeed: 900
   playerPrefab: {fileID: 1202947168}
   merchantPrefab: {fileID: 293952801}
 --- !u!4 &367589619
