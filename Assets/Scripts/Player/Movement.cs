@@ -19,12 +19,25 @@ public class Movement : MonoBehaviour
     private Vector2 dir;
     public float hp = 100f;
     public Text HPText;
-    public Text SprintText;
+    public Slider staminaBar;
+    public Slider HPBar;
+
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         UpdateUI();
+
+        if (staminaBar != null){
+        staminaBar.maxValue = maxStamina;
+        staminaBar.value = stamina;
+        }
+
+        if (HPBar != null){
+        HPBar.maxValue = 100;
+        HPBar.value = stamina;
+        }
+
     }
 
     private void Update()
@@ -106,13 +119,22 @@ public class Movement : MonoBehaviour
 
     void UpdateUI()
     {
-        if (HPText != null)
+        if (HPBar != null)
         {
-            HPText.text = "Health: " + hp.ToString();
+            HPBar.value = hp;
         }
-        if (SprintText != null)
-        {
-            SprintText.text = "Sprint: " + stamina.ToString("F1");
+
+        Image fill = HPBar.fillRect.GetComponent<Image>();
+        if (hp < 100 * 0.3f)
+            fill.color = Color.red; // Low stamina
+        else if (hp < 100 * 0.6f)
+            fill.color = Color.yellow; // Medium stamina
+        else
+            fill.color = Color.green; // Healthy stamina
+        
+        if (staminaBar != null){
+            staminaBar.value = stamina; 
         }
     }
+
 }
