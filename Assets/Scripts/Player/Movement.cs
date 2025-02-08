@@ -10,12 +10,17 @@ public class Movement : MonoBehaviour
     public float hp;
     public Text HPText;
 
+    public float dashSpeed;
+    public float dashTime;
+
+    private float lastTapW, lastTapA, lastTapS, lastTapD;
+    private float tapDelay = 0.3f;
+    private bool isDashing;
 
 
     private void Start(){
         rb = GetComponent<Rigidbody2D>();
         hp = 100;
-      
     }
 
     private void Update(){
@@ -25,6 +30,7 @@ public class Movement : MonoBehaviour
         rb.AddForce(dir * movespeed,ForceMode2D.Force);
 
         processInputs();
+        processDash();
 
         if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)){
             transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0f);
@@ -35,8 +41,6 @@ public class Movement : MonoBehaviour
         }if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
             transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 270f);
         }
-
-
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
@@ -46,7 +50,7 @@ public class Movement : MonoBehaviour
     }
 
     void FixedUpdate(){
-        Move();
+        if (!isDashing) Move();
     }
 
     void processInputs(){
@@ -57,6 +61,27 @@ public class Movement : MonoBehaviour
     }
 
     void Move(){
-        rb.linearVelocity = new Vector2(dir.x * movespeed,dir.y * movespeed);
+        if (!isDashing) rb.linearVelocity = new Vector2(dir.x * movespeed,dir.y * movespeed);
+    }
+
+    void processDash(){
+        if (Input.GetKeyDown(KeyCode.W)) CheckDoubleTap(ref lastTapW, Vector2.up);
+        if (Input.GetKeyDown(KeyCode.A)) CheckDoubleTap(ref lastTapA, Vector2.left);
+        if (Input.GetKeyDown(KeyCode.S)) CheckDoubleTap(ref lastTapS, Vector2.down);
+        if (Input.GetKeyDown(KeyCode.D)) CheckDoubleTap(ref lastTapD, Vector2.right);
+    }
+
+    void CheckDoubleTap(ref float lastTapTime, Vector2 dashDir){
+        if (Time.time - lastTapTime < tapDelay){
+            StartCoroutine(Dash(dashDir));
+        }
+        lastTapTime = Time.time;
+    }
+
+    System.Collections.IEnumerator Dash(Vector2 dashDir){
+        isDashing = true;
+        rb.velocity = dashDir * dashSpeed;
+        yield return new WaitForSeconds(dashTime);
+        isDashing = false;
     }
 }
