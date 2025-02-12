@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Player\Movement.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyAI.cs" />
     <Compile Include="Assets\Scripts\Data\FloorData.cs" />
     <Compile Include="Assets\Scripts\Player\MerchantController.cs" />
     <Compile Include="Assets\Scripts\Data\FloorConfig.cs" />
