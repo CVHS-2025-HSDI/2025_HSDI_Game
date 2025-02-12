@@ -3,16 +3,18 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 // PROCEDURAL GENERATION VERSION 1
+// AUTHORS: Anton, Vitaly, Aron
 public class FloorGenerator : MonoBehaviour
 {
     public enum RoomShape{
         Rectangular,
         LShaped,
-        TShaped,
+        TShaped
     }
     [Header("Tilemap Reference")]
 
     public Tilemap floorTilemap; // Assign in Inspector
+    public GameObject keyPrefab;
 
     [Header("Tile Assets")]
     public TileBase floorTile;
@@ -22,7 +24,6 @@ public class FloorGenerator : MonoBehaviour
     public TileBase doorTile;  // optional; required later
     public TileBase bossDoorTile; // optional; required later
     public TileBase chestTile; // optional; required later
-    public TileBase keyTile;
 
     // Spawn points found or set during generation
     [HideInInspector] public Vector3Int playerSpawn;
@@ -197,15 +198,9 @@ public class FloorGenerator : MonoBehaviour
     /// </summary>
     private bool IsFloorTile(Vector3Int cellPos, int width, int height)
     {
-        // Check bounds
         if (cellPos.x < 0 || cellPos.x >= width || cellPos.y < 0 || cellPos.y >= height)
             return false;
-
-        TileBase tileAt = floorTilemap.GetTile(cellPos);
-        if (tileAt == floorTile)
-            return true;
-
-        return false;
+        return floorTilemap.GetTile(cellPos) == floorTile;
     }
 
     // /// <summary>
@@ -230,12 +225,41 @@ public class FloorGenerator : MonoBehaviour
         int baseRoomCount = Mathf.Clamp((width + height) / 24, 1, 10);
         bool bossRoomPlaced = false;
 
-        for(int i = 0;i<baseRoomCount;i++){
+        for(int i = 0; i<baseRoomCount; i++){
             RoomShape shape = (RoomShape)RandomSeed.GetRandomInt(0,3);
             bool isBossRoom = (!bossRoomPlaced && i == 0);
             bool success = false;
             for(int attempt = 0;attempt < 20 && !success;attempt++){
+                // Pick a random “bounding rectangle” for the room.
+                int roomW = RandomSeed.GetRandomInt(4, Mathf.Min(width / 2, 8));
+                int roomH = RandomSeed.GetRandomInt(4, Mathf.Min(height / 2, 8));
+                int startX = RandomSeed.GetRandomInt(1, width - roomW - 1);
+                int startY = RandomSeed.GetRandomInt(1, height - roomH - 1);
+                Vector3Int startPos = new Vector3Int(startX, startY, 0);
 
+                // Check if the rectangle fits (this sample simply does a bounds check;
+                // in a complete implementation you might track “used” cells to avoid overlapping rooms)
+                if (startX + roomW >= width - 1 || startY + roomH >= height - 1)
+                    continue;
+
+                // Depending on the shape, call a different drawing method.
+                switch (shape)
+                {
+                    case RoomShape.Rectangular:
+                        success = GenerateRectangularRoom(startPos, roomW, roomH, isBossRoom);
+                        break;
+                    case RoomShape.LShaped:
+                        success = GenerateLShapedRoom(startPos, roomW, roomH, isBossRoom);
+                        break;
+                    case RoomShape.TShaped:
+                        success = GenerateTShapedRoom(startPos, roomW, roomH, isBossRoom);
+                        break;
+                }
+
+                if (success && isBossRoom)
+                {
+                    bossRoomPlaced = true;
+                }
             }
         }
 
@@ -374,7 +398,7 @@ public class FloorGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Randomly places a given number of keys onto floor tiles.
+    /// Randomly places a given number of key objects onto floor tiles.
     /// </summary>
     private void GenerateKeys(int width, int height, int keyCount)
     {
@@ -384,11 +408,16 @@ public class FloorGenerator : MonoBehaviour
         {
             int keyX = RandomSeed.GetRandomInt(0, width);
             int keyY = RandomSeed.GetRandomInt(0, height);
-            Vector3Int pos = new Vector3Int(keyX, keyY, 0);
+            Vector3Int cellPos = new Vector3Int(keyX, keyY, 0);
             // Only place a key if the underlying tile is a floor tile.
-            if (floorTilemap.GetTile(pos) == floorTile)
+            if (floorTilemap.GetTile(cellPos) == floorTile)
             {
-                floorTilemap.SetTile(pos, keyTile);
+                // Convert cell position to world position. 
+                Vector3 worldPos = floorTilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
+            
+                // Instantiate the key prefab at this world position.
+                Instantiate(keyPrefab, worldPos, Quaternion.identity);
+            
                 placedKeys++;
             }
             attempts++;

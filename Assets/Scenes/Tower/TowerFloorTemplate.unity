@@ -333,11 +333,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorTilemap: {fileID: 1349149969}
+  keyPrefab: {fileID: 3690001070531611220, guid: 1fe00d1c7ae947947a29b3316ce019f7, type: 3}
   floorTile: {fileID: 11400000, guid: 94dba78efeb552848a45971b0a7e2eb3, type: 2}
   wallTile: {fileID: 11400000, guid: 1d29a9d17268d8c4ba83d7e76917bb2b, type: 2}
   stairTile: {fileID: 11400000, guid: 7bc1149e6764a73428cddfb28012ac58, type: 2}
   cornerWallTile: {fileID: 11400000, guid: f18d8776ca776b042bcd8557ba532568, type: 2}
   doorTile: {fileID: 11400000, guid: be83604734af19144be7f0dec3b0fbfc, type: 2}
+  bossDoorTile: {fileID: 11400000, guid: be83604734af19144be7f0dec3b0fbfc, type: 2}
   chestTile: {fileID: 11400000, guid: 118ad51002fe7234dbc4aafd87c48392, type: 2}
   playerSpawn: {x: 0, y: 0, z: 0}
   merchantSpawn: {x: 0, y: 0, z: 0}
