@@ -175,13 +175,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 989bddbcf7dc6ee4f8300f588cb3a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprintspeed: 7
-  walkspeed: 5
-  canSprint: 1
-  maxSprintMeter: 30
-  sprintRegenRate: 5
-  sprintRegenDelay: 5
-  currentspeed: 0
+  moveSpeed: 5
+  sprintSpeed: 10
+  maxStamina: 10
+  stamina: 10
+  staminaDrain: 2
+  staminaRegen: 2
+  staminaRecoveryDelay: 1
   hp: 100
-  HPText: {fileID: 0}
-  SprintText: {fileID: 0}
+  staminaBar: {fileID: 0}
+  HPBar: {fileID: 0}
+  dashSpeed: 8
+  dashTime: 0.25

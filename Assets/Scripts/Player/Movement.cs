@@ -5,7 +5,7 @@ public class Movement : MonoBehaviour
 {
     private Rigidbody2D rb;
     public float moveSpeed = 5f;
-    public float sprintSpeed = 8f;
+    public float sprintSpeed = 10f;
 
     public float maxStamina = 100f;
     public float stamina = 100f;
@@ -18,7 +18,6 @@ public class Movement : MonoBehaviour
 
     private Vector2 dir;
     public float hp = 100f;
-    public Text HPText;
     public Slider staminaBar;
     public Slider HPBar;
 
@@ -43,55 +42,32 @@ public class Movement : MonoBehaviour
         HPBar.maxValue = 100;
         HPBar.value = stamina;
         hp = 100;
-    }
-
-    private void Update(){
-
-        HPText.text = "Health: " + hp.ToString();
-
-        rb.AddForce(dir * movespeed,ForceMode2D.Force);
-
-        processInputs();
-        processDash();
-
-        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)){
-            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0f);
-        }if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)){
-            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 90f);
-        }if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)){
-            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 180f);
-        }if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
-            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 270f);
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision){
+    void Update(){
+
+        rb.AddForce(dir * moveSpeed,ForceMode2D.Force);
+
+        ProcessInputs();
+        processDash();
+        HandleRotation();
+        ManageStamina();
+        UpdateUI();
+
+    }
+
+    void OnCollisionEnter2D(Collision2D collision){
         if (collision.gameObject.tag == "Enemy"){
             hp-=10;
         }
 
     }
 
-    private void Update()
-    {
-        ProcessInputs();
-        HandleRotation();
-        ManageStamina();
-        UpdateUI();
-    }
-
     void FixedUpdate(){
         if (!isDashing) Move();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            hp -= 10;
-            UpdateUI();
-        }
-    }
 
     void ProcessInputs()
     {
@@ -112,7 +88,7 @@ public class Movement : MonoBehaviour
         }
     }
 
-    private void Move()
+    void Move()
     {
         if (!isSprinting && stamina < maxStamina && timeSinceStoppedSprinting >= staminaRecoveryDelay){
             ManageStamina();
@@ -121,7 +97,7 @@ public class Movement : MonoBehaviour
             timeSinceStoppedSprinting += Time.deltaTime;
         }
 
-        if (!isDashing) rb.linearVelocity = new Vector2(dir.x * movespeed,dir.y * movespeed);
+        if (!isDashing) rb.linearVelocity = new Vector2(dir.x * moveSpeed,dir.y * moveSpeed);
     }
 
     void processDash(){
@@ -145,13 +121,13 @@ public class Movement : MonoBehaviour
         isDashing = false;
     }
 
-    private void DrainStamina()
+    void DrainStamina()
     {
         stamina -= staminaDrain * Time.deltaTime;
         stamina = Mathf.Clamp(stamina, 0f, maxStamina);
     }
 
-    private void ManageStamina()
+    void ManageStamina()
     {
         if (!isSprinting && stamina < maxStamina && timeSinceStoppedSprinting >= staminaRecoveryDelay)
         {
@@ -171,8 +147,7 @@ public class Movement : MonoBehaviour
 
     void UpdateUI()
     {
-        if (HPBar != null)
-        {
+        if (HPBar != null){
             HPBar.value = hp;
         }
 
@@ -188,5 +163,5 @@ public class Movement : MonoBehaviour
             staminaBar.value = stamina; 
         }
     }
-
 }
+

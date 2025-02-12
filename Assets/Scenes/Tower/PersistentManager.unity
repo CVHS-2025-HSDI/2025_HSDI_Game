@@ -1331,33 +1331,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7480648938749263691, guid: a1f877c04f377604bb1e27938e35d83d, type: 3}
-      propertyPath: stamina
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7480648938749263691, guid: a1f877c04f377604bb1e27938e35d83d, type: 3}
-      propertyPath: moveSpeed
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7480648938749263691, guid: a1f877c04f377604bb1e27938e35d83d, type: 3}
       propertyPath: SprintText
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7480648938749263691, guid: a1f877c04f377604bb1e27938e35d83d, type: 3}
-      propertyPath: maxStamina
-      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7480648938749263691, guid: a1f877c04f377604bb1e27938e35d83d, type: 3}
       propertyPath: staminaBar
       value: 
       objectReference: {fileID: 666324229}
-    - target: {fileID: 7480648938749263691, guid: a1f877c04f377604bb1e27938e35d83d, type: 3}
-      propertyPath: staminaDrain
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7480648938749263691, guid: a1f877c04f377604bb1e27938e35d83d, type: 3}
-      propertyPath: staminaRegen
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 7480648938749263691, guid: a1f877c04f377604bb1e27938e35d83d, type: 3}
       propertyPath: maxSprintMeter
       value: 10
