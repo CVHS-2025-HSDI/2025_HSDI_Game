@@ -25,6 +25,10 @@ public class FloorGenerator : MonoBehaviour
     public TileBase bossDoorTile; // optional; required later
     public TileBase chestTile; // optional; required later
 
+    [Header("Enemy Settings")]
+    public int minEnemies = 60;        // Minimum number of enemies to spawn on the floor
+    public int maxEnemies = 61;        // Maximum number of enemies to spawn on the floor
+
     // Spawn points found or set during generation
     [HideInInspector] public Vector3Int playerSpawn;
     [HideInInspector] public Vector3Int merchantSpawn;
@@ -33,6 +37,12 @@ public class FloorGenerator : MonoBehaviour
     private List<Vector3Int> _placedStairs = new List<Vector3Int>();
     private List<Vector3Int> _placedChests = new List<Vector3Int>();
     private List<Vector3Int> _placedDoors = new List<Vector3Int>();
+
+    // New: list to store enemy world positions (for spacing checks)
+    private List<Vector3> _placedEnemies = new List<Vector3>();
+
+    public Transform enemyContainer;
+    public GameObject enemyPrefab;
 
     /// <summary>
     /// Generates a floor using the given config and randomization, then returns FloorData for later reference.
@@ -46,6 +56,7 @@ public class FloorGenerator : MonoBehaviour
         // Clear any existing tiles/stairs from a prior generation
         floorTilemap.ClearAllTiles();
         _placedStairs.Clear();
+        _placedEnemies.Clear();
 
         // 2) Generate floor tiles
         GenerateFloorTiles(width, height);
@@ -73,11 +84,14 @@ public class FloorGenerator : MonoBehaviour
         }
         
 
-        // 7) Prepare the FloorData to store or return
+        // 7) Generate enemies
+        GenerateEnemies(width, height);
+
+        // 8) Prepare the FloorData to store or return
         FloorData data = new FloorData
         {
-            playerSpawn   = (Vector3Int)playerSpawn,
-            merchantSpawn = (Vector3Int)merchantSpawn,
+            playerSpawn   = playerSpawn,
+            merchantSpawn = merchantSpawn,
             stairPositions = _placedStairs.ConvertAll(s => (Vector2Int)s).ToArray(),
             chestPositions = _placedChests.ConvertAll(s => (Vector2Int)s).ToArray(),
             roomDoors = _placedDoors.ConvertAll(s => (Vector2Int)s).ToArray()
@@ -135,7 +149,6 @@ public class FloorGenerator : MonoBehaviour
             TileBase existing = floorTilemap.GetTile(pos);
             if (existing == wallTile || existing == cornerWallTile)
             {
-                // if it's a wall, skip placing stairs here
                 i--;
                 continue;
             }
@@ -151,8 +164,8 @@ public class FloorGenerator : MonoBehaviour
     private void SetupFirstFloorSpawns()
     {
         Vector3Int doorPosition = new Vector3Int(-1, 0, 0);
-        playerSpawn = new Vector3Int(0, 0, 0);  // Adjusted to match (0.5, 0.5) world position
-        merchantSpawn = new Vector3Int(3, 0, 0); // Adjusted to match (3.5, 0.5) world position
+        playerSpawn = new Vector3Int(0, 0, 0);  // For (0.5, 0.5) world position when offset is added
+        merchantSpawn = new Vector3Int(3, 0, 0); // For (3.5, 0.5) world position
 
         // Overwrite the wall tile with a door tile if needed
         if (doorTile != null)
@@ -163,8 +176,7 @@ public class FloorGenerator : MonoBehaviour
 
 
     /// <summary>
-    /// For subsequent floors, place player near a randomly picked stair. We check adjacent tiles for walls or out-of-bounds.
-    /// If the immediate right is invalid, we try left. If both are invalid, we just place the player on the stair tile.
+    /// For subsequent floors, place player near a randomly picked stair.
     /// </summary>
     private void SetupSubsequentFloorSpawns(int width, int height)
     {
@@ -190,7 +202,7 @@ public class FloorGenerator : MonoBehaviour
             return;
         }
 
-        playerSpawn = stairPos; // Default case: on the stairs
+        playerSpawn = stairPos;
     }
 
     /// <summary>
@@ -203,22 +215,8 @@ public class FloorGenerator : MonoBehaviour
         return floorTilemap.GetTile(cellPos) == floorTile;
     }
 
-    // /// <summary>
-    // /// Returns a random stair position. We do a naive approach here, but ideally you'd store all placed stairs.
-    // /// This is used *internally* before we changed to the approach of storing them in _placedStairs.
-    // /// NOW UNUSED. LEAVING COMMENTED
-    // /// </summary>
-    // private Vector3Int GetRandomStairPosition(int width, int height)
-    // {
-    //     // For demonstration, pick any random position. 
-    //     // In a real scenario, you'd pick from _placedStairs for guaranteed stairs.
-    //     int stairX = RandomSeed.GetRandomInt(0, width);
-    //     int stairY = RandomSeed.GetRandomInt(0, height);
-    //     return new Vector3Int(stairX, stairY, 0);
-    // }
-
     /// <summary>
-    /// Places rectangular rooms that do not overlap. Each room has walls, corners, a door, and optionally a chest.
+    /// Places rectangular rooms that do not overlap.
     /// </summary>
     private void GenerateRooms(int width, int height, FloorConfig config)
     {
@@ -267,9 +265,63 @@ public class FloorGenerator : MonoBehaviour
             Vector3Int forcedBossPos = new Vector3Int(width/4,height/4,0);
             GenerateRectangularRoom(forcedBossPos,6,6,true);
         }
-        
-        
     }
+    
+    private void GenerateEnemies(int width, int height){
+        Debug.Log("Generate Enemies called!");
+        if (enemyPrefab == null)
+        {
+            Debug.LogWarning("[FloorGenerator] No enemyPrefab assigned!");
+            return;
+        }
+
+        // Determine how many enemies to spawn; this can be based on floor area or a fixed range.
+        int numEnemies = RandomSeed.GetRandomInt(minEnemies, maxEnemies + 1);
+
+
+
+        for (int i = 0; i < numEnemies; i++)
+        {
+            bool validSpawn = false;
+            Vector3 candidatePos = Vector3.zero;
+            int attempts = 0;
+
+            // Randomly choose a minimum distance for this enemy (between 3 and 6)
+            float minDistance = Random.Range(3f, 6f);
+
+            while (!validSpawn && attempts < 20)
+            {
+                // Choose a random tile coordinate on the floor (assume floor area spans from (0,0) to (width-1,height-1))
+                int x = RandomSeed.GetRandomInt(0, width);
+                int y = RandomSeed.GetRandomInt(0, height);
+                // Convert cell position to world position (adding 0.5 to center on the tile)
+                candidatePos = floorTilemap.CellToWorld(new Vector3Int(x, y, 0)) + new Vector3(0.5f, 0.5f, 0);
+                Vector3Int candidatePosVec3Int = new Vector3Int(x, y, 0);
+
+                validSpawn = true;
+                foreach (Vector3 pos in _placedEnemies)
+                {
+                    if (Vector3.Distance(candidatePos, pos) < minDistance || floorTilemap.GetTile(candidatePosVec3Int) != floorTile)
+                    {
+                        validSpawn = false;
+                        break;
+                    }
+                }
+                attempts++;
+            }
+
+            if (validSpawn)
+            {
+                GameObject enemy = Instantiate(enemyPrefab, candidatePos, Quaternion.identity, enemyContainer);
+                _placedEnemies.Add(candidatePos);
+            }
+            else
+            {
+                Debug.LogWarning($"[FloorGenerator] Could not find valid enemy spawn after {attempts} attempts for enemy {i}.");
+            }
+        }
+    }
+    
     /// <summary>
     /// Generates a rectangular room. If isBossRoom is true, then place the stairs in its center and use a boss door tile.
     /// Returns true if the room was successfully placed.

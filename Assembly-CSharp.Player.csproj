@@ -46,16 +46,22 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Weapons\SwordAttackRadiusScript.cs" />
     <Compile Include="Assets\Scripts\Player\Movement.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyAI.cs" />
     <Compile Include="Assets\Scripts\Data\FloorData.cs" />
     <Compile Include="Assets\Scripts\Player\MerchantController.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerInfo_placeholder.cs" />
     <Compile Include="Assets\Scripts\Data\FloorConfig.cs" />
+    <Compile Include="Assets\Scripts\Weapons\SwordProjectileScript.cs" />
     <Compile Include="Assets\Scripts\Generation\TilemapFloorGenerator.cs" />
     <Compile Include="Assets\Scripts\Player\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\Weapons\SwordScript.cs" />
     <Compile Include="Assets\Scripts\Generation\RandomSeed.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Loaders\TowerSceneLoader.cs" />
     <Compile Include="Assets\Scripts\Generation\MasterLevelManager.cs" />
+    <Compile Include="Assets\Scripts\Player\CursorScript_placeholder.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.dll</HintPath>
     </Reference>
