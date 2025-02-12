@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 // PROCEDURAL GENERATION VERSION 1
 public class FloorGenerator : MonoBehaviour
 {
-    public enum FloorShape{
+    public enum RoomShape{
         Rectangular,
         LShaped,
         TShaped,
@@ -20,6 +20,7 @@ public class FloorGenerator : MonoBehaviour
     public TileBase stairTile;
     public TileBase cornerWallTile;
     public TileBase doorTile;  // optional; required later
+    public TileBase bossDoorTile; // optional; required later
     public TileBase chestTile; // optional; required later
     public TileBase keyTile;
 
@@ -231,7 +232,7 @@ public class FloorGenerator : MonoBehaviour
 
         for(int i = 0;i<baseRoomCount;i++){
             RoomShape shape = (RoomShape)RandomSeed.GetRandomInt(0,3);
-            bool isBossRoom = (!bossRoomPlaced && i == 0)
+            bool isBossRoom = (!bossRoomPlaced && i == 0);
             bool success = false;
             for(int attempt = 0;attempt < 20 && !success;attempt++){
 
@@ -245,5 +246,152 @@ public class FloorGenerator : MonoBehaviour
         
         
     }
+    /// <summary>
+    /// Generates a rectangular room. If isBossRoom is true, then place the stairs in its center and use a boss door tile.
+    /// Returns true if the room was successfully placed.
+    /// </summary>
+    private bool GenerateRectangularRoom(Vector3Int startPos, int roomW, int roomH, bool isBossRoom)
+    {
+        // Draw the room perimeter walls
+        for (int x = startPos.x; x < startPos.x + roomW; x++)
+        {
+            floorTilemap.SetTile(new Vector3Int(x, startPos.y + roomH, 0), wallTile);
+            floorTilemap.SetTile(new Vector3Int(x, startPos.y - 1, 0), wallTile);
+        }
+        for (int y = startPos.y - 1; y <= startPos.y + roomH; y++)
+        {
+            floorTilemap.SetTile(new Vector3Int(startPos.x - 1, y, 0), wallTile);
+            floorTilemap.SetTile(new Vector3Int(startPos.x + roomW, y, 0), wallTile);
+        }
+        // Optionally add corner walls
+        if (cornerWallTile != null)
+        {
+            floorTilemap.SetTile(new Vector3Int(startPos.x - 1,     startPos.y + roomH, 0), cornerWallTile);
+            floorTilemap.SetTile(new Vector3Int(startPos.x + roomW, startPos.y + roomH, 0), cornerWallTile);
+            floorTilemap.SetTile(new Vector3Int(startPos.x - 1,     startPos.y - 1,     0), cornerWallTile);
+            floorTilemap.SetTile(new Vector3Int(startPos.x + roomW, startPos.y - 1,     0), cornerWallTile);
+        }
 
+        // Place a door along one wall.
+        Vector3Int doorPos;
+        if (isBossRoom)
+        {
+            // For a boss room, mark the door with a special boss door tile.
+            doorPos = new Vector3Int(startPos.x, startPos.y + roomH / 2, 0);
+            floorTilemap.SetTile(doorPos, bossDoorTile != null ? bossDoorTile : doorTile);
+        }
+        else
+        {
+            List<Vector3Int> possibleDoorPositions = new List<Vector3Int>
+            {
+                new Vector3Int(RandomSeed.GetRandomInt(startPos.x, startPos.x + roomW), startPos.y - 1, 0),   // Bottom
+                new Vector3Int(RandomSeed.GetRandomInt(startPos.x, startPos.x + roomW), startPos.y + roomH, 0),   // Top
+                new Vector3Int(startPos.x - 1, RandomSeed.GetRandomInt(startPos.y, startPos.y + roomH), 0),      // Left
+                new Vector3Int(startPos.x + roomW, RandomSeed.GetRandomInt(startPos.y, startPos.y + roomH), 0)       // Right
+            };
+            doorPos = possibleDoorPositions[RandomSeed.GetRandomInt(0, possibleDoorPositions.Count)];
+            floorTilemap.SetTile(doorPos, doorTile);
+        }
+        _placedDoors.Add(doorPos);
+
+        // Place a chest inside (we add extra chests for density)
+        if (chestTile != null)
+        {
+            int chestX = RandomSeed.GetRandomInt(startPos.x + 1, startPos.x + roomW - 1);
+            int chestY = RandomSeed.GetRandomInt(startPos.y + 1, startPos.y + roomH - 1);
+            Vector3Int chestPos = new Vector3Int(chestX, chestY, 0);
+            floorTilemap.SetTile(chestPos, chestTile);
+            _placedChests.Add(chestPos);
+        }
+
+        // If this is the boss room, force the stairs in its center.
+        if (isBossRoom)
+        {
+            Vector3Int bossStairPos = new Vector3Int(startPos.x + roomW / 2, startPos.y + roomH / 2, 0);
+            floorTilemap.SetTile(bossStairPos, stairTile);
+            _placedStairs.Add(bossStairPos);
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Generates an L-shaped room by “carving out” one quadrant from a rectangular block.
+    /// </summary>
+    private bool GenerateLShapedRoom(Vector3Int startPos, int roomW, int roomH, bool isBossRoom)
+    {
+        // For simplicity, first draw the full rectangle:
+        GenerateRectangularRoom(startPos, roomW, roomH, isBossRoom);
+        // Then “carve out” one corner by replacing those wall tiles with floor tiles.
+        // (Choose one of the four corners at random.)
+        int carveWidth = roomW / 2;
+        int carveHeight = roomH / 2;
+        int corner = RandomSeed.GetRandomInt(0, 4);
+        int carveStartX = (corner == 0 || corner == 3) ? startPos.x : startPos.x + roomW - carveWidth;
+        int carveStartY = (corner == 0 || corner == 1) ? startPos.y : startPos.y + roomH - carveHeight;
+        for (int x = carveStartX; x < carveStartX + carveWidth; x++)
+        {
+            for (int y = carveStartY; y < carveStartY + carveHeight; y++)
+            {
+                floorTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
+            }
+        }
+        // (You may want to re-draw walls along the new “internal” edges.)
+        return true;
+    }
+
+    /// <summary>
+    /// Generates a T-shaped room by “removing” a section from one edge of a rectangular room.
+    /// </summary>
+    private bool GenerateTShapedRoom(Vector3Int startPos, int roomW, int roomH, bool isBossRoom)
+    {
+        // Draw the full rectangular room first.
+        GenerateRectangularRoom(startPos, roomW, roomH, isBossRoom);
+        // Remove a notch from one of the four edges (choose randomly).
+        int notchSize = Mathf.Max(2, roomW / 4);
+        int notchEdge = RandomSeed.GetRandomInt(0, 4);
+        if (notchEdge == 0) // bottom edge
+        {
+            for (int x = startPos.x + roomW/2 - notchSize/2; x < startPos.x + roomW/2 + notchSize/2; x++)
+                floorTilemap.SetTile(new Vector3Int(x, startPos.y - 1, 0), floorTile);
+        }
+        else if (notchEdge == 1) // top edge
+        {
+            for (int x = startPos.x + roomW/2 - notchSize/2; x < startPos.x + roomW/2 + notchSize/2; x++)
+                floorTilemap.SetTile(new Vector3Int(x, startPos.y + roomH, 0), floorTile);
+        }
+        else if (notchEdge == 2) // left edge
+        {
+            for (int y = startPos.y + roomH/2 - notchSize/2; y < startPos.y + roomH/2 + notchSize/2; y++)
+                floorTilemap.SetTile(new Vector3Int(startPos.x - 1, y, 0), floorTile);
+        }
+        else // right edge
+        {
+            for (int y = startPos.y + roomH/2 - notchSize/2; y < startPos.y + roomH/2 + notchSize/2; y++)
+                floorTilemap.SetTile(new Vector3Int(startPos.x + roomW, y, 0), floorTile);
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Randomly places a given number of keys onto floor tiles.
+    /// </summary>
+    private void GenerateKeys(int width, int height, int keyCount)
+    {
+        int placedKeys = 0;
+        int attempts = 0;
+        while (placedKeys < keyCount && attempts < 100)
+        {
+            int keyX = RandomSeed.GetRandomInt(0, width);
+            int keyY = RandomSeed.GetRandomInt(0, height);
+            Vector3Int pos = new Vector3Int(keyX, keyY, 0);
+            // Only place a key if the underlying tile is a floor tile.
+            if (floorTilemap.GetTile(pos) == floorTile)
+            {
+                floorTilemap.SetTile(pos, keyTile);
+                placedKeys++;
+            }
+            attempts++;
+        }
+    }
 }
