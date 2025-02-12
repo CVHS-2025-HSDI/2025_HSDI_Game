@@ -80,7 +80,7 @@ public class Movement : MonoBehaviour
 
     System.Collections.IEnumerator Dash(Vector2 dashDir){
         isDashing = true;
-        rb.velocity = dashDir * dashSpeed;
+        rb.linearVelocity = dashDir * dashSpeed;
         yield return new WaitForSeconds(dashTime);
         isDashing = false;
     }
