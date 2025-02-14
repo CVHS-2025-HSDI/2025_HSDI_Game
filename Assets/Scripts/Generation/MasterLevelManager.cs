@@ -104,22 +104,31 @@ public class MasterLevelManager : MonoBehaviour
             merchant = GameObject.FindWithTag("Merchant");
 
             // Move player to new spawn position
-            if (player != null)
+            if (player == null)
             {
-                // Move the existing Player
+                player = Instantiate(playerPrefab, playerSpawnWorld, Quaternion.identity);
+                player.tag = "Player"; // Make sure the prefab's tag is set correctly.
+                Debug.Log("[MasterLevelManager] Instantiated new Player prefab.");
+            }
+            else
+            {
                 player.transform.position = playerSpawnWorld;
             }
-            if (_isFirstFloorLoad && merchant != null)
+            
+            if (merchant == null && _isFirstFloorLoad)
             {
-                // Remove or comment out the instantiation logic
+                merchant = Instantiate(merchantPrefab, merchantSpawnWorld, Quaternion.identity);
+                merchant.tag = "Merchant";
+                Debug.Log("[MasterLevelManager] Instantiated new Merchant prefab.");
+            }
+            else if (_isFirstFloorLoad)
+            {
                 merchant.transform.position = merchantSpawnWorld;
             }
-
             
-            var playerObj = GameObject.FindWithTag("Player"); // Or FindAnyObjectByType<PlayerController>(), etc.
+            GameObject playerObj = GameObject.FindWithTag("Player");
             if (playerObj != null)
             {
-                // Try to find a CameraFollow in the loaded scenes
                 CameraFollow camFollow = FindAnyObjectByType<CameraFollow>();
                 if (camFollow != null)
                 {
