@@ -251,15 +251,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorConfig:
-    minWidth: 16
-    maxWidth: 95
-    minHeight: 16
-    maxHeight: 95
+    minWidth: 64
+    maxWidth: 64
+    minHeight: 64
+    maxHeight: 64
     useCornerWalls: 1
     hasDoor: 1
     stairsCount: 1
-  totalFloors: 5
-  globalSeed: 900
+  totalFloors: 16
+  globalSeed: 5493849
   playerPrefab: {fileID: 1168846988}
   merchantPrefab: {fileID: 7853170730201843219, guid: d9d56aad10fdeb242a9fe5ac45ab6f31, type: 3}
 --- !u!4 &367589619
@@ -510,11 +510,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1744433928483367356, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 1744433928483367356, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 1744433928483367356, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -552,14 +552,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3139837161156042174, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3244085669973941387, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
       propertyPath: HPText
       value: 
       objectReference: {fileID: 766207539}
-    m_RemovedComponents: []
+    - target: {fileID: 7720371935904034702, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8140203405567259088, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
+    - {fileID: 7720371935904034702, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3139837161156042174, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1168846994}
+    - targetCorrespondingSourceObject: {fileID: 3139837161156042174, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1168846993}
   m_SourcePrefab: {fileID: 100100000, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
 --- !u!4 &1168846987 stripped
 Transform:
@@ -571,6 +587,69 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3139837161156042174, guid: dc8c6c2fd95731c43abae4bfea54099f, type: 3}
   m_PrefabInstance: {fileID: 1168846986}
   m_PrefabAsset: {fileID: 0}
+--- !u!58 &1168846993
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168846988}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.45
+--- !u!50 &1168846994
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168846988}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &2065942979
 GameObject:
   m_ObjectHideFlags: 0

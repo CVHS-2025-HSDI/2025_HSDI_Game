@@ -60,6 +60,7 @@
     <Compile Include="Assets\Scripts\Generation\RandomSeed.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Loaders\TowerSceneLoader.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Chest.cs" />
     <Compile Include="Assets\Scripts\Generation\MasterLevelManager.cs" />
     <Compile Include="Assets\Scripts\Player\CursorScript_placeholder.cs" />
     <Reference Include="UnityEngine">
