@@ -13,7 +13,10 @@ public class SwordAttackRadiusScript : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
+        if(timer < ss.getAttackRate())
+        {
+            timer += Time.deltaTime;
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)

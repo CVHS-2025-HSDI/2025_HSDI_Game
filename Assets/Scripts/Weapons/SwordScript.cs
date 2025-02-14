@@ -30,79 +30,125 @@ public class SwordScript : MonoBehaviour
 
     void Update()
     {
-        if (target != null)
+        if (isPlayer)
         {
-            if (isPlayer)
+            //if m1 click and attack timer is reached: attack
+            if (Input.GetMouseButtonDown(0) && timer >= attackRate)
             {
-                //if m1 click and attack timer is reached: attack
-                if (Input.GetMouseButtonDown(0) && timer >= attackRate)
-                {
-                    attack();
-                    timer = 0;
-                }
+                attack();
+                timer = 0;
             }
             timer += Time.deltaTime;
         }
     }
 
-    public void attack() //for player change to attack in facing direction rather than target - IN PROGRESS
+    public void attack()
     {
-        //get the correct position and rotation of projectile based on target's position. hardcoded values may change when we get the official sprites
-        if (Math.Abs(target.transform.position.x - transform.position.x) >= 1 && Math.Abs(target.transform.position.y - transform.position.y) >= 1)
+        if (isPlayer)
         {
-            //up and right
-            if (target.transform.position.x > transform.position.x && target.transform.position.y > transform.position.y)
+            //attacks in direction facing
+            GameObject player = gameObject.transform.parent.gameObject;
+            Movement m = player.GetComponent<Movement>();
+            if (m.getFacing().Equals("up"))
             {
-                projPos = new Vector3(transform.position.x + 1f, transform.position.y + 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 270));
+                projPos = new Vector3(transform.position.x, transform.position.y + 1.5f);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 315));
             }
-            //up and left
-            else if (target.transform.position.x < transform.position.x && target.transform.position.y > transform.position.y)
-            {
-                projPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 0));
-            }
-            //down and right
-            else if (target.transform.position.x > transform.position.x && target.transform.position.y < transform.position.y)
-            {
-                projPos = new Vector3(transform.position.x + 1f, transform.position.y - 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 180));
-            }
-            //down and left
-            else if (target.transform.position.x < transform.position.x && target.transform.position.y < transform.position.y)
-            {
-                projPos = new Vector3(transform.position.x - 1f, transform.position.y - 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 90));
-            }
-        }
-        else if (Math.Abs(target.transform.position.x - transform.position.x) > Math.Abs(target.transform.position.y - transform.position.y))
-        {
-            //left
-            if (target.transform.position.x < transform.position.x)
-            {
-                projPos = new Vector3(transform.position.x - 1.5f, transform.position.y);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 45));
-            }
-            //right
-            else if (target.transform.position.x > transform.position.x)
-            {
-                projPos = new Vector3(transform.position.x + 1.5f, transform.position.y);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 225));
-            }
-        }
-        else
-        {
-            //down
-            if (target.transform.position.y < transform.position.y)
+            else if (m.getFacing().Equals("down"))
             {
                 projPos = new Vector3(transform.position.x, transform.position.y - 1.5f);
                 projRot = Quaternion.Euler(new Vector3(0, 0, 135));
             }
-            //up
-            else if(target.transform.position.y > transform.position.y)
+            else if (m.getFacing().Equals("right"))
             {
-                projPos = new Vector3(transform.position.x, transform.position.y + 1.5f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 315));
+                projPos = new Vector3(transform.position.x + 1.5f, transform.position.y);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 225));
+            }
+            else if (m.getFacing().Equals("left"))
+            {
+                projPos = new Vector3(transform.position.x - 1.5f, transform.position.y);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 45));
+            }
+            else if (m.getFacing().Equals("up left"))
+            {
+                projPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 0));
+            }
+            else if (m.getFacing().Equals("up right"))
+            {
+                projPos = new Vector3(transform.position.x + 1f, transform.position.y + 1f);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 270));
+            }
+            else if (m.getFacing().Equals("down left"))
+            {
+                projPos = new Vector3(transform.position.x - 1f, transform.position.y - 1f);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 90));
+            }
+            else if (m.getFacing().Equals("down right"))
+            {
+                projPos = new Vector3(transform.position.x + 1f, transform.position.y - 1f);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 180));
+            }
+        }
+        else
+        {
+            //get the correct position and rotation of projectile based on target's position. hardcoded values may change when we get the official sprites
+            if (Math.Abs(target.transform.position.x - transform.position.x) >= 1 && Math.Abs(target.transform.position.y - transform.position.y) >= 1)
+            {
+                //up and right
+                if (target.transform.position.x > transform.position.x && target.transform.position.y > transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x + 1f, transform.position.y + 1f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 270));
+                }
+                //up and left
+                else if (target.transform.position.x < transform.position.x && target.transform.position.y > transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 0));
+                }
+                //down and right
+                else if (target.transform.position.x > transform.position.x && target.transform.position.y < transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x + 1f, transform.position.y - 1f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 180));
+                }
+                //down and left
+                else if (target.transform.position.x < transform.position.x && target.transform.position.y < transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x - 1f, transform.position.y - 1f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 90));
+                }
+            }
+            else if (Math.Abs(target.transform.position.x - transform.position.x) > Math.Abs(target.transform.position.y - transform.position.y))
+            {
+                //left
+                if (target.transform.position.x < transform.position.x)
+                {
+                    projPos = new Vector3(transform.position.x - 1.5f, transform.position.y);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 45));
+                }
+                //right
+                else if (target.transform.position.x > transform.position.x)
+                {
+                    projPos = new Vector3(transform.position.x + 1.5f, transform.position.y);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 225));
+                }
+            }
+            else
+            {
+                //down
+                if (target.transform.position.y < transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x, transform.position.y - 1.5f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 135));
+                }
+                //up
+                else if (target.transform.position.y > transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x, transform.position.y + 1.5f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 315));
+                }
             }
         }
 

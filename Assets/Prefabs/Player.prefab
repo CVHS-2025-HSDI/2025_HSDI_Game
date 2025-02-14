@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7720371935904034702}
   - component: {fileID: 8140203405567259088}
   - component: {fileID: 3244085669973941387}
+  - component: {fileID: 5649592823063940540}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -175,32 +176,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 989bddbcf7dc6ee4f8300f588cb3a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movespeed: 10
+  moveSpeed: 5
+  sprintSpeed: 10
+  maxStamina: 100
+  stamina: 100
+  staminaDrain: 10
+  staminaRegen: 5
+  staminaRecoveryDelay: 1
   hp: 100
-  HPText: {fileID: 0}
+  staminaBar: {fileID: 0}
+  HPBar: {fileID: 0}
   dashSpeed: 0
   dashTime: 0
---- !u!114 &7480648938749263691
+--- !u!114 &5649592823063940540
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7037524168989723226}
+  m_GameObject: {fileID: 3139837161156042174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 989bddbcf7dc6ee4f8300f588cb3a3c3, type: 3}
+  m_Script: {fileID: 11500000, guid: f78e1aa84f8aa5243a7d9f19af76a7b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  sprintSpeed: 10
-  maxStamina: 10
-  stamina: 10
-  staminaDrain: 2
-  staminaRegen: 2
-  staminaRecoveryDelay: 1
-  hp: 100
-  staminaBar: {fileID: 0}
-  HPBar: {fileID: 0}
-  dashSpeed: 8
-  dashTime: 0.25
+  weaponPrefab: {fileID: 8222599173819168208, guid: 1ee43d03ef4980f44acb20d2abfdbb45, type: 3}

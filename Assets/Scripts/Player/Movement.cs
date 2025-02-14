@@ -28,6 +28,8 @@ public class Movement : MonoBehaviour
     private float tapDelay = 0.3f;
     private bool isDashing;
 
+    private string facing = "up";
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -142,7 +144,45 @@ public class Movement : MonoBehaviour
         {
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+
+            if (angle - 90 == 0)
+            {
+                facing = "up";
+            }
+            else if (angle - 90 == -180)
+            {
+                facing = "down";
+            }
+            else if (angle - 90 == 90)
+            {
+                facing = "left";
+            }
+            else if (angle - 90 == -90)
+            {
+                facing = "right";
+            }
+            else if (angle - 90 == 45)
+            {
+                facing = "up left";
+            }
+            else if (angle - 90 == -45)
+            {
+                facing = "up right";
+            }
+            else if (angle - 90 == -225)
+            {
+                facing = "down left";
+            }
+            else if (angle - 90 == -135)
+            {
+                facing = "down right";
+            }
         }
+    }
+
+    public string getFacing()
+    {
+        return facing;
     }
 
     void UpdateUI()
