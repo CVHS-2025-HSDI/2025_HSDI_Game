@@ -53,16 +53,20 @@
     <Compile Include="Assets\Scripts\Player\MerchantController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInfo_placeholder.cs" />
     <Compile Include="Assets\Scripts\Data\FloorConfig.cs" />
+    <Compile Include="Assets\Scripts\Player\InventoryItem.cs" />
     <Compile Include="Assets\Scripts\Weapons\SwordProjectileScript.cs" />
     <Compile Include="Assets\Scripts\Generation\TilemapFloorGenerator.cs" />
     <Compile Include="Assets\Scripts\Player\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Weapons\SwordScript.cs" />
     <Compile Include="Assets\Scripts\Generation\RandomSeed.cs" />
+    <Compile Include="Assets\Scripts\Player\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Loaders\TowerSceneLoader.cs" />
     <Compile Include="Assets\Scripts\Inventory\Chest.cs" />
     <Compile Include="Assets\Scripts\Generation\MasterLevelManager.cs" />
     <Compile Include="Assets\Scripts\Player\CursorScript_placeholder.cs" />
+    <Compile Include="Assets\Scripts\Player\Item.cs" />
+    <Compile Include="Assets\Scripts\Player\InventorySlot.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.dll</HintPath>
     </Reference>
