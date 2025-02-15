@@ -119,6 +119,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &36144729
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 36144730}
+  m_Layer: 0
+  m_Name: ObjectContainer
+  m_TagString: Container
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &36144730
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36144729}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1349149966
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,15 +436,16 @@ MonoBehaviour:
   floorTilemap: {fileID: 1349149969}
   keyPrefab: {fileID: 3690001070531611220, guid: 1fe00d1c7ae947947a29b3316ce019f7, type: 3}
   chestPrefab: {fileID: 1400404957489357247, guid: b1402ac34a49503418b583e6ee8f6d41, type: 3}
+  objectContainer: {fileID: 36144730}
   floorTile: {fileID: 11400000, guid: 94dba78efeb552848a45971b0a7e2eb3, type: 2}
   wallTile: {fileID: 11400000, guid: 1d29a9d17268d8c4ba83d7e76917bb2b, type: 2}
-  doorTile: {fileID: 11400000, guid: be83604734af19144be7f0dec3b0fbfc, type: 2}
-  stairDownTile: {fileID: 11400000, guid: 7bc1149e6764a73428cddfb28012ac58, type: 2}
-  stairUpTile: {fileID: 11400000, guid: 7bc1149e6764a73428cddfb28012ac58, type: 2}
-  minEnemies: 30
-  maxEnemies: 30
+  minEnemies: 36
+  maxEnemies: 36
   enemyContainer: {fileID: 1538610855}
   enemyPrefab: {fileID: 1727004705137683305, guid: 57d66f5c7d2dd0a458f4b82e58b24ba4, type: 3}
+  doorPrefab: {fileID: 8829747558099694726, guid: f54e6807d779c7e459a39b8ebb889164, type: 3}
+  stairDownPrefab: {fileID: 2355087977520274023, guid: 6568ae18cea45424d8ad17db6475e8da, type: 3}
+  stairUpPrefab: {fileID: 2355087977520274023, guid: 661073600ee71584db13f504290d3d01, type: 3}
   playerSpawn: {x: 0, y: 0, z: 0}
   merchantSpawn: {x: 0, y: 0, z: 0}
 --- !u!1 &1986409536
@@ -462,7 +494,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1727004705137683305, guid: 57d66f5c7d2dd0a458f4b82e58b24ba4, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6751893084171509843, guid: 57d66f5c7d2dd0a458f4b82e58b24ba4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -505,7 +537,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 3639690936081502902, guid: 57d66f5c7d2dd0a458f4b82e58b24ba4, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -588,6 +620,7 @@ CircleCollider2D:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 36144730}
   - {fileID: 1602186852}
   - {fileID: 5999676797946184088}
   - {fileID: 1538610855}
