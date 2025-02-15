@@ -86,6 +86,7 @@ public class FloorGenerator : MonoBehaviour
         _placedDoors.Clear();
         _placedChests.Clear();
         _rooms.Clear();
+        KeyManager.Instance.ResetKeys();
 
         // 2) Fill entire grid with floor
         for (int x = 0; x < width; x++)
