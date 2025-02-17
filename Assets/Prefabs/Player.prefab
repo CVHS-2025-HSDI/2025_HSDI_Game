@@ -104,14 +104,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   sprintSpeed: 10
-  dashSpeed: 0
+  dashSpeed: 10
   dashTime: 0
   maxStamina: 100
   stamina: 100
   staminaDrain: 10
   staminaRegen: 5
   staminaRecoveryDelay: 1
-  hp: 100
   staminaBar: {fileID: 0}
   HPBar: {fileID: 0}
 --- !u!50 &8493018847704040996

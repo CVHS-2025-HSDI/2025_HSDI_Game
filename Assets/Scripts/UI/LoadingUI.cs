@@ -8,14 +8,22 @@ public class LoadingUI : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
-        else { Destroy(gameObject); }
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void ShowLoading(string message = "")
     {
         if (loadingPanel != null)
             loadingPanel.SetActive(true);
+        // Optionally update a text component with the message.
     }
 
     public void HideLoading()

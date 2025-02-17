@@ -5,12 +5,13 @@ using System.Collections;
 public class Movement : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private PlayerInfo playerInfo; // Reference to PlayerInfo component
 
     [Header("Movement Speeds")]
-    public float moveSpeed = 5f;     // Normal walk speed
-    public float sprintSpeed = 10f;  // Speed while sprinting
-    public float dashSpeed;          // Speed during dash
-    public float dashTime;           // Duration of dash
+    public float moveSpeed = 5f;
+    public float sprintSpeed = 10f;
+    public float dashSpeed;
+    public float dashTime;
 
     [Header("Stamina")]
     public float maxStamina = 100f;
@@ -21,12 +22,9 @@ public class Movement : MonoBehaviour
     private float timeSinceStoppedSprinting;
     private bool isSprinting;
 
-    [Header("Health")]
-    public float hp = 100f;
-
     [Header("UI References")]
     public Slider staminaBar;
-    public Slider HPBar;
+    public Slider HPBar;  // This will be updated based on PlayerInfo.currentHealth
 
     // Double-tap detection for dash
     private float lastTapW, lastTapA, lastTapS, lastTapD;
@@ -34,26 +32,27 @@ public class Movement : MonoBehaviour
     private bool isDashing;
 
     // Movement & rotation
-    private Vector2 dir;            // Current movement direction
-    private float desiredRotation;  // We'll rotate via rb.MoveRotation()
+    private Vector2 dir;
+    private float desiredRotation;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerInfo = GetComponent<PlayerInfo>();
 
-        // Initialize UI
+        // Initialize stamina UI
         if (staminaBar != null)
         {
             staminaBar.maxValue = maxStamina;
             staminaBar.value = stamina;
         }
 
-        if (HPBar != null)
+        // Initialize HP UI from PlayerInfo
+        if (playerInfo != null && HPBar != null)
         {
-            HPBar.maxValue = 100f; // If your HP can exceed 100, adjust this
-            HPBar.value = hp;
+            HPBar.maxValue = playerInfo.maxHealth;
+            HPBar.value = playerInfo.currentHealth;
         }
-
         UpdateUI();
     }
 
@@ -61,22 +60,19 @@ public class Movement : MonoBehaviour
     {
         ProcessInputs();
         ProcessDash();
-        HandleRotation();    // Calculate desiredRotation
-        ManageStamina();     // Drain or recover stamina
-        UpdateUI();          // Update sliders/colors
+        HandleRotation();
+        ManageStamina();
+        UpdateUI();
     }
 
     void FixedUpdate()
     {
-        // If not dashing, do normal movement
         if (!isDashing)
         {
             float actualSpeed = isSprinting ? sprintSpeed : moveSpeed;
-            Vector2 newPosition = rb.position + dir * actualSpeed * Time.fixedDeltaTime;
-            rb.MovePosition(newPosition);
+            Vector2 newPos = rb.position + dir * actualSpeed * Time.fixedDeltaTime;
+            rb.MovePosition(newPos);
         }
-
-        // Always update rotation
         rb.MoveRotation(desiredRotation);
     }
 
@@ -84,23 +80,19 @@ public class Movement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            hp -= 10;
-            UpdateUI();
+            // Instead of reducing local hp, call damage on PlayerInfo.
+            if (playerInfo != null)
+                playerInfo.damage(10);
         }
     }
 
-    /// <summary>
-    /// Reads input axes, determines sprinting, etc.
-    /// </summary>
     private void ProcessInputs()
     {
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
         dir = new Vector2(moveX, moveY).normalized;
 
-        // Check if sprinting (shift held, some stamina left, and actually moving)
         isSprinting = Input.GetKey(KeyCode.LeftShift) && stamina > 0f && dir != Vector2.zero;
-
         if (isSprinting)
         {
             DrainStamina();
@@ -112,9 +104,6 @@ public class Movement : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Handles dash input (double-tap detection).
-    /// </summary>
     private void ProcessDash()
     {
         if (Input.GetKeyDown(KeyCode.W)) CheckDoubleTap(ref lastTapW, Vector2.up);
@@ -135,30 +124,20 @@ public class Movement : MonoBehaviour
     private IEnumerator Dash(Vector2 dashDir)
     {
         isDashing = true;
-        rb.linearVelocity = dashDir * dashSpeed;  // or use rb.MovePosition in a loop
-
+        rb.linearVelocity = dashDir * dashSpeed;
         yield return new WaitForSeconds(dashTime);
-
         isDashing = false;
-        rb.linearVelocity = Vector2.zero; // or return to normal movement
+        rb.linearVelocity = Vector2.zero;
     }
 
-    /// <summary>
-    /// Drains stamina while sprinting.
-    /// </summary>
     private void DrainStamina()
     {
         stamina -= staminaDrain * Time.deltaTime;
         stamina = Mathf.Clamp(stamina, 0f, maxStamina);
     }
 
-    /// <summary>
-    /// Manages stamina recovery when not sprinting.
-    /// </summary>
     private void ManageStamina()
     {
-        // If we aren't sprinting and the user has waited long enough,
-        // regenerate stamina
         if (!isSprinting && stamina < maxStamina && timeSinceStoppedSprinting >= staminaRecoveryDelay)
         {
             stamina += staminaRegen * Time.deltaTime;
@@ -166,10 +145,6 @@ public class Movement : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Updates desiredRotation based on current movement direction.
-    /// We'll apply it in FixedUpdate() via rb.MoveRotation.
-    /// </summary>
     private void HandleRotation()
     {
         if (dir != Vector2.zero)
@@ -179,29 +154,21 @@ public class Movement : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Updates the HP and Stamina sliders, plus the color of the HP bar.
-    /// </summary>
     private void UpdateUI()
     {
-        // HP slider
-        if (HPBar != null)
+        if (HPBar != null && playerInfo != null)
         {
-            HPBar.value = hp;
-            // Adjust color based on HP
+            HPBar.value = playerInfo.currentHealth;
             Image fill = HPBar.fillRect.GetComponent<Image>();
-            if (hp < 100f * 0.3f)
-                fill.color = Color.red;    // Low HP
-            else if (hp < 100f * 0.6f)
-                fill.color = Color.yellow; // Medium HP
+            if (playerInfo.currentHealth < playerInfo.maxHealth * 0.3f)
+                fill.color = Color.red;
+            else if (playerInfo.currentHealth < playerInfo.maxHealth * 0.6f)
+                fill.color = Color.yellow;
             else
-                fill.color = Color.green;  // High HP
+                fill.color = Color.green;
         }
 
-        // Stamina slider
         if (staminaBar != null)
-        {
             staminaBar.value = stamina;
-        }
     }
 }
