@@ -35,7 +35,7 @@ public class SwordProjectileScript : MonoBehaviour
             target = collision.gameObject;
 
             //if projectile collided with a valid target, remove 'damage' health from target
-            if ((isPlayer && target.GetComponent<EnemyAI>() != null) || (!isPlayer && target.GetComponent<PlayerInfo_placeholder>() != null))
+            if ((isPlayer && target.GetComponent<EnemyAI>() != null) || (!isPlayer && target.GetComponent<PlayerInfo>() != null))
             {
                 if (isPlayer)
                 {
@@ -43,7 +43,7 @@ public class SwordProjectileScript : MonoBehaviour
                 }
                 else
                 {
-                    target.GetComponent<PlayerInfo_placeholder>().damage(damage); //may change
+                    target.GetComponent<PlayerInfo>().damage(damage); //may change
                 }
 
                 //knock back target by 'knockbackForce' in appropiate direction - IN PROGRESS
