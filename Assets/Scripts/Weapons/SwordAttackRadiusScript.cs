@@ -7,13 +7,16 @@ public class SwordAttackRadiusScript : MonoBehaviour
 
     void Start()
     {
-        ss = gameObject.GetComponentInParent<SwordScript>();
-        timer = ss.getAttackRate();
+        ss = GetComponentInParent<SwordScript>();
+        if (ss != null)
+        {
+            timer = ss.GetAttackRate();
+        }
     }
 
     void Update()
     {
-        if(timer < ss.getAttackRate())
+        if (ss != null && timer < ss.GetAttackRate())
         {
             timer += Time.deltaTime;
         }
@@ -21,15 +24,15 @@ public class SwordAttackRadiusScript : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        //if the radius is entered by the player then call attack(cooldown) in SwordScript
-        if (collision.gameObject.name.Equals("Player")) //causes transient artifact errors?
+        // Use CompareTag to check for the Player rather than checking name
+        if (collision.CompareTag("Player"))
         {
-            if (ss.getTarget() != null)
+            if (ss != null && ss.GetTarget() != null)
             {
-                if (timer >= ss.getAttackRate())
+                if (timer >= ss.GetAttackRate())
                 {
-                    ss.attack();
-                    timer = 0;
+                    ss.Attack();
+                    timer = 0f;
                 }
             }
         }

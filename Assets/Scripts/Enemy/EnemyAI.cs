@@ -1,83 +1,124 @@
 using UnityEngine;
-using System;
+using System.Collections;
 
 public class EnemyAI : MonoBehaviour
 {
+    private Rigidbody2D rb;
     private GameObject playerTarget;
-    public GameObject weaponPrefab; //drag in
+    public GameObject weaponPrefab; // assign in Inspector
     private GameObject weapon;
-    private float moveSpeed = 1.5f;
-    private string state = ("Passive");
-    private float health = 25;
+    public float moveSpeed = 1.5f;
+    private string state = "Passive";
+    private float health = 25f;
+    
+    // New: Freeze flag
+    public bool isFrozen = false;
+    
+    private SpriteRenderer sr;
 
     void Start()
     {
-        //Will find the player when they are in the same scene
+        rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
+
+        // Find the player in the scene
         playerTarget = GameObject.FindWithTag("Player");
         
-        //instantiate weapon, set parent, isPlayer
+        // Instantiate weapon and set parent
         weapon = Instantiate(weaponPrefab, transform.position, weaponPrefab.transform.rotation);
         weapon.transform.SetParent(transform);
-        if(weapon.GetComponent("SwordScript") != null)
+        if (weapon.GetComponent("SwordScript") != null)
         {
             ((SwordScript)weapon.GetComponent("SwordScript")).setIsPlayer(false);
-        }//else if for other weapon scripts
+        }
     }
 
     void Update()
     {
+        if (isFrozen)
+            return; // If frozen, skip any behavior
+
         if (state.Equals("Passive"))
         {
-            //move around and change direction, patrol - IN PROGRESS
-
-            //if target is within 3 units, change state to aggro (change to a line of sight) - IN PROGRESS
-            if (Math.Abs(playerTarget.transform.position.x - transform.position.x) <= 3 && Math.Abs(playerTarget.transform.position.y - transform.position.y) <= 3)
+            // Example patrol logic can be added here
+            // Check if the player is within 3 units; if so, switch to Aggro
+            if (playerTarget != null &&
+                Mathf.Abs(playerTarget.transform.position.x - transform.position.x) <= 3 &&
+                Mathf.Abs(playerTarget.transform.position.y - transform.position.y) <= 3)
             {
                 changeState("Aggro");
             }
         }
-        else if (state.Equals("Aggro") && playerTarget != null) //smarter ai, make choices based on players actions - IN PROGRESS
+    }
+
+    void FixedUpdate()
+    {
+        if (isFrozen)
         {
-            //Move towards target at moveSpeed
-            transform.position = Vector3.MoveTowards(transform.position, playerTarget.transform.position, moveSpeed * Time.deltaTime);
+            rb.linearVelocity = Vector2.zero;
+            return;
         }
-        else if (state.Equals("Stagger"))
+
+        if (state.Equals("Aggro") && playerTarget != null)
         {
-            //not sure what goes here yet
+            Vector2 targetPos = playerTarget.transform.position;
+            Vector2 newPos = Vector2.MoveTowards(rb.position, targetPos, moveSpeed * Time.fixedDeltaTime);
+            rb.MovePosition(newPos);
         }
     }
 
-    public void changeState(String state)
+    public void changeState(string newState)
     {
         if (weapon.GetComponent("SwordScript") != null)
         {
             SwordScript ws = (SwordScript)weapon.GetComponent("SwordScript");
-            if (state.Equals("Passive"))
+            if (newState.Equals("Passive"))
             {
-                this.state = state;
+                state = newState;
                 ws.setTarget(null);
             }
-            else if (state.Equals("Aggro"))
+            else if (newState.Equals("Aggro"))
             {
-                this.state = state;
+                state = newState;
                 ws.setTarget(playerTarget);
             }
-            else if (state.Equals("Stagger"))
+            else if (newState.Equals("Stagger"))
             {
-                this.state = state;
+                state = newState;
                 ws.setTarget(null);
             }
-        }//else if for other weapon scripts
+        }
     }
 
-    public void damage(float damage)
+    public void damage(float dmg)
     {
-        health -= damage;
-        Debug.Log("enemy hit for " + damage);
+        health -= dmg;
+        Debug.Log("Enemy hit for " + dmg);
         if (health <= 0)
         {
-            //death related stuff goes here. Possible drops(gold & weapon), death animation
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    private void Die()
+    {
+        // Freeze enemy and fade out its sprite before destroying
+        StartCoroutine(FreezeAndFadeOut());
+    }
+
+    private IEnumerator FreezeAndFadeOut()
+    {
+        isFrozen = true;
+        float fadeDuration = 2f;
+        float timer = 0f;
+        Color initialColor = sr.color;
+        while (timer < fadeDuration)
+        {
+            timer += Time.deltaTime;
+            float alpha = Mathf.Lerp(initialColor.a, 0f, timer / fadeDuration);
+            sr.color = new Color(initialColor.r, initialColor.g, initialColor.b, alpha);
+            yield return null;
+        }
+        Destroy(gameObject);
     }
 }
