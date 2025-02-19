@@ -7,14 +7,15 @@ public class FloorGenerator : MonoBehaviour
     // PROCEDURAL GENERATION V3 – One-gap-per-room approach with lectern and enclosed boss room.
     // Up stairs will always be placed in the boss room.
     // Down stairs will be placed in a random non-boss room (if available).
+    // State (keys, chests, enemies) is recorded and can be reloaded.
     // AUTHORS: Vitaly, Anton, Aron (modified 2/14/2025)
 
     [Header("Tilemap & Prefab References")]
-    public Tilemap floorTilemap;   // Assign in Inspector
+    public Tilemap floorTilemap;       // Assign in Inspector
     public GameObject keyPrefab;
     public GameObject chestPrefab;
     public Transform objectContainer;
-    public GameObject lecternPrefab;  // Lectern prefab to be placed once per floor
+    public GameObject lecternPrefab;   // Lectern prefab to be placed once per floor
 
     [Header("Tile Assets")]
     public TileBase floorTile;
@@ -28,8 +29,8 @@ public class FloorGenerator : MonoBehaviour
 
     // Prefabs for doors and stairs
     public GameObject doorPrefab;
-    public GameObject stairDownPrefab;  // Down stair (for floor 1/exiting or for middle/last floors)
-    public GameObject stairUpPrefab;    // Up stair (always in boss room for floors > 1)
+    public GameObject stairDownPrefab; // Down stair (for floor 1/exiting or for middle/last floors)
+    public GameObject stairUpPrefab;   // Up stair (always in boss room for floors > 1)
 
     // Spawn points set during generation
     [HideInInspector] public Vector3Int playerSpawn;
@@ -39,6 +40,7 @@ public class FloorGenerator : MonoBehaviour
     private List<Vector3Int> _placedStairs = new List<Vector3Int>();
     private List<Vector3Int> _placedDoors = new List<Vector3Int>();
     private List<Vector3Int> _placedChests = new List<Vector3Int>();
+    private List<Vector3Int> _placedKeys = new List<Vector3Int>();
     private List<Vector3> _placedEnemies = new List<Vector3>();
 
     // We track rooms so we can find the largest as the "boss room"
@@ -47,7 +49,7 @@ public class FloorGenerator : MonoBehaviour
     // Room shapes
     public enum RoomShape { Rectangular, LShaped, TShaped, JShaped }
 
-    // Helper class – now with a doorCell field to record its door gap.
+    // Helper class – includes a doorCell to record its door gap.
     public class Room
     {
         public int X, Y, W, H;  
@@ -71,11 +73,7 @@ public class FloorGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Generates a floor by filling with floor tiles, applying a circular boundary,
-    /// generating rooms (each with one door gap) and connecting them,
-    /// then placing a lectern and designating the largest room as the boss room.
-    /// In the boss room, a dedicated boss door is placed and the up stairs are placed.
-    /// The down stairs are placed in a random room that is not the boss room.
+    /// Generates a new floor layout and returns a FloorData instance containing the state.
     /// </summary>
     public FloorData GenerateFloor(FloorConfig config, bool isFirstFloor, int floorNumber, int totalFloors)
     {
@@ -84,13 +82,14 @@ public class FloorGenerator : MonoBehaviour
 
         floorTilemap.ClearAllTiles();
         _placedStairs.Clear();
-        _placedEnemies.Clear();
         _placedDoors.Clear();
         _placedChests.Clear();
+        _placedKeys.Clear();
+        _placedEnemies.Clear();
         _rooms.Clear();
         KeyManager.Instance.ResetKeys();
 
-        // Fill entire grid with floor.
+        // Fill grid with floor.
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
                 floorTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
@@ -122,11 +121,10 @@ public class FloorGenerator : MonoBehaviour
 
             _rooms.Add(newRoom);
             PlaceWallsForShape(newRoom);
-            // For normal rooms, add one door gap.
             AddDoorGap(newRoom);
         }
 
-        // Determine the boss room as the largest room.
+        // Determine boss room as the largest.
         Room bossRoom = null;
         int largestArea = 0;
         foreach (Room r in _rooms)
@@ -137,7 +135,6 @@ public class FloorGenerator : MonoBehaviour
                 bossRoom = r;
             }
         }
-        // For the boss room, remove its previously placed door (if any) and add a dedicated boss door.
         if (bossRoom != null)
         {
             if (_placedDoors.Contains(bossRoom.doorCell))
@@ -154,23 +151,22 @@ public class FloorGenerator : MonoBehaviour
         {
             CarveCorridor(_rooms[i - 1].Center, _rooms[i].Center);
         }
-        
-        // Choose a spawn room (for the player) that is not the boss room.
+
+        // Choose spawn rooms (player not in boss room)
         Room spawnRoom = ChooseRandomRoomExcluding(bossRoom);
         playerSpawn = new Vector3Int(spawnRoom.Center.x, spawnRoom.Center.y, 0);
-
-        // Choose a different room for the merchant if available.
         Room merchantRoom = ChooseRandomRoomExcluding(bossRoom, spawnRoom);
         if (merchantRoom == null)
             merchantRoom = spawnRoom;
         merchantSpawn = new Vector3Int(merchantRoom.Center.x, merchantRoom.Center.y, 0);
-        
-        // Place up stairs in the boss room.
+
+        // Place stairs.
         if (bossRoom != null)
         {
+            // Up stairs in boss room.
             PlaceUpStairs(bossRoom, floorNumber, totalFloors);
         }
-        // Place down stairs in a room different from the boss room.
+        // Down stairs in a non-boss room.
         Room downRoom = ChooseRandomRoomExcluding(bossRoom);
         if (downRoom != null)
         {
@@ -178,12 +174,10 @@ public class FloorGenerator : MonoBehaviour
         }
         else if (bossRoom != null)
         {
-            // Fallback if only boss room exists.
             PlaceDownStairs(bossRoom, floorNumber, totalFloors);
         }
-        // --- END STAIRCASE PLACEMENT ---
 
-        // Place lectern once per floor.
+        // Place lectern at center of floor.
         if (lecternPrefab != null)
         {
             Vector3Int lecternCell = new Vector3Int(width / 2, height / 2, 0);
@@ -194,22 +188,62 @@ public class FloorGenerator : MonoBehaviour
             }
         }
 
-        // Place keys, chests, and enemies.
-        GenerateKeys(width, height, 4);
-        GenerateChests(_rooms, bossRoom);
-        GenerateEnemies(width, height);
+        // Generate keys, chests, enemies.
+        List<Vector2Int> keyPositions = GenerateKeys(width, height, 4);
+        List<Vector2Int> chestPositions = GenerateChests(_rooms, bossRoom);
+        List<Vector2Int> enemyPositions = GenerateEnemies(width, height);
 
         floorTilemap.RefreshAllTiles();
 
-        FloorData data = new FloorData
-        {
+        FloorData data = new FloorData {
             playerSpawn = playerSpawn,
             merchantSpawn = merchantSpawn,
             stairPositions = _placedStairs.ConvertAll(s => (Vector2Int)s).ToArray(),
-            chestPositions = _placedChests.ConvertAll(s => (Vector2Int)s).ToArray(),
-            roomDoors = _placedDoors.ConvertAll(s => (Vector2Int)s).ToArray()
+            chestPositions = chestPositions.ToArray(),
+            roomDoors = _placedDoors.ConvertAll(s => (Vector2Int)s).ToArray(),
+            keyPositions = keyPositions.ToArray(),
+            enemyPositions = enemyPositions.ToArray()
         };
         return data;
+    }
+
+    /// <summary>
+    /// Loads a floor from previously stored FloorData. This re-instantiates keys, chests, and enemies
+    /// so that the floor state (e.g., collected keys and killed enemies) is preserved.
+    /// </summary>
+    public void LoadFloorFromData(FloorData data)
+    {
+        // Assume the tilemap and wall/floor layout remain intact.
+        // Clear dynamic objects:
+        foreach (Transform child in objectContainer)
+            Destroy(child.gameObject);
+        foreach (Transform child in enemyContainer)
+            Destroy(child.gameObject);
+
+        // Re-instantiate keys.
+        foreach (Vector2Int keyPos in data.keyPositions)
+        {
+            Vector3Int cell = new Vector3Int(keyPos.x, keyPos.y, 0);
+            Vector3 worldPos = floorTilemap.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
+            Instantiate(keyPrefab, worldPos, Quaternion.identity, objectContainer);
+        }
+        // Re-instantiate chests.
+        foreach (Vector2Int chestPos in data.chestPositions)
+        {
+            Vector3Int cell = new Vector3Int(chestPos.x, chestPos.y, 0);
+            Vector3 worldPos = floorTilemap.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
+            Instantiate(chestPrefab, worldPos, Quaternion.identity, objectContainer);
+        }
+        // Re-instantiate enemies.
+        foreach (Vector2Int enemyPos in data.enemyPositions)
+        {
+            Vector3Int cell = new Vector3Int(enemyPos.x, enemyPos.y, 0);
+            Vector3 worldPos = floorTilemap.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
+            Instantiate(enemyPrefab, worldPos, Quaternion.identity, enemyContainer);
+        }
+        // (Stairs, lectern, and door objects are assumed to be static in the tilemap.)
+        playerSpawn = data.playerSpawn;
+        merchantSpawn = data.merchantSpawn;
     }
 
     private Room ChooseRandomRoomExcluding(Room bossRoom, Room additionalExclusion = null)
@@ -367,7 +401,6 @@ public class FloorGenerator : MonoBehaviour
 
     private void AddBossRoomDoor(Room r)
     {
-        // Always use the bottom wall for the boss room door.
         Vector3Int doorCell = new Vector3Int(r.X + r.W / 2, r.Y - 1, 0);
         floorTilemap.SetTile(doorCell, floorTile);
         if (doorPrefab != null)
@@ -389,7 +422,6 @@ public class FloorGenerator : MonoBehaviour
         candidates[1] = new Vector3Int(r.X + r.W - 2, r.Y + r.H - 2, 0);  // top-right
         candidates[2] = new Vector3Int(r.X + 1, r.Y + 1, 0);             // bottom-left
         candidates[3] = new Vector3Int(r.X + r.W - 2, r.Y + 1, 0);         // bottom-right
-        // For example, choose a random candidate.
         int idx = RandomSeed.GetRandomInt(0, candidates.Length);
         CreateStairObject(candidates[idx], stairUpPrefab, StairType.Up, floorNumber, totalFloors);
     }
@@ -415,8 +447,9 @@ public class FloorGenerator : MonoBehaviour
         _placedStairs.Add(cellPos);
     }
 
-    private void GenerateKeys(int width, int height, int keyCount)
+    private List<Vector2Int> GenerateKeys(int width, int height, int keyCount)
     {
+        List<Vector2Int> keyPositions = new List<Vector2Int>();
         int placedKeys = 0;
         int attempts = 0;
         while (placedKeys < keyCount && attempts < 100)
@@ -428,14 +461,17 @@ public class FloorGenerator : MonoBehaviour
             {
                 Vector3 worldPos = floorTilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
                 Instantiate(keyPrefab, worldPos, Quaternion.identity, objectContainer);
+                keyPositions.Add(new Vector2Int(cellPos.x, cellPos.y));
                 placedKeys++;
             }
             attempts++;
         }
+        return keyPositions;
     }
 
-    private void GenerateChests(List<Room> rooms, Room bossRoom)
+    private List<Vector2Int> GenerateChests(List<Room> rooms, Room bossRoom)
     {
+        List<Vector2Int> chestPositions = new List<Vector2Int>();
         foreach (Room room in rooms)
         {
             if (room == bossRoom || room.Area < 30)
@@ -449,18 +485,21 @@ public class FloorGenerator : MonoBehaviour
                 {
                     Vector3 chestWorldPos = floorTilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
                     Instantiate(chestPrefab, chestWorldPos, Quaternion.identity, objectContainer);
+                    chestPositions.Add(new Vector2Int(cellPos.x, cellPos.y));
                     _placedChests.Add(cellPos);
                 }
             }
         }
+        return chestPositions;
     }
 
-    private void GenerateEnemies(int width, int height)
+    private List<Vector2Int> GenerateEnemies(int width, int height)
     {
+        List<Vector2Int> enemyPositions = new List<Vector2Int>();
         if (enemyPrefab == null)
         {
             Debug.LogWarning("[FloorGenerator] No enemyPrefab assigned!");
-            return;
+            return enemyPositions;
         }
         int numEnemies = RandomSeed.GetRandomInt(minEnemies, maxEnemies + 1);
         for (int i = 0; i < numEnemies; i++)
@@ -492,9 +531,11 @@ public class FloorGenerator : MonoBehaviour
             if (validSpawn)
             {
                 Instantiate(enemyPrefab, candidatePos, Quaternion.identity, enemyContainer);
+                enemyPositions.Add(new Vector2Int((int)candidatePos.x, (int)candidatePos.y));
                 _placedEnemies.Add(candidatePos);
             }
         }
+        return enemyPositions;
     }
 
     private bool IsFloorTile(Vector3Int cellPos, int width, int height)
