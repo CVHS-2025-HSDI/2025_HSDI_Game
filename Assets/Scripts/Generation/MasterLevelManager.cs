@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class MasterLevelManager : MonoBehaviour
 {
     public FloorConfig floorConfig;
-    public int totalFloors = 16;
+    public int totalFloors = 8;
     public int globalSeed = 1337420;
 
     public GameObject playerPrefab;

@@ -385,6 +385,8 @@ GameObject:
   - component: {fileID: 367589619}
   - component: {fileID: 367589618}
   - component: {fileID: 367589620}
+  - component: {fileID: 367589621}
+  - component: {fileID: 367589622}
   m_Layer: 0
   m_Name: PersistentManager
   m_TagString: Untagged
@@ -405,10 +407,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorConfig:
-    minWidth: 64
-    maxWidth: 64
-    minHeight: 64
-    maxHeight: 64
+    minWidth: 96
+    maxWidth: 96
+    minHeight: 96
+    maxHeight: 96
   totalFloors: 16
   globalSeed: 5493849
   playerPrefab: {fileID: 3139837162291064116}
@@ -442,6 +444,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keysNeeded: 4
   keysCollected: 0
+--- !u!114 &367589621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367589616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a8f0557b29885b47a7d4f97eefa9859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bossPrefabs:
+  - {fileID: 1727004705137683305, guid: 57fbe9d113bc24a48a36b339cf5b4a9b, type: 3}
+  - {fileID: 1727004705137683305, guid: c84ef261203a4ac4a8ea5cf566769940, type: 3}
+  - {fileID: 1727004705137683305, guid: 1eee919c2980db7478c127f5208fc5d0, type: 3}
+  - {fileID: 1727004705137683305, guid: cb2ea16728895a34c8829209e581f782, type: 3}
+  - {fileID: 1727004705137683305, guid: 7a658798ad5d55d48898bc1a9fc83961, type: 3}
+  - {fileID: 1727004705137683305, guid: 89b26202ceead0e488c20fa1226b9cd9, type: 3}
+  - {fileID: 1727004705137683305, guid: 1123b81d65a06f248824d83e73d4f7b2, type: 3}
+  - {fileID: 1727004705137683305, guid: 336249c799d7b2744be4ad8f86fb12c8, type: 3}
+--- !u!114 &367589622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367589616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d79875b3d37882d428fad9bfb8d68265, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &459359571
 GameObject:
   m_ObjectHideFlags: 0
@@ -1387,7 +1422,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 12.71698, y: 0.7249756}
+  m_AnchoredPosition: {x: 12.717041, y: 0.7249756}
   m_SizeDelta: {x: 66.38098, y: 37.387}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1510904560

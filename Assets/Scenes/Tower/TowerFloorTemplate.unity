@@ -436,6 +436,7 @@ MonoBehaviour:
   floorTilemap: {fileID: 1349149969}
   keyPrefab: {fileID: 3690001070531611220, guid: 1fe00d1c7ae947947a29b3316ce019f7, type: 3}
   chestPrefab: {fileID: 1400404957489357247, guid: b1402ac34a49503418b583e6ee8f6d41, type: 3}
+  lecternPrefab: {fileID: 4647010975387710129, guid: 4707d756a2d857a4ab925c723fef0cb4, type: 3}
   objectContainer: {fileID: 36144730}
   floorTile: {fileID: 11400000, guid: 94dba78efeb552848a45971b0a7e2eb3, type: 2}
   wallTile: {fileID: 11400000, guid: 1d29a9d17268d8c4ba83d7e76917bb2b, type: 2}

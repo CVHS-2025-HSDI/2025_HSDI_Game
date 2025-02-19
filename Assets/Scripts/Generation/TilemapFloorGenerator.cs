@@ -4,7 +4,9 @@ using UnityEngine.Tilemaps;
 
 public class FloorGenerator : MonoBehaviour
 {
-    // PROCEDURAL GENERATION V3 – One-gap-per-room approach, single-tile carve, door placed in that gap.
+    // PROCEDURAL GENERATION V3 – One-gap-per-room approach with lectern and enclosed boss room.
+    // Up stairs will always be placed in the boss room.
+    // Down stairs will be placed in a random non-boss room (if available).
     // AUTHORS: Vitaly, Anton, Aron (modified 2/14/2025)
 
     [Header("Tilemap & Prefab References")]
@@ -12,6 +14,7 @@ public class FloorGenerator : MonoBehaviour
     public GameObject keyPrefab;
     public GameObject chestPrefab;
     public Transform objectContainer;
+    public GameObject lecternPrefab;  // Lectern prefab to be placed once per floor
 
     [Header("Tile Assets")]
     public TileBase floorTile;
@@ -25,8 +28,8 @@ public class FloorGenerator : MonoBehaviour
 
     // Prefabs for doors and stairs
     public GameObject doorPrefab;
-    public GameObject stairDownPrefab;  
-    public GameObject stairUpPrefab;    
+    public GameObject stairDownPrefab;  // Down stair (for floor 1/exiting or for middle/last floors)
+    public GameObject stairUpPrefab;    // Up stair (always in boss room for floors > 1)
 
     // Spawn points set during generation
     [HideInInspector] public Vector3Int playerSpawn;
@@ -44,19 +47,17 @@ public class FloorGenerator : MonoBehaviour
     // Room shapes
     public enum RoomShape { Rectangular, LShaped, TShaped, JShaped }
 
-    // Helper class
+    // Helper class – now with a doorCell field to record its door gap.
     public class Room
     {
         public int X, Y, W, H;  
         public RoomShape Shape;
+        public Vector3Int doorCell; // stores the door gap cell
 
         public Room(int x, int y, int w, int h, RoomShape shape)
         {
-            this.X = x; 
-            this.Y = y; 
-            this.W = w; 
-            this.H = h;
-            this.Shape = shape;
+            X = x; Y = y; W = w; H = h; Shape = shape;
+            doorCell = new Vector3Int(-1, -1, 0);
         }
 
         public Vector2Int Center => new Vector2Int(X + W / 2, Y + H / 2);
@@ -70,16 +71,17 @@ public class FloorGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Generates a floor by first filling with floor, then placing walls around each room, 
-    /// carving minimal shapes, and adding exactly one door gap per room.
+    /// Generates a floor by filling with floor tiles, applying a circular boundary,
+    /// generating rooms (each with one door gap) and connecting them,
+    /// then placing a lectern and designating the largest room as the boss room.
+    /// In the boss room, a dedicated boss door is placed and the up stairs are placed.
+    /// The down stairs are placed in a random room that is not the boss room.
     /// </summary>
     public FloorData GenerateFloor(FloorConfig config, bool isFirstFloor, int floorNumber, int totalFloors)
     {
-        // 1) Randomize floor dimensions
-        int width = RandomSeed.GetRandomInt(config.minWidth, config.maxWidth + 1);
+        int width  = RandomSeed.GetRandomInt(config.minWidth, config.maxWidth + 1);
         int height = RandomSeed.GetRandomInt(config.minHeight, config.maxHeight + 1);
 
-        // Clear tilemap & reset lists
         floorTilemap.ClearAllTiles();
         _placedStairs.Clear();
         _placedEnemies.Clear();
@@ -88,20 +90,15 @@ public class FloorGenerator : MonoBehaviour
         _rooms.Clear();
         KeyManager.Instance.ResetKeys();
 
-        // 2) Fill entire grid with floor
+        // Fill entire grid with floor.
         for (int x = 0; x < width; x++)
-        {
             for (int y = 0; y < height; y++)
-            {
                 floorTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
-            }
-        }
 
-        // 3) Apply a circular boundary, then force the outer border to be walls
         MakeCircularBoundary(width, height);
 
-        // 4) Generate random rooms
-        int numRooms = RandomSeed.GetRandomInt(9, 17);
+        // Generate random rooms.
+        int numRooms = RandomSeed.GetRandomInt(12, 20);
         for (int i = 0; i < numRooms; i++)
         {
             int roomW = RandomSeed.GetRandomInt(6, Mathf.Min(12, width / 2));
@@ -111,8 +108,6 @@ public class FloorGenerator : MonoBehaviour
             RoomShape shape = (RoomShape)RandomSeed.GetRandomInt(0, 4);
 
             var newRoom = new Room(roomX, roomY, roomW, roomH, shape);
-
-            // Check overlap
             bool overlaps = false;
             foreach (Room other in _rooms)
             {
@@ -126,24 +121,12 @@ public class FloorGenerator : MonoBehaviour
                 continue;
 
             _rooms.Add(newRoom);
-
-            // Place walls around the shape
             PlaceWallsForShape(newRoom);
-
-            // Add exactly one door gap
+            // For normal rooms, add one door gap.
             AddDoorGap(newRoom);
         }
 
-        // 5) Connect rooms with corridors
-        _rooms.Sort((a, b) => a.Center.x.CompareTo(b.Center.x));
-        for (int i = 1; i < _rooms.Count; i++)
-        {
-            Vector2Int prev = _rooms[i - 1].Center;
-            Vector2Int curr = _rooms[i].Center;
-            CarveCorridor(prev, curr);
-        }
-
-        // 6) Identify largest room as boss room
+        // Determine the boss room as the largest room.
         Room bossRoom = null;
         int largestArea = 0;
         foreach (Room r in _rooms)
@@ -154,54 +137,70 @@ public class FloorGenerator : MonoBehaviour
                 bossRoom = r;
             }
         }
-
-        // 7) Place stairs in the boss room
+        // For the boss room, remove its previously placed door (if any) and add a dedicated boss door.
         if (bossRoom != null)
         {
-            PlaceStairs(bossRoom, floorNumber, totalFloors);
+            if (_placedDoors.Contains(bossRoom.doorCell))
+            {
+                _placedDoors.Remove(bossRoom.doorCell);
+                floorTilemap.SetTile(bossRoom.doorCell, wallTile);
+            }
+            AddBossRoomDoor(bossRoom);
         }
 
-        // 8) Place keys, chests, enemies, etc.
+        // Connect rooms with corridors.
+        _rooms.Sort((a, b) => a.Center.x.CompareTo(b.Center.x));
+        for (int i = 1; i < _rooms.Count; i++)
+        {
+            CarveCorridor(_rooms[i - 1].Center, _rooms[i].Center);
+        }
+        
+        // Choose a spawn room (for the player) that is not the boss room.
+        Room spawnRoom = ChooseRandomRoomExcluding(bossRoom);
+        playerSpawn = new Vector3Int(spawnRoom.Center.x, spawnRoom.Center.y, 0);
+
+        // Choose a different room for the merchant if available.
+        Room merchantRoom = ChooseRandomRoomExcluding(bossRoom, spawnRoom);
+        if (merchantRoom == null)
+            merchantRoom = spawnRoom;
+        merchantSpawn = new Vector3Int(merchantRoom.Center.x, merchantRoom.Center.y, 0);
+        
+        // Place up stairs in the boss room.
+        if (bossRoom != null)
+        {
+            PlaceUpStairs(bossRoom, floorNumber, totalFloors);
+        }
+        // Place down stairs in a room different from the boss room.
+        Room downRoom = ChooseRandomRoomExcluding(bossRoom);
+        if (downRoom != null)
+        {
+            PlaceDownStairs(downRoom, floorNumber, totalFloors);
+        }
+        else if (bossRoom != null)
+        {
+            // Fallback if only boss room exists.
+            PlaceDownStairs(bossRoom, floorNumber, totalFloors);
+        }
+        // --- END STAIRCASE PLACEMENT ---
+
+        // Place lectern once per floor.
+        if (lecternPrefab != null)
+        {
+            Vector3Int lecternCell = new Vector3Int(width / 2, height / 2, 0);
+            if (floorTilemap.GetTile(lecternCell) == floorTile)
+            {
+                Vector3 lecternWorldPos = floorTilemap.CellToWorld(lecternCell) + new Vector3(0.5f, 0.5f, 0);
+                Instantiate(lecternPrefab, lecternWorldPos, Quaternion.identity, objectContainer);
+            }
+        }
+
+        // Place keys, chests, and enemies.
         GenerateKeys(width, height, 4);
         GenerateChests(_rooms, bossRoom);
         GenerateEnemies(width, height);
 
-        // 9) Determine spawn positions
-        if (bossRoom != null)
-        {
-            if (isFirstFloor)
-            {
-                Vector3Int candidate = new Vector3Int(bossRoom.Center.x + 1, bossRoom.Center.y, 0);
-                if (IsFloorTile(candidate, width, height))
-                    playerSpawn = candidate;
-                else
-                    playerSpawn = new Vector3Int(bossRoom.Center.x, bossRoom.Center.y, 0);
-            }
-            else
-            {
-                playerSpawn = new Vector3Int(bossRoom.Center.x, bossRoom.Center.y, 0);
-            }
-
-            if (_rooms.Count > 0)
-            {
-                merchantSpawn = new Vector3Int(_rooms[0].Center.x, _rooms[0].Center.y, 0);
-            }
-            else
-            {
-                merchantSpawn = playerSpawn;
-            }
-        }
-        else
-        {
-            // fallback
-            playerSpawn = new Vector3Int(width / 2, height / 2, 0);
-            merchantSpawn = playerSpawn;
-        }
-
-        // Refresh tilemap colliders
         floorTilemap.RefreshAllTiles();
 
-        // 10) Prepare and return FloorData
         FloorData data = new FloorData
         {
             playerSpawn = playerSpawn,
@@ -213,29 +212,29 @@ public class FloorGenerator : MonoBehaviour
         return data;
     }
 
-    /// <summary>
-    /// Circular boundary + forced outer border walls.
-    /// </summary>
+    private Room ChooseRandomRoomExcluding(Room bossRoom, Room additionalExclusion = null)
+    {
+        List<Room> valid = _rooms.FindAll(r => r != bossRoom && r != additionalExclusion);
+        if (valid.Count == 0)
+            return bossRoom;
+        int index = RandomSeed.GetRandomInt(0, valid.Count);
+        return valid[index];
+    }
+
     private void MakeCircularBoundary(int width, int height)
     {
         float centerX = width / 2f;
         float centerY = height / 2f;
         float radius = Mathf.Min(width, height) / 2f - 1f;
-
         for (int x = 0; x < width; x++)
-        {
             for (int y = 0; y < height; y++)
             {
                 float dx = x - centerX;
                 float dy = y - centerY;
                 float dist = Mathf.Sqrt(dx * dx + dy * dy);
                 if (dist > radius)
-                {
                     floorTilemap.SetTile(new Vector3Int(x, y, 0), wallTile);
-                }
             }
-        }
-        // Force the outer border to be walls.
         for (int x = 0; x < width; x++)
         {
             floorTilemap.SetTile(new Vector3Int(x, 0, 0), wallTile);
@@ -248,9 +247,6 @@ public class FloorGenerator : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Places walls for a room shape. Then we do minimal carve-outs for L/T/J.
-    /// </summary>
     private void PlaceWallsForShape(Room r)
     {
         switch (r.Shape)
@@ -284,207 +280,141 @@ public class FloorGenerator : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// L-shape: only carve out 1 tile in one corner.
-    /// </summary>
     private void PlaceWallsLShaped(int x, int y, int w, int h)
     {
         PlaceWallsRectangular(x, y, w, h);
-
-        // Carve out exactly 1 tile in one corner
         int corner = RandomSeed.GetRandomInt(0, 4);
         int carveX = (corner == 0 || corner == 3) ? x : (x + w - 1);
         int carveY = (corner == 0 || corner == 1) ? y : (y + h - 1);
-
         floorTilemap.SetTile(new Vector3Int(carveX, carveY, 0), floorTile);
     }
 
-    /// <summary>
-    /// T-shape: carve exactly 1 tile as a notch from one edge.
-    /// </summary>
     private void PlaceWallsTShaped(int x, int y, int w, int h)
     {
         PlaceWallsRectangular(x, y, w, h);
-
         int edge = RandomSeed.GetRandomInt(0, 4);
-        // We carve 1 tile wide
-        if (edge == 0) // bottom
+        if (edge == 0)
         {
             int carveX = x + w / 2;
             floorTilemap.SetTile(new Vector3Int(carveX, y - 1, 0), floorTile);
         }
-        else if (edge == 1) // top
+        else if (edge == 1)
         {
             int carveX = x + w / 2;
             floorTilemap.SetTile(new Vector3Int(carveX, y + h, 0), floorTile);
         }
-        else if (edge == 2) // left
+        else if (edge == 2)
         {
             int carveY = y + h / 2;
             floorTilemap.SetTile(new Vector3Int(x - 1, carveY, 0), floorTile);
         }
-        else // right
+        else
         {
             int carveY = y + h / 2;
             floorTilemap.SetTile(new Vector3Int(x + w, carveY, 0), floorTile);
         }
     }
 
-    /// <summary>
-    /// J-shape: carve exactly 1 tile from 2 corners, skipping 1 corner. 
-    /// But let's keep it minimal: carve out exactly 1 tile from a single corner to reduce big gaps.
-    /// </summary>
     private void PlaceWallsJShaped(int x, int y, int w, int h)
     {
         PlaceWallsRectangular(x, y, w, h);
-
-        // Instead of removing two corners, remove exactly 1 tile from one corner 
-        // to keep the shape minimal
         int corner = RandomSeed.GetRandomInt(0, 4);
         int carveX = (corner == 1 || corner == 3) ? (x + w - 1) : x;
         int carveY = (corner >= 2) ? y : (y + h - 1);
-
         floorTilemap.SetTile(new Vector3Int(carveX, carveY, 0), floorTile);
     }
 
-    /// <summary>
-    /// Creates a 1-tile corridor between two room centers.
-    /// </summary>
     private void CarveCorridor(Vector2Int start, Vector2Int end)
     {
         int minX = Mathf.Min(start.x, end.x);
         int maxX = Mathf.Max(start.x, end.x);
         int minY = Mathf.Min(start.y, end.y);
         int maxY = Mathf.Max(start.y, end.y);
-
         for (int x = minX; x <= maxX; x++)
-        {
             floorTilemap.SetTile(new Vector3Int(x, start.y, 0), floorTile);
-        }
         for (int y = minY; y <= maxY; y++)
-        {
             floorTilemap.SetTile(new Vector3Int(end.x, y, 0), floorTile);
-        }
     }
 
-    /// <summary>
-    /// Adds exactly one door gap to the perimeter of the room:
-    /// - Picks a random side
-    /// - Creates a 1-tile gap by setting it to floor
-    /// - Instantiates the door prefab in that tile
-    /// </summary>
     private void AddDoorGap(Room r)
     {
-        // 0=top, 1=bottom, 2=left, 3=right
         int side = RandomSeed.GetRandomInt(0, 4);
         Vector3Int gapCell = Vector3Int.zero;
-
         switch (side)
         {
-            case 0: // top
+            case 0:
                 gapCell = new Vector3Int(r.X + r.W / 2, r.Y + r.H, 0);
                 break;
-            case 1: // bottom
+            case 1:
                 gapCell = new Vector3Int(r.X + r.W / 2, r.Y - 1, 0);
                 break;
-            case 2: // left
+            case 2:
                 gapCell = new Vector3Int(r.X - 1, r.Y + r.H / 2, 0);
                 break;
-            case 3: // right
+            case 3:
                 gapCell = new Vector3Int(r.X + r.W, r.Y + r.H / 2, 0);
                 break;
         }
-
-        // Convert that tile to floor (making a gap)
         floorTilemap.SetTile(gapCell, floorTile);
-
-        // Place the door prefab at that location
         if (doorPrefab != null)
         {
             Vector3 worldPos = floorTilemap.CellToWorld(gapCell) + new Vector3(0.5f, 0.5f, 0);
             Instantiate(doorPrefab, worldPos, Quaternion.identity, objectContainer);
             _placedDoors.Add(gapCell);
         }
+        r.doorCell = gapCell;
     }
 
-     /// <summary>
-    /// Called after identifying the boss room. We place multiple stairs:
-    /// - If floorNumber == 1, place a "down" that leads out, plus an "up" to floor 2.
-    /// - If floorNumber == totalFloors, place only a "down" from last floor.
-    /// - Otherwise, place both up & down.
-    /// </summary>
-    public void PlaceStairs(Room bossRoom, int floorNumber, int totalFloors)
+    private void AddBossRoomDoor(Room r)
     {
-        // Example: place the stairs in different corners of the boss room
-        // or next to each other. We'll do corners for clarity.
-        if (bossRoom == null) return;
-
-        // "Down" corner
-        Vector3Int downCell = new Vector3Int(bossRoom.X + 1, bossRoom.Y + 1, 0);
-        // "Up" corner
-        Vector3Int upCell   = new Vector3Int(bossRoom.X + bossRoom.W - 2, bossRoom.Y + bossRoom.H - 2, 0);
-
-        // 1) If floorNumber == 1, place a "down" that leads out (optional), plus an "up"
-        // 2) If floorNumber == totalFloors, place only "down"
-        // 3) Otherwise place both
-
-        if (floorNumber == 1)
+        // Always use the bottom wall for the boss room door.
+        Vector3Int doorCell = new Vector3Int(r.X + r.W / 2, r.Y - 1, 0);
+        floorTilemap.SetTile(doorCell, floorTile);
+        if (doorPrefab != null)
         {
-            // (Optional) place a "down" that leads out of the tower
-            if (stairDownPrefab != null)
-            {
-                CreateStairObject(downCell, stairDownPrefab, StairType.Down, floorNumber, totalFloors);
-            }
-            // place an "up" to floor #2
-            if (stairUpPrefab != null)
-            {
-                CreateStairObject(upCell, stairUpPrefab, StairType.Up, floorNumber, totalFloors);
-            }
+            Vector3 worldPos = floorTilemap.CellToWorld(doorCell) + new Vector3(0.5f, 0.5f, 0);
+            Instantiate(doorPrefab, worldPos, Quaternion.identity, objectContainer);
+            _placedDoors.Add(doorCell);
         }
-        else if (floorNumber == totalFloors)
-        {
-            // only "down"
-            if (stairDownPrefab != null)
-            {
-                CreateStairObject(downCell, stairDownPrefab, StairType.Down, floorNumber, totalFloors);
-            }
-        }
-        else
-        {
-            // Both
-            if (stairDownPrefab != null)
-            {
-                CreateStairObject(downCell, stairDownPrefab, StairType.Down, floorNumber, totalFloors);
-            }
-            if (stairUpPrefab != null)
-            {
-                CreateStairObject(upCell, stairUpPrefab, StairType.Up, floorNumber, totalFloors);
-            }
-        }
+        r.doorCell = doorCell;
     }
 
-    /// <summary>
-    /// Helper to instantiate a stair prefab, set its StairController info, and track it in _placedStairs.
-    /// </summary>
+    // --- New methods for separate staircase placement ---
+    private void PlaceUpStairs(Room r, int floorNumber, int totalFloors)
+    {
+        // Up stairs go in the boss room.
+        // For up stairs, choose a candidate corner from r.
+        Vector3Int[] candidates = new Vector3Int[4];
+        candidates[0] = new Vector3Int(r.X + 1, r.Y + r.H - 2, 0);      // top-left
+        candidates[1] = new Vector3Int(r.X + r.W - 2, r.Y + r.H - 2, 0);  // top-right
+        candidates[2] = new Vector3Int(r.X + 1, r.Y + 1, 0);             // bottom-left
+        candidates[3] = new Vector3Int(r.X + r.W - 2, r.Y + 1, 0);         // bottom-right
+        // For example, choose a random candidate.
+        int idx = RandomSeed.GetRandomInt(0, candidates.Length);
+        CreateStairObject(candidates[idx], stairUpPrefab, StairType.Up, floorNumber, totalFloors);
+    }
+
+    private void PlaceDownStairs(Room r, int floorNumber, int totalFloors)
+    {
+        // Down stairs: choose a fixed position in the room (e.g. bottom-left).
+        Vector3Int downCell = new Vector3Int(r.X + 1, r.Y + 1, 0);
+        CreateStairObject(downCell, stairDownPrefab, StairType.Down, floorNumber, totalFloors);
+    }
+
     private void CreateStairObject(Vector3Int cellPos, GameObject prefab, StairType stairType, int floorNumber, int totalFloors)
     {
         Vector3 worldPos = floorTilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
         GameObject stairObj = Instantiate(prefab, worldPos, Quaternion.identity, objectContainer);
-
-        // If the prefab has a StairController, set the floor info
         StairController sc = stairObj.GetComponent<StairController>();
         if (sc != null)
         {
-            sc.stairType     = stairType;
-            sc.currentFloor  = floorNumber;
-            sc.totalFloors   = totalFloors;
+            sc.stairType = stairType;
+            sc.currentFloor = floorNumber;
+            sc.totalFloors = totalFloors;
         }
         _placedStairs.Add(cellPos);
     }
 
-    /// <summary>
-    /// Places key objects on floor tiles.
-    /// </summary>
     private void GenerateKeys(int width, int height, int keyCount)
     {
         int placedKeys = 0;
@@ -504,10 +434,6 @@ public class FloorGenerator : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Places chest prefabs in some rooms (skipping the boss room).
-    /// 80% chance per eligible room; area threshold lowered to 30.
-    /// </summary>
     private void GenerateChests(List<Room> rooms, Room bossRoom)
     {
         foreach (Room room in rooms)
@@ -529,9 +455,6 @@ public class FloorGenerator : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Spawns enemies on valid floor tiles, ensuring spacing.
-    /// </summary>
     private void GenerateEnemies(int width, int height)
     {
         if (enemyPrefab == null)
@@ -574,9 +497,6 @@ public class FloorGenerator : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Checks if a given cell is floor.
-    /// </summary>
     private bool IsFloorTile(Vector3Int cellPos, int width, int height)
     {
         if (cellPos.x < 0 || cellPos.x >= width || cellPos.y < 0 || cellPos.y >= height)
