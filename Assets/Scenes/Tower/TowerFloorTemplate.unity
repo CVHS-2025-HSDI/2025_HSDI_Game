@@ -436,12 +436,12 @@ MonoBehaviour:
   floorTilemap: {fileID: 1349149969}
   keyPrefab: {fileID: 3690001070531611220, guid: 1fe00d1c7ae947947a29b3316ce019f7, type: 3}
   chestPrefab: {fileID: 1400404957489357247, guid: b1402ac34a49503418b583e6ee8f6d41, type: 3}
-  lecternPrefab: {fileID: 4647010975387710129, guid: 4707d756a2d857a4ab925c723fef0cb4, type: 3}
   objectContainer: {fileID: 36144730}
+  lecternPrefab: {fileID: 4647010975387710129, guid: 4707d756a2d857a4ab925c723fef0cb4, type: 3}
   floorTile: {fileID: 11400000, guid: 94dba78efeb552848a45971b0a7e2eb3, type: 2}
   wallTile: {fileID: 11400000, guid: 1d29a9d17268d8c4ba83d7e76917bb2b, type: 2}
-  minEnemies: 36
-  maxEnemies: 36
+  minEnemies: 30
+  maxEnemies: 30
   enemyContainer: {fileID: 1538610855}
   enemyPrefab: {fileID: 1727004705137683305, guid: 57d66f5c7d2dd0a458f4b82e58b24ba4, type: 3}
   doorPrefab: {fileID: 8829747558099694726, guid: f54e6807d779c7e459a39b8ebb889164, type: 3}
@@ -539,6 +539,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
+    - {fileID: 5332478792872480045, guid: 57d66f5c7d2dd0a458f4b82e58b24ba4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

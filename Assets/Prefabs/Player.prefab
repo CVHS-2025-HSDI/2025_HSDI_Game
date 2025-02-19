@@ -103,9 +103,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  sprintSpeed: 10
-  dashSpeed: 10
-  dashTime: 0
+  sprintSpeed: 7
+  dashSpeed: 8
+  dashTime: 0.25
   maxStamina: 100
   stamina: 100
   staminaDrain: 10
