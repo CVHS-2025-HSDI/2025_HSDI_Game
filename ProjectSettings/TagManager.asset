@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Merchant
   - Enemy
+  - EnemyTemplate
+  - Container
   layers:
   - Default
   - TransparentFX
@@ -13,8 +15,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Enemy
+  - Player
   - 
   - 
   - 

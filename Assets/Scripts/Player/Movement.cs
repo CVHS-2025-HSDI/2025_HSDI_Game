@@ -1,106 +1,98 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class Movement : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public float moveSpeed = 5f;
-    public float sprintSpeed = 8f;
+    private PlayerInfo playerInfo; // Reference to PlayerInfo component
 
+    [Header("Movement Speeds")]
+    public float moveSpeed = 5f;
+    public float sprintSpeed = 10f;
+    public float dashSpeed;
+    public float dashTime;
+
+    [Header("Stamina")]
     public float maxStamina = 100f;
     public float stamina = 100f;
     public float staminaDrain = 10f;
     public float staminaRegen = 5f;
     public float staminaRecoveryDelay = 1f;
-
     private float timeSinceStoppedSprinting;
     private bool isSprinting;
 
-    private Vector2 dir;
-    public float hp = 100f;
-    public Text HPText;
+    [Header("UI References")]
     public Slider staminaBar;
-    public Slider HPBar;
+    public Slider HPBar;  // This will be updated based on PlayerInfo.currentHealth
 
-    public float dashSpeed;
-    public float dashTime;
-
+    // Double-tap detection for dash
     private float lastTapW, lastTapA, lastTapS, lastTapD;
     private float tapDelay = 0.3f;
     private bool isDashing;
 
-    private void Start()
+    // Movement & rotation
+    private Vector2 dir;
+    private float desiredRotation;
+
+    void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerInfo = GetComponent<PlayerInfo>();
+
+        // Initialize stamina UI
+        if (staminaBar != null)
+        {
+            staminaBar.maxValue = maxStamina;
+            staminaBar.value = stamina;
+        }
+
+        // Initialize HP UI from PlayerInfo
+        if (playerInfo != null && HPBar != null)
+        {
+            HPBar.maxValue = playerInfo.maxHealth;
+            HPBar.value = playerInfo.currentHealth;
+        }
         UpdateUI();
-
-        if (staminaBar != null){
-        staminaBar.maxValue = maxStamina;
-        staminaBar.value = stamina;
-        }
-
-        if (HPBar != null){
-        HPBar.maxValue = 100;
-        HPBar.value = stamina;
-        hp = 100;
     }
 
-    private void Update(){
-
-        HPText.text = "Health: " + hp.ToString();
-
-        rb.AddForce(dir * movespeed,ForceMode2D.Force);
-
-        processInputs();
-        processDash();
-
-        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)){
-            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0f);
-        }if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)){
-            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 90f);
-        }if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)){
-            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 180f);
-        }if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
-            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 270f);
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision){
-        if (collision.gameObject.tag == "Enemy"){
-            hp-=10;
-        }
-
-    }
-
-    private void Update()
+    void Update()
     {
         ProcessInputs();
+        ProcessDash();
         HandleRotation();
         ManageStamina();
         UpdateUI();
     }
 
-    void FixedUpdate(){
-        if (!isDashing) Move();
+    void FixedUpdate()
+    {
+        if (!isDashing)
+        {
+            float actualSpeed = isSprinting ? sprintSpeed : moveSpeed;
+            Vector2 newPos = rb.position + dir * actualSpeed * Time.fixedDeltaTime;
+            rb.MovePosition(newPos);
+        }
+        rb.MoveRotation(desiredRotation);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            hp -= 10;
-            UpdateUI();
+            // Instead of reducing local hp, call damage on PlayerInfo.
+            if (playerInfo != null)
+                playerInfo.damage(10);
         }
     }
 
-    void ProcessInputs()
+    private void ProcessInputs()
     {
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
         dir = new Vector2(moveX, moveY).normalized;
 
         isSprinting = Input.GetKey(KeyCode.LeftShift) && stamina > 0f && dir != Vector2.zero;
-
         if (isSprinting)
         {
             DrainStamina();
@@ -112,37 +104,30 @@ public class Movement : MonoBehaviour
         }
     }
 
-    private void Move()
+    private void ProcessDash()
     {
-        if (!isSprinting && stamina < maxStamina && timeSinceStoppedSprinting >= staminaRecoveryDelay){
-            ManageStamina();
-        }
-        else{
-            timeSinceStoppedSprinting += Time.deltaTime;
-        }
-
-        if (!isDashing) rb.linearVelocity = new Vector2(dir.x * movespeed,dir.y * movespeed);
-    }
-
-    void processDash(){
         if (Input.GetKeyDown(KeyCode.W)) CheckDoubleTap(ref lastTapW, Vector2.up);
         if (Input.GetKeyDown(KeyCode.A)) CheckDoubleTap(ref lastTapA, Vector2.left);
         if (Input.GetKeyDown(KeyCode.S)) CheckDoubleTap(ref lastTapS, Vector2.down);
         if (Input.GetKeyDown(KeyCode.D)) CheckDoubleTap(ref lastTapD, Vector2.right);
     }
 
-    void CheckDoubleTap(ref float lastTapTime, Vector2 dashDir){
-        if (Time.time - lastTapTime < tapDelay){
+    private void CheckDoubleTap(ref float lastTapTime, Vector2 dashDir)
+    {
+        if (Time.time - lastTapTime < tapDelay)
+        {
             StartCoroutine(Dash(dashDir));
         }
         lastTapTime = Time.time;
     }
 
-    System.Collections.IEnumerator Dash(Vector2 dashDir){
+    private IEnumerator Dash(Vector2 dashDir)
+    {
         isDashing = true;
         rb.linearVelocity = dashDir * dashSpeed;
         yield return new WaitForSeconds(dashTime);
         isDashing = false;
+        rb.linearVelocity = Vector2.zero;
     }
 
     private void DrainStamina()
@@ -160,33 +145,30 @@ public class Movement : MonoBehaviour
         }
     }
 
-    void HandleRotation()
+    private void HandleRotation()
     {
         if (dir != Vector2.zero)
         {
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+            desiredRotation = angle - 90f;
         }
     }
 
-    void UpdateUI()
+    private void UpdateUI()
     {
-        if (HPBar != null)
+        if (HPBar != null && playerInfo != null)
         {
-            HPBar.value = hp;
+            HPBar.value = playerInfo.currentHealth;
+            Image fill = HPBar.fillRect.GetComponent<Image>();
+            if (playerInfo.currentHealth < playerInfo.maxHealth * 0.3f)
+                fill.color = Color.red;
+            else if (playerInfo.currentHealth < playerInfo.maxHealth * 0.6f)
+                fill.color = Color.yellow;
+            else
+                fill.color = Color.green;
         }
 
-        Image fill = HPBar.fillRect.GetComponent<Image>();
-        if (hp < 100 * 0.3f)
-            fill.color = Color.red; // Low stamina
-        else if (hp < 100 * 0.6f)
-            fill.color = Color.yellow; // Medium stamina
-        else
-            fill.color = Color.green; // Healthy stamina
-        
-        if (staminaBar != null){
-            staminaBar.value = stamina; 
-        }
+        if (staminaBar != null)
+            staminaBar.value = stamina;
     }
-
 }
