@@ -7,9 +7,15 @@ public class EnemyAI : MonoBehaviour
     private GameObject playerTarget;
     public GameObject weaponPrefab; // assign in Inspector
     private GameObject weapon;
-    public float moveSpeed = 1.5f;
+    public float moveSpeed = 1.8f;
     private string state = "Passive";
     private float health = 25f;
+    public float wanderSpeed = 1f;
+    public float wanderInterval = 6f;
+    public float pauseDuration = 1f;
+    private bool isPaused = false;
+    private Vector2 wanderDirection;
+
     
     // New: Freeze flag
     public bool isFrozen = false;
@@ -43,16 +49,28 @@ public class EnemyAI : MonoBehaviour
             // Example patrol logic can be added here
             // Check if the player is within 3 units; if so, switch to Aggro
             if (playerTarget != null &&
-                Mathf.Abs(playerTarget.transform.position.x - transform.position.x) <= 3 &&
-                Mathf.Abs(playerTarget.transform.position.y - transform.position.y) <= 3)
+                Mathf.Abs(playerTarget.transform.position.x - transform.position.x) <= 4 &&
+                Mathf.Abs(playerTarget.transform.position.y - transform.position.y) <= 4)
             {
                 changeState("Aggro");
+                Debug.Log("Changing to Aggro");
+            }
+        }
+        if(state.Equals("Aggro"))
+        {
+            
+            if (playerTarget != null &&
+                Mathf.Abs(playerTarget.transform.position.x - transform.position.x) >= 7 ||
+                Mathf.Abs(playerTarget.transform.position.y - transform.position.y) >= 7)
+            {
+                changeState("Passive");
             }
         }
     }
-
+    private float timer = 0f;
     void FixedUpdate()
     {
+        
         if (isFrozen)
         {
             rb.linearVelocity = Vector2.zero;
@@ -65,8 +83,33 @@ public class EnemyAI : MonoBehaviour
             Vector2 newPos = Vector2.MoveTowards(rb.position, targetPos, moveSpeed * Time.fixedDeltaTime);
             rb.MovePosition(newPos);
         }
+        if(state.Equals("Passive"))
+        {
+            timer += Time.fixedDeltaTime;
+            if(isPaused)
+            {
+                if(timer>=Random.Range(1.5f,2.5f))
+                {
+                    isPaused = false;
+                    timer = 0f;
+                    wander();
+                }
+            }
+            else
+            {
+                if(timer>=wanderInterval)
+                {
+                    isPaused = true;
+                    timer = 0f;
+                    rb.linearVelocity = Vector2.zero;
+                }
+            }
+        }
     }
-
+    void wander(){
+        Vector2 randomDirection = Random.insideUnitCircle.normalized;
+        rb.linearVelocity = randomDirection * wanderSpeed;
+    }
     public void changeState(string newState)
     {
         if (weapon.GetComponent("SwordScript") != null)
