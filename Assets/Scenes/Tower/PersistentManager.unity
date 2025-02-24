@@ -416,6 +416,7 @@ MonoBehaviour:
   globalSeed: 5493849
   playerPrefab: {fileID: 3139837162291064116}
   merchantPrefab: {fileID: 7853170730201843219, guid: d9d56aad10fdeb242a9fe5ac45ab6f31, type: 3}
+  inTower: 1
 --- !u!4 &367589619
 Transform:
   m_ObjectHideFlags: 0
