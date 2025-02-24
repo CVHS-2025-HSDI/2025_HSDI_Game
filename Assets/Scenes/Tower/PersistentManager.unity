@@ -5881,11 +5881,11 @@ PrefabInstance:
       objectReference: {fileID: 1368721708}
     - target: {fileID: 1995290649423402826, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: dashTime
-      value: 0
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 1995290649423402826, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: dashSpeed
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1995290649423402826, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: staminaBar
