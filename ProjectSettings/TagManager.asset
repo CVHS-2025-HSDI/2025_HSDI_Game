@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - EnemyTemplate
   - Container
+  - LoreUI
   layers:
   - Default
   - TransparentFX
