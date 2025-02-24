@@ -26,6 +26,7 @@ public class MasterLevelManager : MonoBehaviour
 
     void Start()
     {
+        // Set the global seed once.
         RandomSeed.SetSeed(globalSeed);
 
         player   = GameObject.FindWithTag("Player");
@@ -43,6 +44,12 @@ public class MasterLevelManager : MonoBehaviour
         _currentFloorNumber = floorNumber;
         _isFirstFloorLoad   = isFirstFloor;
 
+        // Instead of always using the same global seed,
+        // compute a floor-specific seed (for example, add a constant multiple of the floor number)
+        int floorSeed = globalSeed + floorNumber * 12345;
+        RandomSeed.SetSeed(floorSeed);
+
+        // Unload the old floor if it exists.
         var oldFloor = SceneManager.GetSceneByName("TowerFloorTemplate");
         if (oldFloor.IsValid())
         {
@@ -62,7 +69,7 @@ public class MasterLevelManager : MonoBehaviour
                 return;
             }
 
-            // Pass in the floorNumber + totalFloors so it can place the correct stairs
+            // Generate the floor layout (with our floor-specific seed)
             FloorData data = floorGen.GenerateFloor(
                 floorConfig, 
                 _isFirstFloorLoad, 
@@ -71,7 +78,7 @@ public class MasterLevelManager : MonoBehaviour
             );
             floorsData[_currentFloorNumber] = data;
 
-            // Convert tile coords to world
+            // Convert tile coords to world positions.
             Vector3 playerSpawnWorld = floorGen.floorTilemap.CellToWorld(data.playerSpawn) + new Vector3(0.5f, 0.5f, 0);
             Vector3 merchantSpawnWorld = floorGen.floorTilemap.CellToWorld(data.merchantSpawn) + new Vector3(0.5f, 0.5f, 0);
 
