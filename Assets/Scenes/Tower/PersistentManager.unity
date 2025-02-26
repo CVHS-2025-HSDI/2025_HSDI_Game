@@ -2006,6 +2006,7 @@ MonoBehaviour:
   HPBar: {fileID: 1368721708}
   gameOverPanel: {fileID: 1467770226}
   youDiedText: {fileID: 158860658}
+  weaponPrefab: {fileID: 8222599173819168208, guid: 1ee43d03ef4980f44acb20d2abfdbb45, type: 3}
 --- !u!1001 &5504354119077333611
 PrefabInstance:
   m_ObjectHideFlags: 0

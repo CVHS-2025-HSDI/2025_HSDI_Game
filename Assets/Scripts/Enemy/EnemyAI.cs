@@ -35,7 +35,7 @@ public class EnemyAI : MonoBehaviour
         weapon.transform.SetParent(transform);
         if (weapon.GetComponent("SwordScript") != null)
         {
-            ((SwordScript)weapon.GetComponent("SwordScript")).setIsPlayer(false);
+            ((SwordScript)weapon.GetComponent("SwordScript")).SetIsPlayer(false);
         }
     }
 
@@ -118,17 +118,17 @@ public class EnemyAI : MonoBehaviour
             if (newState.Equals("Passive"))
             {
                 state = newState;
-                ws.setTarget(null);
+                ws.SetTarget(null);
             }
             else if (newState.Equals("Aggro"))
             {
                 state = newState;
-                ws.setTarget(playerTarget);
+                ws.SetTarget(playerTarget);
             }
             else if (newState.Equals("Stagger"))
             {
                 state = newState;
-                ws.setTarget(null);
+                ws.SetTarget(null);
             }
         }
     }

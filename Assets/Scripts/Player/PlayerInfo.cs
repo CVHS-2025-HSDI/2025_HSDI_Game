@@ -16,6 +16,9 @@ public class PlayerInfo : MonoBehaviour
     private SpriteRenderer sr;
     private bool isDead = false;
 
+    public GameObject weaponPrefab; // Assign in Inspector for now. Will later be assigned through inventory
+    private GameObject weapon;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -38,6 +41,14 @@ public class PlayerInfo : MonoBehaviour
             }
             if (youDiedText != null)
                 youDiedText.SetActive(false);
+        }
+
+        // Instantiate weapon and set parent
+        weapon = Instantiate(weaponPrefab, transform.position, weaponPrefab.transform.rotation);
+        weapon.transform.SetParent(transform);
+        if (weapon.GetComponent("SwordScript") != null)
+        {
+            ((SwordScript)weapon.GetComponent("SwordScript")).SetIsPlayer(true);
         }
     }
 

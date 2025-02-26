@@ -172,4 +172,9 @@ public class Movement : MonoBehaviour
         if (staminaBar != null)
             staminaBar.value = stamina;
     }
+
+    public float GetDesiredRotation()
+    {
+        return desiredRotation;
+    }
 }

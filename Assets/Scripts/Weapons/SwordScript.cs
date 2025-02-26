@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SwordScript : MonoBehaviour
@@ -9,6 +10,8 @@ public class SwordScript : MonoBehaviour
     private float attackRate;
     private float timer = 0f;
     private bool isPlayer;
+    private Vector3 projPos;
+    private Quaternion projRot;
 
     void Start()
     {
@@ -41,28 +44,59 @@ public class SwordScript : MonoBehaviour
                 timer = 0f;
             }
         }
-        else
-        {
-            // For enemy, you might trigger attacks via AI logic.
-            // For demonstration, we auto-attack when the timer is ready.
-            if (target != null && timer >= attackRate)
-            {
-                Attack();
-                timer = 0f;
-            }
-        }
+
+        transform.rotation = Quaternion.identity;
     }
 
     public void Attack()
     {
         if (isPlayer)
         {
-            // Use the parent's up vector as the facing direction.
-            Vector3 direction = transform.parent.up;
-            // Calculate projectile spawn position offset from the sword.
-            Vector3 projPos = transform.position + direction * 1.5f;
-            // Create a rotation that makes the projectile point in that direction.
-            Quaternion projRot = Quaternion.LookRotation(Vector3.forward, direction);
+            GameObject player = gameObject.transform.parent.gameObject;
+            Movement m = player.GetComponent<Movement>();
+
+            // Changed back to old method because new one wasn't working correctly
+            if (m.GetDesiredRotation() == 0)
+            {
+                projPos = new Vector3(transform.position.x, transform.position.y + 1.5f);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 315));
+            }
+            else if (m.GetDesiredRotation() == -180)
+            {
+                projPos = new Vector3(transform.position.x, transform.position.y - 1.5f);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 135));
+            }
+            else if (m.GetDesiredRotation() == -90)
+            {
+                projPos = new Vector3(transform.position.x + 1.5f, transform.position.y);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 225));
+            }
+            else if (m.GetDesiredRotation() == 90)
+            {
+                projPos = new Vector3(transform.position.x - 1.5f, transform.position.y);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 45));
+            }
+            else if (m.GetDesiredRotation() == 45)
+            {
+                projPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 0));
+            }
+            else if (m.GetDesiredRotation() == -45)
+            {
+                projPos = new Vector3(transform.position.x + 1f, transform.position.y + 1f);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 270));
+            }
+            else if (m.GetDesiredRotation() == -225)
+            {
+                projPos = new Vector3(transform.position.x - 1f, transform.position.y - 1f);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 90));
+            }
+            else if (m.GetDesiredRotation() == -135)
+            {
+                projPos = new Vector3(transform.position.x + 1f, transform.position.y - 1f);
+                projRot = Quaternion.Euler(new Vector3(0, 0, 180));
+            }
+
             SwordProjectileScript sps = Instantiate(projectilePrefab, projPos, projRot)
                 .GetComponent<SwordProjectileScript>();
             sps.gameObject.transform.SetParent(transform);
@@ -72,10 +106,64 @@ public class SwordScript : MonoBehaviour
         {
             if (target == null) return;
             // For enemy attacks, determine the direction towards the target.
-            Vector3 diff = target.transform.position - transform.position;
-            diff.Normalize();
-            Vector3 projPos = transform.position + diff * 1.5f;
-            Quaternion projRot = Quaternion.LookRotation(Vector3.forward, diff);
+            if (Math.Abs(target.transform.position.x - transform.position.x) >= 1 && Math.Abs(target.transform.position.y - transform.position.y) >= 1)
+            {
+                //up and right
+                if (target.transform.position.x > transform.position.x && target.transform.position.y > transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x + 1f, transform.position.y + 1f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 270));
+                }
+                //up and left
+                else if (target.transform.position.x < transform.position.x && target.transform.position.y > transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 0));
+                }
+                //down and right
+                else if (target.transform.position.x > transform.position.x && target.transform.position.y < transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x + 1f, transform.position.y - 1f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 180));
+                }
+                //down and left
+                else if (target.transform.position.x < transform.position.x && target.transform.position.y < transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x - 1f, transform.position.y - 1f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 90));
+                }
+            }
+            else if (Math.Abs(target.transform.position.x - transform.position.x) > Math.Abs(target.transform.position.y - transform.position.y))
+            {
+                //left
+                if (target.transform.position.x < transform.position.x)
+                {
+                    projPos = new Vector3(transform.position.x - 1.5f, transform.position.y);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 45));
+                }
+                //right
+                else if (target.transform.position.x > transform.position.x)
+                {
+                    projPos = new Vector3(transform.position.x + 1.5f, transform.position.y);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 225));
+                }
+            }
+            else
+            {
+                //down
+                if (target.transform.position.y < transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x, transform.position.y - 1.5f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 135));
+                }
+                //up
+                else if (target.transform.position.y > transform.position.y)
+                {
+                    projPos = new Vector3(transform.position.x, transform.position.y + 1.5f);
+                    projRot = Quaternion.Euler(new Vector3(0, 0, 315));
+                }
+            }
+
             SwordProjectileScript sps = Instantiate(projectilePrefab, projPos, projRot)
                 .GetComponent<SwordProjectileScript>();
             sps.gameObject.transform.SetParent(transform);
@@ -83,18 +171,18 @@ public class SwordScript : MonoBehaviour
         }
     }
 
-    public SwordScript setTarget(GameObject target)
+    public SwordScript SetTarget(GameObject target)
     {
         this.target = target;
         return this;
     }
 
-    public GameObject getTarget()
+    public GameObject GetTarget()
     {
         return target;
     }
 
-    public void setIsPlayer(bool isPlayer)
+    public void SetIsPlayer(bool isPlayer)
     {
         this.isPlayer = isPlayer;
     }
@@ -103,10 +191,4 @@ public class SwordScript : MonoBehaviour
     {
         return attackRate;
     }
-
-    public GameObject GetTarget()
-    {
-        return target;
-    }
-
 }
