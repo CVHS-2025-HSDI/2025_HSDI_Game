@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class MasterLevelManager : MonoBehaviour
 {
+    public static MasterLevelManager Instance;  // Singleton instance
+
     public FloorConfig floorConfig;
     public int totalFloors = 8;
     public int globalSeed = 1337420;
@@ -18,12 +20,20 @@ public class MasterLevelManager : MonoBehaviour
     private int _currentFloorNumber;
     private bool _isFirstFloorLoad = false;
 
-    // New flag that tells us whether we are inside the tower.
+    // Flag to indicate whether we’re inside the tower.
     public bool inTower = false;
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Start()
@@ -31,23 +41,24 @@ public class MasterLevelManager : MonoBehaviour
         // Set the global seed.
         RandomSeed.SetSeed(globalSeed);
 
-        player   = GameObject.FindWithTag("Player");
-        merchant = GameObject.FindWithTag("Merchant");
-        
+        // Initially, if you start in the MainMenu, you don’t generate a floor.
+        // inTower remains false until EnterTower() is called.
+        Debug.Log("MasterLevelManager: Waiting for player to enter the tower.");
+    }
+    
+    void OnEnable()
+    {
+        // Subscribe to Unity’s sceneLoaded event
         SceneManager.sceneLoaded += OnSceneLoaded;
-
-        // If inTower is true (set in the editor) then immediately trigger floor generation.
-        if (inTower)
-        {
-            EnterTower();
-        }
-        else
-        {
-            Debug.Log("Not in tower yet; floor generation will be disabled until EnterTower() is called.");
-        }
+    }
+    
+    void OnDisable()
+    {
+        // Unsubscribe to avoid memory leaks or multiple calls
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // This method is called when the player “enters” the tower.
+    // Called from MainMenuController when Start Game is pressed.
     public void EnterTower()
     {
         inTower = true;
@@ -63,7 +74,10 @@ public class MasterLevelManager : MonoBehaviour
             return;
         }
 
-        LoadingUI.Instance.ShowLoading("Loading floor " + floorNumber + "...");
+        if (LoadingUI.Instance != null)
+            LoadingUI.Instance.ShowLoading("Loading floor " + floorNumber + "...");
+        else
+            Debug.LogError("LoadingUI instance is null in GenerateAndLoadFloor!");
         _currentFloorNumber = floorNumber;
         _isFirstFloorLoad = isFirstFloor;
 
@@ -124,11 +138,17 @@ public class MasterLevelManager : MonoBehaviour
                 merchant.transform.position = merchantSpawnWorld;
             }
 
+            // Set the camera to follow the player.
             CameraFollow camFollow = FindAnyObjectByType<CameraFollow>();
             if (camFollow != null && player != null)
                 camFollow.SetTarget(player.transform);
             
+            // Hide the loading panel (assumed to be managed by LoadingUI).
             LoadingUI.Instance.HideLoading();
+
+            // Unload the MainMenu scene now that the game is ready.
+            SceneManager.UnloadSceneAsync("MainMenu");
+
             Debug.Log($"[MasterLevelManager] Floor {_currentFloorNumber} loaded. First Floor? {_isFirstFloorLoad}");
         }
     }
