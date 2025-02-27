@@ -12,12 +12,14 @@ public class SwordScript : MonoBehaviour
     private bool isPlayer;
     private Vector3 projPos;
     private Quaternion projRot;
+    private int durability; // Should be randomly generated when picked up then set through SetDurability when selecting weapon
 
     void Start()
     {
         if (isPlayer)
         {
             attackRate = 0.4f;
+            durability = 100; //temp
         }
         else
         {
@@ -169,6 +171,16 @@ public class SwordScript : MonoBehaviour
             sps.gameObject.transform.SetParent(transform);
             sps.setIsPlayer(isPlayer);
         }
+
+        if (isPlayer)
+        {
+            durability--;
+            if(durability <= 0)
+            {
+                // Add destroy inventory item also
+                Destroy(gameObject);
+            }
+        }
     }
 
     public SwordScript SetTarget(GameObject target)
@@ -190,5 +202,10 @@ public class SwordScript : MonoBehaviour
     public float GetAttackRate()
     {
         return attackRate;
+    }
+
+    public void SetDurability(int dura)
+    {
+        durability = dura;
     }
 }

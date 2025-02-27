@@ -66,6 +66,7 @@ public class PlayerInfo : MonoBehaviour
     private void Die()
     {
         isDead = true;
+        weapon.SetActive(false);
         // Freeze movement by disabling the Movement script (assumed to be on the same GameObject)
         Movement moveScript = GetComponent<Movement>();
         if (moveScript != null)

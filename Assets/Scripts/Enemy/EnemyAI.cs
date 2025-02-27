@@ -15,12 +15,14 @@ public class EnemyAI : MonoBehaviour
     public float pauseDuration = 1f;
     private bool isPaused = false;
     private Vector2 wanderDirection;
-
     
     // New: Freeze flag
     public bool isFrozen = false;
-    
+
     private SpriteRenderer sr;
+
+    private float timer = 0f;
+    public Vector2 knockbackForceVector;
 
     void Start()
     {
@@ -42,7 +44,13 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         if (isFrozen)
+        {
+            if (weapon.activeSelf)
+            {
+                weapon.SetActive(false);
+            }
             return; // If frozen, skip any behavior
+        }
 
         if (state.Equals("Passive"))
         {
@@ -67,7 +75,7 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
-    private float timer = 0f;
+
     void FixedUpdate()
     {
         
@@ -81,6 +89,14 @@ public class EnemyAI : MonoBehaviour
         {
             Vector2 targetPos = playerTarget.transform.position;
             Vector2 newPos = Vector2.MoveTowards(rb.position, targetPos, moveSpeed * Time.fixedDeltaTime);
+
+            // Apply knockback force if any
+            if (knockbackForceVector != Vector2.zero)
+            {
+                newPos += knockbackForceVector * Time.fixedDeltaTime;
+                knockbackForceVector = Vector2.Lerp(knockbackForceVector, Vector2.zero, 0.5f); // Gradually reduce the knockback force
+            }
+
             rb.MovePosition(newPos);
         }
         if(state.Equals("Passive"))
@@ -106,10 +122,12 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
+
     void wander(){
         Vector2 randomDirection = Random.insideUnitCircle.normalized;
         rb.linearVelocity = randomDirection * wanderSpeed;
     }
+
     public void changeState(string newState)
     {
         if (weapon.GetComponent("SwordScript") != null)
@@ -145,6 +163,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Die()
     {
+        gameObject.GetComponent<CircleCollider2D>().enabled = false; // Disable contact damage and allow player to pass through
         // Freeze enemy and fade out its sprite before destroying
         StartCoroutine(FreezeAndFadeOut());
     }
@@ -163,5 +182,10 @@ public class EnemyAI : MonoBehaviour
             yield return null;
         }
         Destroy(gameObject);
+    }
+
+    public void SetKnockbackForceVector(Vector2 v)
+    {
+        knockbackForceVector = v;
     }
 }

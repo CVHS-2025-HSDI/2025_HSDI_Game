@@ -35,6 +35,7 @@ public class Movement : MonoBehaviour
     // Movement & rotation
     private Vector2 dir;
     private float desiredRotation;
+    private Vector2 knockbackForceVector;
 
     void Start()
     {
@@ -72,6 +73,14 @@ public class Movement : MonoBehaviour
         {
             float actualSpeed = isSprinting ? sprintSpeed : moveSpeed;
             Vector2 newPos = rb.position + dir * actualSpeed * Time.fixedDeltaTime;
+
+            // Apply knockback force if any
+            if (knockbackForceVector != Vector2.zero)
+            {
+                newPos += knockbackForceVector * Time.fixedDeltaTime;
+                knockbackForceVector = Vector2.Lerp(knockbackForceVector, Vector2.zero, 0.5f); // Gradually reduce the knockback force
+            }
+
             rb.MovePosition(newPos);
         }
         rb.MoveRotation(desiredRotation);
@@ -176,5 +185,10 @@ public class Movement : MonoBehaviour
     public float GetDesiredRotation()
     {
         return desiredRotation;
+    }
+
+    public void SetKnockbackForceVector(Vector2 v)
+    {
+        knockbackForceVector = v;
     }
 }
