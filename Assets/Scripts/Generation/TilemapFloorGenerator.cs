@@ -8,7 +8,7 @@ public class FloorGenerator : MonoBehaviour
     // Up stairs will always be placed in the boss room.
     // Down stairs will be placed in a random non-boss room (if available).
     // State (keys, chests, enemies) is recorded and reloaded.
-    // AUTHORS: Vitaly, Anton, Aron (modified 2/14/2025)
+    // AUTHORS: Vitaly, Anton, Aron (modified 2/26/2025)
 
     [Header("Tilemap & Prefab References")]
     public Tilemap floorTilemap;       // Assign in Inspector
@@ -386,9 +386,47 @@ public class FloorGenerator : MonoBehaviour
                 gapCell = new Vector3Int(r.X + r.W, r.Y + r.H / 2, 0);
                 break;
         }
+    
+        // Set the gap cell to floor tile as a starting point.
         floorTilemap.SetTile(gapCell, floorTile);
+
+        // Check the eight neighbors of gapCell.
+        bool surroundedByWalls = true;
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                // Skip the center cell.
+                if (dx == 0 && dy == 0)
+                    continue;
+            
+                Vector3Int neighbor = gapCell + new Vector3Int(dx, dy, 0);
+                // If any neighbor is not a wall, the gap is not sealed.
+                if (floorTilemap.GetTile(neighbor) != wallTile)
+                {
+                    surroundedByWalls = false;
+                    break;
+                }
+            }
+            if (!surroundedByWalls)
+                break;
+        }
+    
+        // If the gap is fully surrounded by walls, seal it.
+        if (surroundedByWalls)
+        {
+            floorTilemap.SetTile(gapCell, wallTile);
+            return;
+        }
+    
+        // Otherwise, instantiate a door at the gap.
         if (doorPrefab != null)
         {
+            if (floorTilemap.GetTile(gapCell) != floorTile)
+            {
+                floorTilemap.SetTile(gapCell, floorTile);
+                // Fix for doors spawned in walls and other stuff (hopefully)
+            }
             Vector3 worldPos = floorTilemap.CellToWorld(gapCell) + new Vector3(0.5f, 0.5f, 0);
             Instantiate(doorPrefab, worldPos, Quaternion.identity, objectContainer);
             _placedDoors.Add(gapCell);
@@ -510,7 +548,8 @@ public class FloorGenerator : MonoBehaviour
                 int x = RandomSeed.GetRandomInt(0, width);
                 int y = RandomSeed.GetRandomInt(0, height);
                 Vector3Int cell = new Vector3Int(x, y, 0);
-                if (floorTilemap.GetTile(cell) == floorTile)
+                TileBase tileAtCell = floorTilemap.GetTile(cell);
+                if (tileAtCell == floorTile && !_placedDoors.Contains(cell))
                 {
                     candidatePos = floorTilemap.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
                     validSpawn = true;

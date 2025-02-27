@@ -7,7 +7,7 @@ public class MasterLevelManager : MonoBehaviour
     public static MasterLevelManager Instance;  // Singleton instance
 
     public FloorConfig floorConfig;
-    public int totalFloors = 8;
+    public int totalFloors = 16;
     public int globalSeed = 1337420;
     
     public GameObject playerPrefab;
@@ -146,8 +146,10 @@ public class MasterLevelManager : MonoBehaviour
             // Hide the loading panel (assumed to be managed by LoadingUI).
             LoadingUI.Instance.HideLoading();
 
-            // Unload the MainMenu scene now that the game is ready.
-            SceneManager.UnloadSceneAsync("MainMenu");
+            // Unload the MainMenu scene now that the game is ready, if we're going from the main menu
+            Scene mainMenu = SceneManager.GetSceneByName("MainMenu");
+            if (mainMenu.IsValid())
+                SceneManager.UnloadSceneAsync("MainMenu");
 
             Debug.Log($"[MasterLevelManager] Floor {_currentFloorNumber} loaded. First Floor? {_isFirstFloorLoad}");
         }

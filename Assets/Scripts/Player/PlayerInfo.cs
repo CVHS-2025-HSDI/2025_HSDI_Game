@@ -9,9 +9,12 @@ public class PlayerInfo : MonoBehaviour
     public float currentHealth = 100f;
 
     [Header("UI References")]
-    public Slider HPBar;                // Assign in Inspector
+    public Slider HPBar;                // Assigned in Inspector
     public GameObject gameOverPanel;    // Panel under MainCanvas (covers screen)
-    public GameObject youDiedText;      // Child text object (initially inactive)
+    public GameObject youDiedText;      // Child text object #1 (initially inactive)
+    public GameObject restartButton; // #2
+    public GameObject quitToMenuButton; // #3
+    public GameObject quitButton; // #4
 
     private SpriteRenderer sr;
     private bool isDead = false;
@@ -109,6 +112,11 @@ public class PlayerInfo : MonoBehaviour
             panelImage.color = new Color(initialPanelColor.r, initialPanelColor.g, initialPanelColor.b, 1f);
         if (youDiedText != null)
             youDiedText.SetActive(true);
-        // (Optionally, you might pause the game or show a reset button here.)
+        if (restartButton != null)
+            restartButton.SetActive(true);
+        if (quitToMenuButton != null)
+            quitToMenuButton.SetActive(true);
+        if (quitButton != null)
+            quitButton.SetActive(true);
     }
 }

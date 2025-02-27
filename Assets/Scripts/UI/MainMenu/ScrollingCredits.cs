@@ -13,7 +13,7 @@ public class ScrollingCredits : MonoBehaviour
     public float scrollEndY = 1000f;
     
     // Flag to indicate whether the credits are scrolling
-    private bool isScrolling = false;
+    private bool isScrolling;
 
     // Call this method from your button's OnClick event
     public void StartCredits()
@@ -21,9 +21,8 @@ public class ScrollingCredits : MonoBehaviour
         // Hide the buttons
         if (buttonsParent != null)
             buttonsParent.SetActive(false);
-
-        // Optionally reset the credits position to the starting position
-        creditsContent.anchoredPosition = new Vector2(creditsContent.anchoredPosition.x, 0);
+        
+        creditsContent.anchoredPosition = new Vector2(creditsContent.anchoredPosition.x, -15);
 
         // Begin scrolling
         isScrolling = true;
@@ -42,8 +41,8 @@ public class ScrollingCredits : MonoBehaviour
                 // Stop scrolling
                 isScrolling = false;
 
-                // Optionally, reset credits position if you want to scroll again later
-                creditsContent.anchoredPosition = new Vector2(creditsContent.anchoredPosition.x, 0);
+                // Reset credits position if you want to scroll again later
+                creditsContent.anchoredPosition = new Vector2(creditsContent.anchoredPosition.x, -15);
 
                 // Show the buttons again
                 if (buttonsParent != null)

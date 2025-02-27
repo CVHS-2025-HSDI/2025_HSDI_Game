@@ -34,10 +34,14 @@ public class StartScript : MonoBehaviour
             Debug.LogWarning("LoadingUI or SingletonManager instance not found!");
         }
         
+        // Generate a new seed value.
+        int newSeed = Random.Range(100000, 1000000);
+        
         // 2. Signal MasterLevelManager to enter the tower.
         MasterLevelManager mlm = MasterLevelManager.Instance;
         if (mlm != null)
         {
+            mlm.globalSeed = newSeed;
             mlm.inTower = true;
             mlm.GenerateAndLoadFloor(1, true);
         }
