@@ -25,13 +25,19 @@ public class Quit : MonoBehaviour
             {
                 pi.Revive();  // Reset isDead and currentHealth
                 Debug.Log("Player health and state reset.");
+            
+                // Reactivate the toolbar and inventory button.
+                if (pi.toolbar != null)
+                    pi.toolbar.SetActive(true);
+                if (pi.invButton != null)
+                    pi.invButton.SetActive(true);
             }
             else
             {
                 Debug.LogWarning("PlayerInfo component not found on player!");
             }
 
-            // Re-enable the movement script
+            // Re-enable the movement script.
             Movement moveScript = player.GetComponent<Movement>();
             if (moveScript != null)
             {
@@ -43,7 +49,7 @@ public class Quit : MonoBehaviour
                 Debug.LogWarning("Movement script not found on player!");
             }
 
-            // Reset the sprite's alpha so the player becomes visible again
+            // Reset the sprite's alpha so the player becomes visible again.
             SpriteRenderer sr = player.GetComponent<SpriteRenderer>();
             if (sr != null)
             {
@@ -57,8 +63,7 @@ public class Quit : MonoBehaviour
                 Debug.LogWarning("SpriteRenderer not found on player!");
             }
 
-            // Optionally, reposition the player at a spawn point
-            // This example resets position to Vector3.zero; adjust as needed.
+            // Optionally, reposition the player at a spawn point.
             player.transform.position = Vector3.zero;
             Debug.Log("Player position reset.");
         }

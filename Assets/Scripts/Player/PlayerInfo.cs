@@ -15,6 +15,8 @@ public class PlayerInfo : MonoBehaviour
     public GameObject restartButton; // #2
     public GameObject quitToMenuButton; // #3
     public GameObject quitButton; // #4
+    public GameObject toolbar; // #5
+    public GameObject invButton; // #6
 
     private SpriteRenderer sr;
     private bool isDead = false;
@@ -99,7 +101,7 @@ public class PlayerInfo : MonoBehaviour
             }
         }
         
-        // Now disable all enemy AI scripts
+        // Optionally disable enemy AI here...
         EnemyAI[] enemies = FindObjectsByType<EnemyAI>(FindObjectsSortMode.InstanceID);
         foreach (EnemyAI enemy in enemies)
         {
@@ -107,15 +109,13 @@ public class PlayerInfo : MonoBehaviour
             Debug.Log("Disabled enemy AI for " + enemy.name);
         }
 
-        // Simultaneously fade out the player's sprite and fade in the game over panel.
+        // Fade out player's sprite and fade in the game over panel.
         while (timer < fadeDuration)
         {
             timer += Time.deltaTime;
             float t = timer / fadeDuration;
-            // Fade out player (alpha goes from current to 0)
             float playerAlpha = Mathf.Lerp(initialPlayerColor.a, 0f, t);
             sr.color = new Color(initialPlayerColor.r, initialPlayerColor.g, initialPlayerColor.b, playerAlpha);
-            // Fade in panel (alpha goes from 0 to 1)
             if (panelImage != null)
             {
                 float panelAlpha = Mathf.Lerp(0f, 1f, t);
@@ -123,7 +123,6 @@ public class PlayerInfo : MonoBehaviour
             }
             yield return null;
         }
-        // Ensure final states
         sr.color = new Color(initialPlayerColor.r, initialPlayerColor.g, initialPlayerColor.b, 0f);
         if (panelImage != null)
             panelImage.color = new Color(initialPanelColor.r, initialPanelColor.g, initialPanelColor.b, 1f);
@@ -135,5 +134,11 @@ public class PlayerInfo : MonoBehaviour
             quitToMenuButton.SetActive(true);
         if (quitButton != null)
             quitButton.SetActive(true);
+        
+        // Hide the toolbar and inventory button on game over.
+        if (toolbar != null)
+            toolbar.SetActive(false);
+        if (invButton != null)
+            invButton.SetActive(false);
     }
 }
