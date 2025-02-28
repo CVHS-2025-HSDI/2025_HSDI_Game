@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - EnemyTemplate
   - Container
+
+  - InventoryManager
   - LoreUI
   - Loading
   - SingletonManager
@@ -21,6 +23,9 @@ TagManager:
   - Enemy
   - Player
   - Whale
+  - 
+  - 
+  - 
   - 
   - 
   - 
