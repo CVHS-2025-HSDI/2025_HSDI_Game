@@ -10,6 +10,32 @@ public class StartScript : MonoBehaviour
 
     public void OnStartGameClicked()
     {
+        // Check if the player is "dead" (for example, health is 0 or movement disabled)
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            PlayerInfo playerInfo = player.GetComponent<PlayerInfo>();
+            Movement playerMovement = player.GetComponent<Movement>();
+            if (playerInfo != null && (playerInfo.currentHealth <= 0 || (playerMovement != null && !playerMovement.enabled)))
+            {
+                // Find the Quit component that holds ResetPlayer
+                Quit quitScript = FindFirstObjectByType<Quit>();
+                if (quitScript != null)
+                {
+                    quitScript.ResetPlayer();
+                    Debug.Log("Dead player detected and reset.");
+                }
+                else
+                {
+                    Debug.LogWarning("Quit script instance not found; cannot reset dead player.");
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Player not found in OnStartGameClicked.");
+        }
+        
         // 1. Enable the GameplayCanvas and its sliders.
         if (SingletonManager.Instance != null && LoadingUI.Instance != null)
         {
@@ -60,7 +86,8 @@ public class StartScript : MonoBehaviour
                 mainCamera.gameObject.SetActive(false);
         }
         
-        // 4. Disable the MainMenuCanvas.
+        // 4. Optionally, disable the MainMenuCanvas and unload the MainMenu scene.
+        // (Your current code for this is commented out.)
         // if (SingletonManager.Instance != null && mainMenuCanvas != null)
         // {
         //     mainMenuCanvas.SetActive(false);
@@ -70,7 +97,6 @@ public class StartScript : MonoBehaviour
         //     Debug.LogWarning("MainMenuCanvas or SingletonManager not found!");
         // }
         //
-        // // 5. Finally, unload the MainMenu scene.
         // SceneManager.UnloadSceneAsync("MainMenu");
     }
 }

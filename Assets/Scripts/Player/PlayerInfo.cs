@@ -64,13 +64,22 @@ public class PlayerInfo : MonoBehaviour
             moveScript.enabled = false;
         StartCoroutine(GameOverSequence());
     }
+    
+    public void Revive()
+    {
+        isDead = false;
+        currentHealth = maxHealth;
+        if (HPBar != null)
+            HPBar.value = currentHealth;
+        Debug.Log("Player revived.");
+    }
 
     private IEnumerator GameOverSequence()
     {
         // Play GameOver music
         if (MusicController.Instance != null)
             MusicController.Instance.PlayGameOverMusic();
-
+        
         float fadeDuration = 4f;
         float timer = 0f;
         Color initialPlayerColor = sr.color;
@@ -88,6 +97,14 @@ public class PlayerInfo : MonoBehaviour
                 temp.a = 0f;
                 panelImage.color = temp;
             }
+        }
+        
+        // Now disable all enemy AI scripts
+        EnemyAI[] enemies = FindObjectsByType<EnemyAI>(FindObjectsSortMode.InstanceID);
+        foreach (EnemyAI enemy in enemies)
+        {
+            enemy.enabled = false;
+            Debug.Log("Disabled enemy AI for " + enemy.name);
         }
 
         // Simultaneously fade out the player's sprite and fade in the game over panel.
