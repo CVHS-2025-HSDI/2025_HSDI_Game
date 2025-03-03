@@ -170,6 +170,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 4081914475184358477}
   countText: {fileID: 6963391824205516019}
-  item: {fileID: 0}
+  item: {fileID: 11400000, guid: cea2dc6305aef0044a49526f16c5be26, type: 2}
   count: 1
   parentAfterDrag: {fileID: 0}

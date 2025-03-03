@@ -92,7 +92,7 @@ public class LecternTrigger : MonoBehaviour
 
         // Ensure the panel is active.
         lorePanel.SetActive(true);
-        lorePanel.transform.SetAsLastSibling();
+        // lorePanel.transform.SetAsLastSibling();
 
         // Reactivate the close button (in case it was deactivated).
         if (closeButton != null)

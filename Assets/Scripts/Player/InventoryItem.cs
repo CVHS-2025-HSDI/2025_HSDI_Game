@@ -30,18 +30,48 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     }
 
-    public void OnBeginDrag(PointerEventData eventData){
-        image.raycastTarget = false;
-        parentAfterDrag = transform.parent;
-        transform.SetParent(transform.root);
+   public void OnBeginDrag(PointerEventData eventData){
+    image.raycastTarget = false;
+    parentAfterDrag = transform.parent;
+    transform.SetParent(transform.root);
+
+    InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
+    if (inventoryManager != null && inventoryManager.equippedWeaponSlot.childCount > 0 && item.type == Itemtype.Weapon)
+    {
+        inventoryManager.UnequipWeapon();
     }
+}
+
+
     
     public void OnDrag(PointerEventData eventData){
         transform.position = Input.mousePosition;
     }
 
-    public void OnEndDrag(PointerEventData eventData){
-        image.raycastTarget = true;
-        transform.SetParent(parentAfterDrag);
+public void OnEndDrag(PointerEventData eventData){
+    image.raycastTarget = true;
+    transform.SetParent(parentAfterDrag);
+
+    InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
+
+    if (inventoryManager != null)
+    {
+        inventoryManager.CheckWeaponEquipped();
+
+        // Equip weapon immediately if dropped into selected slot
+        int selectedSlotIndex = inventoryManager.GetSelectedSlotIndex();
+        InventorySlot currentSlot = parentAfterDrag.GetComponent<InventorySlot>();
+
+        if (currentSlot != null && inventoryManager.inventorySlots[selectedSlotIndex] == currentSlot && item.type == Itemtype.Weapon)
+        {
+            inventoryManager.EquipWeapon(item);
+        }
     }
+}
+
+
+
+
+
+
 }
