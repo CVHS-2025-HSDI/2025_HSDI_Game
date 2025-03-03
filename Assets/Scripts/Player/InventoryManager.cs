@@ -35,28 +35,22 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-void ChangeSelectedSlot(int newValue) {
+void ChangeSelectedSlot(int newValue)
+{
     if (selectedSlot >= 0) {
         inventorySlots[selectedSlot].Deselect();
     }
     inventorySlots[newValue].Select();
     selectedSlot = newValue;
 
-    // Get the item in the selected slot
     InventoryItem selectedItem = inventorySlots[selectedSlot].GetComponentInChildren<InventoryItem>();
 
-    if (selectedItem != null) {
-        if (selectedItem.item.type == Itemtype.Weapon) {
-            EquipWeapon(selectedItem.item);
-        } else {
-            UnequipWeapon(); // Unequip if it's NOT a weapon
-        }
+    if (selectedItem != null && selectedItem.item.type == Itemtype.Weapon) {
+        EquipWeapon(selectedItem.item);
     } else {
-        UnequipWeapon(); // Unequip if slot is EMPTY
+        UnequipWeapon(); // Unequip if no weapon is in the slot
     }
 }
-
-
 
 
     public bool AddItem(Item item){
@@ -89,7 +83,7 @@ void ChangeSelectedSlot(int newValue) {
     }
 
   
-    void EquipWeapon(Item weaponItem) {
+    public void EquipWeapon(Item weaponItem) {
     // Remove previously equipped weapon
         if (equippedWeaponSlot.childCount > 0) {
             Destroy(equippedWeaponSlot.GetChild(0).gameObject);
@@ -106,11 +100,26 @@ void ChangeSelectedSlot(int newValue) {
         sr.sortingOrder=1;
     }
 
-    void UnequipWeapon() {
+    public void UnequipWeapon() {
     foreach (Transform child in equippedWeaponSlot) {
         Destroy(child.gameObject);
     }
 }
+
+public void CheckWeaponEquipped(){
+    InventoryItem selectedItem = inventorySlots[selectedSlot].GetComponentInChildren<InventoryItem>();
+
+    if (selectedItem == null || selectedItem.item.type != Itemtype.Weapon)
+    {
+        UnequipWeapon();
+    }
+}
+
+public int GetSelectedSlotIndex(){
+    return selectedSlot;
+}
+
+
 
 
 
