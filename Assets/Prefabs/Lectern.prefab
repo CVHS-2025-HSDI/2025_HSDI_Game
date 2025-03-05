@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1725015018770813150}
   - component: {fileID: 658731556928382387}
   - component: {fileID: -8047492665735955335}
-  - component: {fileID: 5820052738417243054}
+  - component: {fileID: 4339429508050635550}
   m_Layer: 0
   m_Name: Lectern
   m_TagString: Untagged
@@ -135,7 +135,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2.54, y: 2.64}
   m_EdgeRadius: 0
---- !u!114 &5820052738417243054
+--- !u!114 &4339429508050635550
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,6 +148,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentFloor: 1
-  lorePanel: {fileID: 0}
-  loreTitleText: {fileID: 0}
-  loreBodyText: {fileID: 0}

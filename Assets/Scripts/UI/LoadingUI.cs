@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class LoadingUI : MonoBehaviour
 {
@@ -23,7 +22,7 @@ public class LoadingUI : MonoBehaviour
     {
         if (loadingPanel != null)
             loadingPanel.SetActive(true);
-        // Optionally update a text component with the message.
+        // Optionally update a child Text component with the message; not sure if we can implement
     }
 
     public void HideLoading()

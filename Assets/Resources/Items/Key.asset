@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 915ce5d89e19ad44d961277fe188314e, type: 3}
-  m_Name: Sword
+  m_Name: Key
   m_EditorClassIdentifier: 
-  type: 0
-  actionType: 1
+  type: 4
+  actionType: 0
   range: {x: 5, y: 4}
-  stackable: 0
-  image: {fileID: 0}
+  stackable: 1
+  image: {fileID: 1095141833252711340, guid: 3ac5b41dd122bf940b3c8ce778a019b5, type: 3}

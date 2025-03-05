@@ -14,21 +14,36 @@ public class LecternTrigger : MonoBehaviour
     private TextMeshProUGUI loreTitleText;
     private TextMeshProUGUI loreBodyText;
     private Image panelImage; // For fading the panel background
+    private Button closeButton; // The 'Close' button under lorePanel
 
     // Fade settings.
     private float fadeDuration = 0.25f;
     private float delayBetween = 0.25f;
 
+    // Controls whether the lectern has been triggered.
     private bool triggered = false;
 
     private void Start()
     {
         if (LorePanelController.Instance != null)
         {
-            lorePanel = LorePanelController.Instance.gameObject;
             loreTitleText = LorePanelController.Instance.loreTitleText;
             loreBodyText = LorePanelController.Instance.loreBodyText;
+            // Assuming the parent of the title text is the panel.
+            lorePanel = LorePanelController.Instance.loreTitleText.transform.parent.gameObject;
             panelImage = lorePanel.GetComponent<Image>();
+
+            // Find the "Close" button within lorePanel’s children.
+            closeButton = lorePanel.GetComponentInChildren<Button>(true);
+            if (closeButton != null)
+            {
+                // Subscribe to its onClick event.
+                closeButton.onClick.AddListener(OnCloseButtonClicked);
+            }
+            else
+            {
+                Debug.LogWarning("No Close button found as a child of the LorePanel!");
+            }
         }
         else
         {
@@ -55,8 +70,18 @@ public class LecternTrigger : MonoBehaviour
             string title = parts.Length > 0 ? parts[0] : "";
             string body = parts.Length > 1 ? fullLore.Substring(fullLore.IndexOf('\n') + 1) : "";
 
+            // Trigger the lore sequence.
             StartCoroutine(FadeInLoreSequence(title, body));
             triggered = true;
+        }
+    }
+
+    // Option 1: Reset the trigger when the player exits the lectern area.
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            triggered = false;
         }
     }
 
@@ -67,6 +92,11 @@ public class LecternTrigger : MonoBehaviour
 
         // Ensure the panel is active.
         lorePanel.SetActive(true);
+        // lorePanel.transform.SetAsLastSibling();
+
+        // Reactivate the close button (in case it was deactivated).
+        if (closeButton != null)
+            closeButton.gameObject.SetActive(true);
 
         // Fade in the panel's image from 0 to 168/255.
         if (panelImage != null)
@@ -74,6 +104,7 @@ public class LecternTrigger : MonoBehaviour
             Color panelColor = panelImage.color;
             panelColor.a = 0f;
             panelImage.color = panelColor;
+
             float timer = 0f;
             while (timer < fadeDuration)
             {
@@ -105,7 +136,7 @@ public class LecternTrigger : MonoBehaviour
         {
             textTimer += Time.deltaTime;
             float alpha = Mathf.Clamp01(textTimer / fadeDuration);
-            titleColor.a = alpha; // Target for text is 1 (fully opaque)
+            titleColor.a = alpha;
             loreTitleText.color = titleColor;
             yield return null;
         }
@@ -125,5 +156,47 @@ public class LecternTrigger : MonoBehaviour
             yield return null;
         }
         loreBodyText.color = new Color(bodyColor.r, bodyColor.g, bodyColor.b, 1f);
+    }
+
+    /// <summary>
+    /// Called when the 'Close' button is clicked.
+    /// Instantly resets the lorePanel transparency and deactivates the button.
+    /// Optionally, you can also hide the lorePanel.
+    /// </summary>
+    private void OnCloseButtonClicked()
+    {
+        // Instantly reset the panel alpha.
+        if (panelImage != null)
+        {
+            Color pc = panelImage.color;
+            pc.a = 0f;
+            panelImage.color = pc;
+        }
+
+        // Instantly reset the text alphas.
+        if (loreTitleText != null)
+        {
+            Color tc = loreTitleText.color;
+            tc.a = 0f;
+            loreTitleText.color = tc;
+        }
+        if (loreBodyText != null)
+        {
+            Color bc = loreBodyText.color;
+            bc.a = 0f;
+            loreBodyText.color = bc;
+        }
+
+        // Hide the entire panel.
+        lorePanel.SetActive(false);
+
+        // Deactivate the close button so it won't be clicked again.
+        if (closeButton != null)
+        {
+            closeButton.gameObject.SetActive(false);
+        }
+
+        // Reset the triggered flag so the lectern can be used again even if the player doesn't leave the trigger area.
+        triggered = false;
     }
 }

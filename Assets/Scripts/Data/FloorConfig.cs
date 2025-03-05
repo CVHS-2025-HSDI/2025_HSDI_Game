@@ -3,8 +3,8 @@ using UnityEngine;
 [System.Serializable]
 public class FloorConfig
 {
-    public int minWidth  = 16;
-    public int maxWidth  = 95;
-    public int minHeight = 16;
-    public int maxHeight = 95;
+    public int minWidth  = 64;
+    public int maxWidth  = 64;
+    public int minHeight = 64;
+    public int maxHeight = 64;
 }

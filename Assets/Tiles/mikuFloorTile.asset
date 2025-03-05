@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 915ce5d89e19ad44d961277fe188314e, type: 3}
-  m_Name: Key
+  m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
+  m_Name: mikuFloorTile
   m_EditorClassIdentifier: 
-  type: 4
-  actionType: 0
-  range: {x: 5, y: 4}
-  stackable: 1
-  image: {fileID: 0}
+  m_DefaultSprite: {fileID: -4652782224436564629, guid: c3ca17c4265ee6a40921476182a24e60, type: 3}
+  m_DefaultGameObject: {fileID: 0}
+  m_DefaultColliderType: 1
+  m_TilingRules: []
