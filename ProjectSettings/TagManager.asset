@@ -11,7 +11,8 @@ TagManager:
 
   - InventoryManager
   - LoreUI
-
+  - Loading
+  - SingletonManager
   layers:
   - Default
   - TransparentFX
@@ -19,6 +20,9 @@ TagManager:
   - 
   - Water
   - UI
+  - Enemy
+  - Player
+  - Whale
   - 
   - 
   - 

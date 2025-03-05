@@ -25,4 +25,15 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             inventoryItem.parentAfterDrag = transform;
         }
     }
+
+    public void RemoveItem() {
+    InventoryItem inventoryItem = GetComponentInChildren<InventoryItem>();
+    if (inventoryItem != null) {
+        if (inventoryItem.item.type == Itemtype.Weapon) {
+            FindFirstObjectByType<InventoryManager>().UnequipWeapon(); // Unequip the weapon if it was equipped
+        }
+        Destroy(inventoryItem.gameObject);
+    }
+}
+
 }
