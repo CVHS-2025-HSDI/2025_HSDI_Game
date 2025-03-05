@@ -2199,6 +2199,7 @@ MonoBehaviour:
   quitButton: {fileID: 471451398}
   toolbar: {fileID: 232055844}
   invButton: {fileID: 261297434}
+  eventSystem: {fileID: 1294991513}
 --- !u!4 &417956244
 Transform:
   m_ObjectHideFlags: 0
@@ -5303,7 +5304,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1294991514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7511,15 +7512,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5192796020778820681, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 5192796020778820681, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 5192796020778820681, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 5192796020778820681, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_LocalPosition.x

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class SingletonManager : MonoBehaviour 
@@ -40,6 +41,9 @@ public class SingletonManager : MonoBehaviour
     
     [Tooltip("ShowMainInventory button under GameplayCanvas.")]
     public GameObject invButton; 
+    
+    [Tooltip("Event System")]
+    public GameObject eventSystem;
 
     void Awake()
     {

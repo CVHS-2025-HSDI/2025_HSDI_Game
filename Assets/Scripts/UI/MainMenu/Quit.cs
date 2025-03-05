@@ -121,6 +121,10 @@ public class Quit : MonoBehaviour
             MasterLevelManager.Instance.inTower = false;
         }
         
+        GameObject eventSystem = SingletonManager.Instance.eventSystem;
+        if (eventSystem != null)
+            eventSystem.gameObject.SetActive(false);
+        
         // Load the MainMenu scene additively so that PersistentManager and MainTower remain loaded.
         AsyncOperation op = SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
         while (!op.isDone) {
