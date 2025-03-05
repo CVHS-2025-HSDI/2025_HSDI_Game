@@ -30,7 +30,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     InventoryItem inventoryItem = GetComponentInChildren<InventoryItem>();
     if (inventoryItem != null) {
         if (inventoryItem.item.type == Itemtype.Weapon) {
-            FindObjectOfType<InventoryManager>().UnequipWeapon(); // Unequip the weapon if it was equipped
+            FindFirstObjectByType<InventoryManager>().UnequipWeapon(); // Unequip the weapon if it was equipped
         }
         Destroy(inventoryItem.gameObject);
     }

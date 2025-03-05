@@ -54,6 +54,18 @@ public class StartScript : MonoBehaviour
                 healthSlider.gameObject.SetActive(true);
             else
                 Debug.LogWarning("HealthSlider not found under GameplayCanvas.");
+            
+            Transform invButton = SingletonManager.Instance.gameplayCanvas.transform.Find("ShowMainInventory");
+            if (invButton != null)
+                invButton.gameObject.SetActive(true);
+            else
+                Debug.LogWarning("ShowMainInventory not found under GameplayCanvas.");
+            
+            Transform toolbar = SingletonManager.Instance.gameplayCanvas.transform.Find("Toolbar");
+            if (toolbar != null)
+                toolbar.gameObject.SetActive(true);
+            else
+                Debug.LogWarning("Toolbar not found under GameplayCanvas.");
         }
         else
         {

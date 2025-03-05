@@ -213,14 +213,14 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 202567105}
   - {fileID: 1368721707}
   - {fileID: 533833292}
-  - {fileID: 261297435}
-  - {fileID: 232055845}
   - {fileID: 1903928100}
   - {fileID: 1632508403}
   - {fileID: 1467770227}
+  - {fileID: 202567105}
+  - {fileID: 261297435}
+  - {fileID: 232055845}
   - {fileID: 317455319}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1631,6 +1631,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 244820271}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &261297434
 GameObject:
   m_ObjectHideFlags: 0
@@ -1713,7 +1725,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 202567104}
+      - m_Target: {fileID: 423314978}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -1736,6 +1748,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 244820271}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &261297437
 MonoBehaviour:
@@ -7264,28 +7288,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 166486416587655812, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
   m_PrefabInstance: {fileID: 5504354119077333611}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3139837162291064117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3139837162291064116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b13b52746cb30194dbab7a43ec8238f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 100
-  HPBar: {fileID: 1368721708}
-  gameOverPanel: {fileID: 1533009232}
-  youDiedText: {fileID: 1274704325}
-  restartButton: {fileID: 1804038892}
-  quitToMenuButton: {fileID: 126931335}
-  quitButton: {fileID: 471451398}
-  toolbar: {fileID: 232055844}
-  invButton: {fileID: 261297434}
 --- !u!1001 &4839253349266931586
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7520,10 +7522,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 166486416587655812, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3139837162291064117}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
 --- !u!1001 &7871677498605593827
 PrefabInstance:

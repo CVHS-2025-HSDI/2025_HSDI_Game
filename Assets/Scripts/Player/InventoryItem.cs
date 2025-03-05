@@ -35,7 +35,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     parentAfterDrag = transform.parent;
     transform.SetParent(transform.root);
 
-    InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
+    InventoryManager inventoryManager = FindFirstObjectByType<InventoryManager>();
     if (inventoryManager != null && inventoryManager.equippedWeaponSlot.childCount > 0 && item.type == Itemtype.Weapon)
     {
         inventoryManager.UnequipWeapon();
@@ -52,7 +52,7 @@ public void OnEndDrag(PointerEventData eventData){
     image.raycastTarget = true;
     transform.SetParent(parentAfterDrag);
 
-    InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
+    InventoryManager inventoryManager = FindFirstObjectByType<InventoryManager>();
 
     if (inventoryManager != null)
     {
