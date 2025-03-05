@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2738e7f196f24984d89300c7835e56ed
+guid: 36c65453d804fa2418c94d9784338853
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -99779908098063039
-    second: couchPicture_0
+      213: 7695274298298069472
+    second: idle_left_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: couchPicture_0
+      name: idle_left_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 444
-        height: 280
+        width: 29
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1450816c3b28d9ef0800000000000000
-      internalID: -99779908098063039
+      spriteID: 0e1ff37f33b1bca60800000000000000
+      internalID: 7695274298298069472
       vertices: []
       indices: 
       edges: []
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      couchPicture_0: -99779908098063039
+      idle_left_0: 7695274298298069472
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

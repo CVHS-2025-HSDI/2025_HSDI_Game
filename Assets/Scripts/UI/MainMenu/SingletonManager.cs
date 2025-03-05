@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SingletonManager: MonoBehaviour 
+public class SingletonManager : MonoBehaviour 
 {
     // Singleton instance for global access.
     public static SingletonManager Instance { get; private set; } 
@@ -15,6 +15,31 @@ public class SingletonManager: MonoBehaviour
     
     [Tooltip("Reference to Loading Panel.")]
     public GameObject loadingPanel;
+    
+    [Tooltip("Reference to Lore Panel.")]
+    public GameObject lorePanel;
+
+    [Header("UI References")]
+    [Tooltip("Game Over Panel under the main canvas.")]
+    public GameObject gameOverPanel;
+    
+    [Tooltip("Text that displays 'You Died'.")]
+    public GameObject youDiedText;
+    
+    [Tooltip("Restart button.")]
+    public GameObject restartButton;
+    
+    [Tooltip("Quit To Menu button.")]
+    public GameObject quitToMenuButton;
+    
+    [Tooltip("Quit button.")]
+    public GameObject quitButton;
+    
+    [Tooltip("Toolbar under GameplayCanvas.")]
+    public GameObject toolbar;
+    
+    [Tooltip("ShowMainInventory button under GameplayCanvas.")]
+    public GameObject invButton; 
 
     void Awake()
     {

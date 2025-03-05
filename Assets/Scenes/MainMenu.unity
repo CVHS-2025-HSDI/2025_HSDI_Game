@@ -803,7 +803,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae14881a7d6e8584690d21a1fb17fafc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameOverScreen: {fileID: 0}
 --- !u!1 &1612203341
 GameObject:
   m_ObjectHideFlags: 0

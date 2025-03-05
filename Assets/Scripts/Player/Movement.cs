@@ -32,9 +32,9 @@ public class Movement : MonoBehaviour
     private float tapDelay = 0.3f;
     private bool isDashing;
 
-    // Movement & rotation
+    // Movement 
     private Vector2 dir;
-    private float desiredRotation;
+    // Removed desiredRotation variable since we no longer need it.
     private Vector2 knockbackForceVector;
 
     void Start()
@@ -62,7 +62,7 @@ public class Movement : MonoBehaviour
     {
         ProcessInputs();
         ProcessDash();
-        HandleRotation();
+        // Removed HandleRotation() because rotation is no longer desired.
         ManageStamina();
         UpdateUI();
     }
@@ -78,19 +78,19 @@ public class Movement : MonoBehaviour
             if (knockbackForceVector != Vector2.zero)
             {
                 newPos += knockbackForceVector * Time.fixedDeltaTime;
-                knockbackForceVector = Vector2.Lerp(knockbackForceVector, Vector2.zero, 0.5f); // Gradually reduce the knockback force
+                knockbackForceVector = Vector2.Lerp(knockbackForceVector, Vector2.zero, 0.5f);
             }
 
             rb.MovePosition(newPos);
         }
-        rb.MoveRotation(desiredRotation);
+        // Do not apply any rotation to the player.
+        // rb.MoveRotation(desiredRotation); // This line has been removed.
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            // Instead of reducing local hp, call damage on PlayerInfo.
             if (playerInfo != null)
                 playerInfo.damage(10);
         }
@@ -155,15 +155,6 @@ public class Movement : MonoBehaviour
         }
     }
 
-    private void HandleRotation()
-    {
-        if (dir != Vector2.zero)
-        {
-            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            desiredRotation = angle - 90f;
-        }
-    }
-
     private void UpdateUI()
     {
         if (HPBar != null && playerInfo != null)
@@ -182,13 +173,14 @@ public class Movement : MonoBehaviour
             staminaBar.value = stamina;
     }
 
-    public float GetDesiredRotation()
-    {
-        return desiredRotation;
-    }
-
     public void SetKnockbackForceVector(Vector2 v)
     {
         knockbackForceVector = v;
     }
+    
+    public Vector2 GetMovementDirection()
+    {
+        return dir;  // 'dir' is the movement vector computed in Update()
+    }
+
 }

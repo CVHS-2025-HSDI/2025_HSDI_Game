@@ -66,6 +66,12 @@ public class StartScript : MonoBehaviour
                 toolbar.gameObject.SetActive(true);
             else
                 Debug.LogWarning("Toolbar not found under GameplayCanvas.");
+            
+            Transform lorePanel = SingletonManager.Instance.gameplayCanvas.transform.Find("LorePanel");
+            if (lorePanel != null)
+                lorePanel.gameObject.SetActive(true);
+            else
+                Debug.LogWarning("LorePanel not found under GameplayCanvas.");
         }
         else
         {

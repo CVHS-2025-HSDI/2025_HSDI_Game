@@ -12,14 +12,14 @@ public class SwordScript : MonoBehaviour
     private bool isPlayer;
     private Vector3 projPos;
     private Quaternion projRot;
-    private int durability; // Should be randomly generated when picked up then set through SetDurability when selecting weapon
+    private int durability; // Should be randomly generated when picked up then set via SetDurability
 
     void Start()
     {
         if (isPlayer)
         {
             attackRate = 0.4f;
-            durability = 100; //temp
+            durability = 100; // temporary value
         }
         else
         {
@@ -46,7 +46,8 @@ public class SwordScript : MonoBehaviour
                 timer = 0f;
             }
         }
-
+        
+        // Ensure the sword remains unrotated relative to the world.
         transform.rotation = Quaternion.identity;
     }
 
@@ -54,132 +55,53 @@ public class SwordScript : MonoBehaviour
     {
         if (isPlayer)
         {
-            GameObject player = gameObject.transform.parent.gameObject;
+            // Get the player (assumed to be the parent) and its Movement component.
+            GameObject player = transform.parent.gameObject;
             Movement m = player.GetComponent<Movement>();
 
-            // Changed back to old method because new one wasn't working correctly
-            if (m.GetDesiredRotation() == 0)
+            // Use a new helper method (added to Movement) to get the current movement direction.
+            Vector2 attackDir = m.GetMovementDirection();
+            if (attackDir == Vector2.zero)
             {
-                projPos = new Vector3(transform.position.x, transform.position.y + 1.5f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 315));
+                // If there's no input, default to the player's facing direction based on scale.
+                attackDir = (player.transform.localScale.x >= 0) ? Vector2.right : Vector2.left;
             }
-            else if (m.GetDesiredRotation() == -180)
-            {
-                projPos = new Vector3(transform.position.x, transform.position.y - 1.5f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 135));
-            }
-            else if (m.GetDesiredRotation() == -90)
-            {
-                projPos = new Vector3(transform.position.x + 1.5f, transform.position.y);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 225));
-            }
-            else if (m.GetDesiredRotation() == 90)
-            {
-                projPos = new Vector3(transform.position.x - 1.5f, transform.position.y);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 45));
-            }
-            else if (m.GetDesiredRotation() == 45)
-            {
-                projPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 0));
-            }
-            else if (m.GetDesiredRotation() == -45)
-            {
-                projPos = new Vector3(transform.position.x + 1f, transform.position.y + 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 270));
-            }
-            else if (m.GetDesiredRotation() == -225)
-            {
-                projPos = new Vector3(transform.position.x - 1f, transform.position.y - 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 90));
-            }
-            else if (m.GetDesiredRotation() == -135)
-            {
-                projPos = new Vector3(transform.position.x + 1f, transform.position.y - 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 180));
-            }
+            attackDir.Normalize();
+            // Compute the angle in degrees from the attack direction.
+            float angle = Mathf.Atan2(attackDir.y, attackDir.x) * Mathf.Rad2Deg;
+            float offsetDistance = 1.5f;
+            // Position the projectile offset from the sword in the attack direction.
+            projPos = transform.position + new Vector3(attackDir.x, attackDir.y, 0) * offsetDistance;
+            projRot = Quaternion.Euler(new Vector3(0, 0, angle));
 
             SwordProjectileScript sps = Instantiate(projectilePrefab, projPos, projRot)
                 .GetComponent<SwordProjectileScript>();
-            sps.gameObject.transform.SetParent(transform);
+            sps.transform.SetParent(transform);
             sps.setIsPlayer(isPlayer);
+
+            // Reduce durability and destroy if depleted.
+            durability--;
+            if (durability <= 0)
+            {
+                // Optionally, notify InventoryManager to remove this weapon.
+                Destroy(gameObject);
+            }
         }
         else
         {
+            // Enemy attack: Determine the direction toward the target.
             if (target == null) return;
-            // For enemy attacks, determine the direction towards the target.
-            if (Math.Abs(target.transform.position.x - transform.position.x) >= 1 && Math.Abs(target.transform.position.y - transform.position.y) >= 1)
-            {
-                //up and right
-                if (target.transform.position.x > transform.position.x && target.transform.position.y > transform.position.y)
-                {
-                    projPos = new Vector3(transform.position.x + 1f, transform.position.y + 1f);
-                    projRot = Quaternion.Euler(new Vector3(0, 0, 270));
-                }
-                //up and left
-                else if (target.transform.position.x < transform.position.x && target.transform.position.y > transform.position.y)
-                {
-                    projPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f);
-                    projRot = Quaternion.Euler(new Vector3(0, 0, 0));
-                }
-                //down and right
-                else if (target.transform.position.x > transform.position.x && target.transform.position.y < transform.position.y)
-                {
-                    projPos = new Vector3(transform.position.x + 1f, transform.position.y - 1f);
-                    projRot = Quaternion.Euler(new Vector3(0, 0, 180));
-                }
-                //down and left
-                else if (target.transform.position.x < transform.position.x && target.transform.position.y < transform.position.y)
-                {
-                    projPos = new Vector3(transform.position.x - 1f, transform.position.y - 1f);
-                    projRot = Quaternion.Euler(new Vector3(0, 0, 90));
-                }
-            }
-            else if (Math.Abs(target.transform.position.x - transform.position.x) > Math.Abs(target.transform.position.y - transform.position.y))
-            {
-                //left
-                if (target.transform.position.x < transform.position.x)
-                {
-                    projPos = new Vector3(transform.position.x - 1.5f, transform.position.y);
-                    projRot = Quaternion.Euler(new Vector3(0, 0, 45));
-                }
-                //right
-                else if (target.transform.position.x > transform.position.x)
-                {
-                    projPos = new Vector3(transform.position.x + 1.5f, transform.position.y);
-                    projRot = Quaternion.Euler(new Vector3(0, 0, 225));
-                }
-            }
-            else
-            {
-                //down
-                if (target.transform.position.y < transform.position.y)
-                {
-                    projPos = new Vector3(transform.position.x, transform.position.y - 1.5f);
-                    projRot = Quaternion.Euler(new Vector3(0, 0, 135));
-                }
-                //up
-                else if (target.transform.position.y > transform.position.y)
-                {
-                    projPos = new Vector3(transform.position.x, transform.position.y + 1.5f);
-                    projRot = Quaternion.Euler(new Vector3(0, 0, 315));
-                }
-            }
+            Vector3 diff = target.transform.position - transform.position;
+            Vector2 enemyAttackDir = new Vector2(diff.x, diff.y).normalized;
+            float angle = Mathf.Atan2(enemyAttackDir.y, enemyAttackDir.x) * Mathf.Rad2Deg;
+            float offsetDistance = 1.5f;
+            projPos = transform.position + new Vector3(enemyAttackDir.x, enemyAttackDir.y, 0) * offsetDistance;
+            projRot = Quaternion.Euler(new Vector3(0, 0, angle));
 
             SwordProjectileScript sps = Instantiate(projectilePrefab, projPos, projRot)
                 .GetComponent<SwordProjectileScript>();
-            sps.gameObject.transform.SetParent(transform);
+            sps.transform.SetParent(transform);
             sps.setIsPlayer(isPlayer);
-        }
-
-        if (isPlayer)
-        {
-            durability--;
-            if(durability <= 0)
-            {
-                // Add destroy inventory item also
-                Destroy(gameObject);
-            }
         }
     }
 

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2738e7f196f24984d89300c7835e56ed
+guid: ab658b2aac3b13343816cf08f8b290d4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -99779908098063039
-    second: couchPicture_0
+      213: 1826435285958538685
+    second: idle_right_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,40 +96,27 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: couchPicture_0
+      name: idle_right_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 444
-        height: 280
+        width: 29
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1450816c3b28d9ef0800000000000000
-      internalID: -99779908098063039
+      spriteID: 0506203103be83c41b5d1b389ec8e925
+      internalID: -204201036
       vertices: []
       indices: 
       edges: []
@@ -138,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: fc9bed445e65d804594e90ffe0b06cbb
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      couchPicture_0: -99779908098063039
+      idle_right_0: -204201036
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
