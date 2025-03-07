@@ -4,132 +4,130 @@ using UnityEngine;
 public class SwordScript : MonoBehaviour
 {
     private GameObject target;
-    public GameObject projectilePrefab; //drag in
-    public GameObject AttackRadiusPrefab; //drag in
+    public GameObject projectilePrefab;      // Assign in Inspector
+    public GameObject AttackRadiusPrefab;      // For enemy (assign if needed)
+    
     private float attackRate;
-    private float timer = 0;
+    private float timer = 0f;
+    private bool isPlayer;
     private Vector3 projPos;
     private Quaternion projRot;
-    private bool isPlayer;
+    private int durability; // Should be randomly generated when picked up then set via SetDurability
 
     void Start()
     {
         if (isPlayer)
         {
             attackRate = 0.4f;
+            durability = 100; // temporary value
         }
         else
         {
             attackRate = 1f;
-            //instantitate radius if its an enemy
-            Instantiate(AttackRadiusPrefab, transform.position, Quaternion.identity).transform.SetParent(transform);
+            // For enemy, instantiate the attack radius if desired.
+            if (AttackRadiusPrefab != null)
+            {
+                Instantiate(AttackRadiusPrefab, transform.position, Quaternion.identity)
+                    .transform.SetParent(transform);
+            }
         }
         timer = attackRate;
-
     }
 
     void Update()
     {
-        if (target != null)
+        timer += Time.deltaTime;
+        if (isPlayer)
         {
-            if (isPlayer)
+            // On left mouse click and if attack timer is ready, attack.
+            if (Input.GetMouseButtonDown(0) && timer >= attackRate)
             {
-                //if m1 click and attack timer is reached: attack
-                if (Input.GetMouseButtonDown(0) && timer >= attackRate)
-                {
-                    attack();
-                    timer = 0;
-                }
+                Attack();
+                timer = 0f;
             }
-            timer += Time.deltaTime;
         }
+        
+        // Ensure the sword remains unrotated relative to the world.
+        transform.rotation = Quaternion.identity;
     }
 
-    public void attack() //for player change to attack in facing direction rather than target - IN PROGRESS
+    public void Attack()
     {
-        //get the correct position and rotation of projectile based on target's position. hardcoded values may change when we get the official sprites
-        if (Math.Abs(target.transform.position.x - transform.position.x) >= 1 && Math.Abs(target.transform.position.y - transform.position.y) >= 1)
+        if (isPlayer)
         {
-            //up and right
-            if (target.transform.position.x > transform.position.x && target.transform.position.y > transform.position.y)
+            // Get the player (assumed to be the parent) and its Movement component.
+            GameObject player = transform.parent.gameObject;
+            Movement m = player.GetComponent<Movement>();
+
+            // Use a new helper method (added to Movement) to get the current movement direction.
+            Vector2 attackDir = m.GetMovementDirection();
+            if (attackDir == Vector2.zero)
             {
-                projPos = new Vector3(transform.position.x + 1f, transform.position.y + 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 270));
+                // If there's no input, default to the player's facing direction based on scale.
+                attackDir = (player.transform.localScale.x >= 0) ? Vector2.right : Vector2.left;
             }
-            //up and left
-            else if (target.transform.position.x < transform.position.x && target.transform.position.y > transform.position.y)
+            attackDir.Normalize();
+            // Compute the angle in degrees from the attack direction.
+            float angle = Mathf.Atan2(attackDir.y, attackDir.x) * Mathf.Rad2Deg;
+            float offsetDistance = 1.5f;
+            // Position the projectile offset from the sword in the attack direction.
+            projPos = transform.position + new Vector3(attackDir.x, attackDir.y, 0) * offsetDistance;
+            projRot = Quaternion.Euler(new Vector3(0, 0, angle));
+
+            SwordProjectileScript sps = Instantiate(projectilePrefab, projPos, projRot)
+                .GetComponent<SwordProjectileScript>();
+            sps.transform.SetParent(transform);
+            sps.setIsPlayer(isPlayer);
+
+            // Reduce durability and destroy if depleted.
+            durability--;
+            if (durability <= 0)
             {
-                projPos = new Vector3(transform.position.x - 1f, transform.position.y + 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 0));
-            }
-            //down and right
-            else if (target.transform.position.x > transform.position.x && target.transform.position.y < transform.position.y)
-            {
-                projPos = new Vector3(transform.position.x + 1f, transform.position.y - 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 180));
-            }
-            //down and left
-            else if (target.transform.position.x < transform.position.x && target.transform.position.y < transform.position.y)
-            {
-                projPos = new Vector3(transform.position.x - 1f, transform.position.y - 1f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 90));
-            }
-        }
-        else if (Math.Abs(target.transform.position.x - transform.position.x) > Math.Abs(target.transform.position.y - transform.position.y))
-        {
-            //left
-            if (target.transform.position.x < transform.position.x)
-            {
-                projPos = new Vector3(transform.position.x - 1.5f, transform.position.y);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 45));
-            }
-            //right
-            else if (target.transform.position.x > transform.position.x)
-            {
-                projPos = new Vector3(transform.position.x + 1.5f, transform.position.y);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 225));
+                // Optionally, notify InventoryManager to remove this weapon.
+                Destroy(gameObject);
             }
         }
         else
         {
-            //down
-            if (target.transform.position.y < transform.position.y)
-            {
-                projPos = new Vector3(transform.position.x, transform.position.y - 1.5f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 135));
-            }
-            //up
-            else if(target.transform.position.y > transform.position.y)
-            {
-                projPos = new Vector3(transform.position.x, transform.position.y + 1.5f);
-                projRot = Quaternion.Euler(new Vector3(0, 0, 315));
-            }
-        }
+            // Enemy attack: Determine the direction toward the target.
+            if (target == null) return;
+            Vector3 diff = target.transform.position - transform.position;
+            Vector2 enemyAttackDir = new Vector2(diff.x, diff.y).normalized;
+            float angle = Mathf.Atan2(enemyAttackDir.y, enemyAttackDir.x) * Mathf.Rad2Deg;
+            float offsetDistance = 1.5f;
+            projPos = transform.position + new Vector3(enemyAttackDir.x, enemyAttackDir.y, 0) * offsetDistance;
+            projRot = Quaternion.Euler(new Vector3(0, 0, angle));
 
-        //instantiate projectile, set parent, isPlayer
-        SwordProjectileScript sps = (SwordProjectileScript)Instantiate(projectilePrefab, projPos, projRot).GetComponent("SwordProjectileScript");
-        sps.gameObject.transform.SetParent(transform);
-        sps.setIsPlayer(isPlayer);
+            SwordProjectileScript sps = Instantiate(projectilePrefab, projPos, projRot)
+                .GetComponent<SwordProjectileScript>();
+            sps.transform.SetParent(transform);
+            sps.setIsPlayer(isPlayer);
+        }
     }
 
-    public SwordScript setTarget(GameObject target)
+    public SwordScript SetTarget(GameObject target)
     {
         this.target = target;
         return this;
     }
 
-    public GameObject getTarget()
+    public GameObject GetTarget()
     {
         return target;
     }
 
-    public float getAttackRate()
+    public void SetIsPlayer(bool isPlayer)
+    {
+        this.isPlayer = isPlayer;
+    }
+    
+    public float GetAttackRate()
     {
         return attackRate;
     }
 
-    public void setIsPlayer(bool isPlayer)
+    public void SetDurability(int dura)
     {
-        this.isPlayer = isPlayer;
+        durability = dura;
     }
 }

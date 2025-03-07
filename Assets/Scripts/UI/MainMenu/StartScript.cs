@@ -7,6 +7,7 @@ public class StartScript : MonoBehaviour
     // These references can be assigned in the Inspector if needed.
     public GameObject mainMenuCanvas; 
     public Camera mainCamera;  // This is the camera in the MainMenu scene.
+    public GameObject currentEventSystem;
 
     public void OnStartGameClicked()
     {
@@ -66,6 +67,19 @@ public class StartScript : MonoBehaviour
                 toolbar.gameObject.SetActive(true);
             else
                 Debug.LogWarning("Toolbar not found under GameplayCanvas.");
+            
+            Transform lorePanel = SingletonManager.Instance.gameplayCanvas.transform.Find("LorePanel");
+            if (lorePanel != null)
+                lorePanel.gameObject.SetActive(true);
+            else
+                Debug.LogWarning("LorePanel not found under GameplayCanvas.");
+            
+            // Switch systems
+            if (currentEventSystem != null)
+                currentEventSystem.gameObject.SetActive(false);
+            GameObject eventSystem = SingletonManager.Instance.eventSystem;
+            if (eventSystem != null)
+                eventSystem.gameObject.SetActive(true);
         }
         else
         {
