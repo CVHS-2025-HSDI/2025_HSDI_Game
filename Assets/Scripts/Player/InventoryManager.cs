@@ -84,27 +84,35 @@ void ChangeSelectedSlot(int newValue)
 
   
     public void EquipWeapon(Item weaponItem) {
-    // Remove previously equipped weapon
+        // Remove previously equipped weapon
         if (equippedWeaponSlot.childCount > 0) {
             Destroy(equippedWeaponSlot.GetChild(0).gameObject);
         }
 
-    // Spawn and equip the new weapon
+        // Spawn and equip the new weapon
         GameObject newWeapon = Instantiate(weaponItem.itemPrefab, equippedWeaponSlot);
-        newWeapon.transform.localPosition = new Vector3(0.05f, 0.06f, 0); // Ensure correct position
+
+        // Adjust the weapon's local position as needed.
+        newWeapon.transform.localPosition = new Vector3(0.05f, 0.06f, 0);
+
+        // Set rotation offset based on the provided value.
         newWeapon.transform.localRotation = Quaternion.Euler(weaponRotationOffset);
-        newWeapon.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f); // Ensure correct size
+
+        // Adjust the scale to ensure the weapon fits your game world.
+        // You can modify these values until the weapon looks right.
+        newWeapon.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
 
         SpriteRenderer sr = newWeapon.GetComponent<SpriteRenderer>();
-
-        sr.sortingOrder=1;
+        if (sr != null) {
+            sr.sortingOrder = 1;
+        }
     }
 
     public void UnequipWeapon() {
-    foreach (Transform child in equippedWeaponSlot) {
-        Destroy(child.gameObject);
+        foreach (Transform child in equippedWeaponSlot) {
+            Destroy(child.gameObject);
+        }
     }
-}
 
 public void CheckWeaponEquipped(){
     InventoryItem selectedItem = inventorySlots[selectedSlot].GetComponentInChildren<InventoryItem>();

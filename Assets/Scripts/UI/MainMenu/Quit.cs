@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class Quit : MonoBehaviour
 {
-    // Assign this in the Inspector with your Game Over panel.
-    public GameObject gameOverScreen;
+    // Removed the local gameOverScreen field.
+    // All UI elements are now referenced via SingletonManager.Instance.
 
     public void QuitGame() {
         Application.Quit();
@@ -26,11 +26,11 @@ public class Quit : MonoBehaviour
                 pi.Revive();  // Reset isDead and currentHealth
                 Debug.Log("Player health and state reset.");
             
-                // Reactivate the toolbar and inventory button.
-                if (pi.toolbar != null)
-                    pi.toolbar.SetActive(true);
-                if (pi.invButton != null)
-                    pi.invButton.SetActive(true);
+                // Reactivate the toolbar and inventory button via SingletonManager.
+                if (SingletonManager.Instance.toolbar != null)
+                    SingletonManager.Instance.toolbar.SetActive(true);
+                if (SingletonManager.Instance.invButton != null)
+                    SingletonManager.Instance.invButton.SetActive(true);
             }
             else
             {
@@ -84,91 +84,94 @@ public class Quit : MonoBehaviour
     }
     
     private IEnumerator ReturnToMainMenuRoutine() {
-    // Show loading screen with an appropriate message.
-    if (LoadingUI.Instance != null)
-        LoadingUI.Instance.ShowLoading("Returning to Main Menu...");
-    else
-        Debug.LogWarning("LoadingUI instance not found in ReturnToMainMenu.");
+        // Show loading screen with an appropriate message.
+        if (LoadingUI.Instance != null)
+            LoadingUI.Instance.ShowLoading("Returning to Main Menu...");
+        else
+            Debug.LogWarning("LoadingUI instance not found in ReturnToMainMenu.");
 
-    // Reset the Game Over panel's UI elements.
-    if (gameOverScreen != null) {
-        // Reset the panel's alpha to 0.
-        Image panelImage = gameOverScreen.GetComponent<Image>();
-        if (panelImage != null) {
-            Color col = panelImage.color;
-            col.a = 0f;
-            panelImage.color = col;
-            Debug.Log("GameOver panel alpha reset.");
+        // Reset the Game Over panel's UI elements via SingletonManager.
+        if (SingletonManager.Instance.gameOverPanel != null) {
+            // Reset the panel's alpha to 0.
+            Image panelImage = SingletonManager.Instance.gameOverPanel.GetComponent<Image>();
+            if (panelImage != null) {
+                Color col = panelImage.color;
+                col.a = 0f;
+                panelImage.color = col;
+                Debug.Log("GameOver panel alpha reset.");
+            } else {
+                Debug.LogWarning("GameOver screen does not have an Image component!");
+            }
+            // Disable all child elements (buttons, text, etc.)
+            foreach (Transform child in SingletonManager.Instance.gameOverPanel.transform) {
+                child.gameObject.SetActive(false);
+            }
+            Debug.Log("GameOver panel children disabled.");
         } else {
-            Debug.LogWarning("GameOver screen does not have an Image component!");
+            Debug.LogWarning("GameOver screen not assigned!");
         }
-        // Disable all child elements (buttons, text, etc.)
-        foreach (Transform child in gameOverScreen.transform) {
-            child.gameObject.SetActive(false);
-        }
-        Debug.Log("GameOver panel children disabled.");
-    } else {
-        Debug.LogWarning("GameOver screen not assigned!");
-    }
 
-    // Disable gameplay UI elements.
-    if (SingletonManager.Instance != null && SingletonManager.Instance.gameplayCanvas != null) {
-        SingletonManager.Instance.gameplayCanvas.gameObject.SetActive(false);
-    }
-    
-    // Reset game state (leave tower mode).
-    if (MasterLevelManager.Instance != null) {
-        MasterLevelManager.Instance.inTower = false;
-    }
-    
-    // Load the MainMenu scene additively so that PersistentManager and MainTower remain loaded.
-    AsyncOperation op = SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
-    while (!op.isDone) {
-        yield return null;
-    }
-    
-    // Optionally, set MainMenu as the active scene.
-    Scene mainMenuScene = SceneManager.GetSceneByName("MainMenu");
-    if (mainMenuScene.IsValid()) {
-        SceneManager.SetActiveScene(mainMenuScene);
-    } else {
-        Debug.LogError("MainMenu scene not found!");
-    }
-    
-    // Disable persistent main camera by disabling its Camera and AudioListener components.
-    GameObject mainCamera = GameObject.FindWithTag("MainCamera");
-    if (mainCamera != null) {
-        Camera cam = mainCamera.GetComponent<Camera>();
-        AudioListener audioListener = mainCamera.GetComponent<AudioListener>();
-        if (cam != null) {
-            cam.enabled = false;
-            Debug.Log("Camera component disabled.");
-        } else {
-            Debug.LogError("Camera component not found on MainCamera.");
+        // Disable gameplay UI elements.
+        if (SingletonManager.Instance != null && SingletonManager.Instance.gameplayCanvas != null) {
+            SingletonManager.Instance.gameplayCanvas.gameObject.SetActive(false);
         }
-        if (audioListener != null) {
-            audioListener.enabled = false;
-            Debug.Log("AudioListener component disabled.");
-        } else {
-            Debug.LogError("AudioListener component not found.");
+        
+        // Reset game state (leave tower mode).
+        if (MasterLevelManager.Instance != null) {
+            MasterLevelManager.Instance.inTower = false;
         }
-    } else {
-        Debug.LogError("MainCamera not found!");
+        
+        GameObject eventSystem = SingletonManager.Instance.eventSystem;
+        if (eventSystem != null)
+            eventSystem.gameObject.SetActive(false);
+        
+        // Load the MainMenu scene additively so that PersistentManager and MainTower remain loaded.
+        AsyncOperation op = SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
+        while (!op.isDone) {
+            yield return null;
+        }
+        
+        // Optionally, set MainMenu as the active scene.
+        Scene mainMenuScene = SceneManager.GetSceneByName("MainMenu");
+        if (mainMenuScene.IsValid()) {
+            SceneManager.SetActiveScene(mainMenuScene);
+        } else {
+            Debug.LogError("MainMenu scene not found!");
+        }
+        
+        // Disable persistent main camera by disabling its Camera and AudioListener components.
+        GameObject mainCamera = GameObject.FindWithTag("MainCamera");
+        if (mainCamera != null) {
+            Camera cam = mainCamera.GetComponent<Camera>();
+            AudioListener audioListener = mainCamera.GetComponent<AudioListener>();
+            if (cam != null) {
+                cam.enabled = false;
+                Debug.Log("Camera component disabled.");
+            } else {
+                Debug.LogError("Camera component not found on MainCamera.");
+            }
+            if (audioListener != null) {
+                audioListener.enabled = false;
+                Debug.Log("AudioListener component disabled.");
+            } else {
+                Debug.LogError("AudioListener component not found.");
+            }
+        } else {
+            Debug.LogError("MainCamera not found!");
+        }
+        
+        // Disable gameplay canvas again to be safe.
+        if (SingletonManager.Instance != null && SingletonManager.Instance.gameplayCanvas != null) {
+            SingletonManager.Instance.gameplayCanvas.gameObject.SetActive(false);
+        }
+        
+        // Wait a brief moment before hiding the loading UI.
+        yield return new WaitForSeconds(0.5f);
+        if (LoadingUI.Instance != null)
+            LoadingUI.Instance.HideLoading();
+        
+        Debug.Log("Returned to Main Menu");
     }
-    
-    // Disable gameplay canvas again to be safe.
-    if (SingletonManager.Instance != null && SingletonManager.Instance.gameplayCanvas != null) {
-        SingletonManager.Instance.gameplayCanvas.gameObject.SetActive(false);
-    }
-    
-    // Wait a brief moment before hiding the loading UI.
-    yield return new WaitForSeconds(0.5f);
-    if (LoadingUI.Instance != null)
-        LoadingUI.Instance.HideLoading();
-    
-    Debug.Log("Returned to Main Menu");
-}
-
     
     /// <summary>
     /// Restarts the game with a new seed, bypassing the Main Menu.
@@ -181,17 +184,17 @@ public class Quit : MonoBehaviour
         else
             Debug.LogWarning("LoadingUI instance not found in RestartGameWithNewSeed.");
         
-        // Reset the game over screen, if it exists.
-        if (gameOverScreen != null) {
+        // Reset the game over screen using SingletonManager.
+        if (SingletonManager.Instance.gameOverPanel != null) {
             // Reset the panel's alpha to 0.
-            Image img = gameOverScreen.GetComponent<Image>();
+            Image img = SingletonManager.Instance.gameOverPanel.GetComponent<Image>();
             if (img != null) {
                 Color col = img.color;
                 col.a = 0f;
                 img.color = col;
             }
-            // Disable all children
-            foreach (Transform child in gameOverScreen.transform) {
+            // Disable all children.
+            foreach (Transform child in SingletonManager.Instance.gameOverPanel.transform) {
                 child.gameObject.SetActive(false);
             }
         } else {
@@ -224,6 +227,11 @@ public class Quit : MonoBehaviour
         else
         {
             Debug.LogWarning("KeyManager instance not found!");
+        }
+        
+        Transform lorePanel = SingletonManager.Instance.gameplayCanvas.transform.Find("LorePanel");
+        if (lorePanel != null) {
+            lorePanel.gameObject.SetActive(true); // Bring back panel
         }
         
         if (LoadingUI.Instance != null)

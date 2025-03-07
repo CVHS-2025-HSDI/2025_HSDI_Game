@@ -8,41 +8,55 @@ public class PlayerInfo : MonoBehaviour
     public float maxHealth = 100f;
     public float currentHealth = 100f;
 
-    [Header("UI References")]
-    public Slider HPBar;                // Assigned in Inspector
-    public GameObject gameOverPanel;    // Panel under MainCanvas (covers screen)
-    public GameObject youDiedText;      // Child text object #1 (initially inactive)
-    public GameObject restartButton; // #2
-    public GameObject quitToMenuButton; // #3
-    public GameObject quitButton; // #4
-    public GameObject toolbar; // #5
-    public GameObject invButton; // #6
+    // Remove local UI references – they will now be accessed through SingletonManager.
+    // public GameObject gameOverPanel;
+    // public GameObject youDiedText;
+    // public GameObject restartButton;
+    // public GameObject quitToMenuButton;
+    // public GameObject quitButton;
+    // public GameObject toolbar;
+    // public GameObject invButton;
 
     private SpriteRenderer sr;
     private bool isDead = false;
+
+    public GameObject weaponPrefab; // Assign in Inspector
+    private GameObject weapon;
 
     void Start()
     {
         currentHealth = maxHealth;
         sr = GetComponent<SpriteRenderer>();
 
+        // Assume HPBar is either assigned locally or found on a child.
+        Slider HPBar = GetComponentInChildren<Slider>();
         if (HPBar != null)
         {
             HPBar.maxValue = maxHealth;
             HPBar.value = currentHealth;
         }
+        
         // Initialize GameOver panel: set its alpha to 0 and disable the YouDied text.
-        if (gameOverPanel != null)
+        if (SingletonManager.Instance.gameOverPanel != null)
         {
-            Image panelImage = gameOverPanel.GetComponent<Image>();
+            Image panelImage = SingletonManager.Instance.gameOverPanel.GetComponent<Image>();
             if (panelImage != null)
             {
                 Color c = panelImage.color;
                 c.a = 0f;
                 panelImage.color = c;
             }
-            if (youDiedText != null)
-                youDiedText.SetActive(false);
+            if (SingletonManager.Instance.youDiedText != null)
+                SingletonManager.Instance.youDiedText.SetActive(false);
+        }
+
+        // Instantiate weapon and set as a child of the player.
+        weapon = Instantiate(weaponPrefab, transform.position, weaponPrefab.transform.rotation);
+        weapon.transform.SetParent(transform);
+        var swordScript = weapon.GetComponent("SwordScript");
+        if (swordScript != null)
+        {
+            ((SwordScript)swordScript).SetIsPlayer(true);
         }
     }
 
@@ -51,8 +65,11 @@ public class PlayerInfo : MonoBehaviour
         if (isDead) return;
         currentHealth -= dmg;
         Debug.Log("Player hit for " + dmg + ", health now: " + currentHealth);
+        
+        Slider HPBar = GetComponentInChildren<Slider>();
         if (HPBar != null)
             HPBar.value = currentHealth;
+            
         if (currentHealth <= 0)
             Die();
     }
@@ -60,10 +77,22 @@ public class PlayerInfo : MonoBehaviour
     private void Die()
     {
         isDead = true;
+        if (weapon != null)
+            weapon.SetActive(false);
+        
         // Freeze movement by disabling the Movement script (assumed to be on the same GameObject)
         Movement moveScript = GetComponent<Movement>();
         if (moveScript != null)
             moveScript.enabled = false;
+        
+        // Hide LorePanel under GameplayCanvas via SingletonManager.
+        if (SingletonManager.Instance.gameplayCanvas != null)
+        {
+            Transform lorePanel = SingletonManager.Instance.gameplayCanvas.transform.Find("LorePanel");
+            if (lorePanel != null)
+                lorePanel.gameObject.SetActive(false);
+        }
+        
         StartCoroutine(GameOverSequence());
     }
     
@@ -71,6 +100,7 @@ public class PlayerInfo : MonoBehaviour
     {
         isDead = false;
         currentHealth = maxHealth;
+        Slider HPBar = GetComponentInChildren<Slider>();
         if (HPBar != null)
             HPBar.value = currentHealth;
         Debug.Log("Player revived.");
@@ -78,7 +108,7 @@ public class PlayerInfo : MonoBehaviour
 
     private IEnumerator GameOverSequence()
     {
-        // Play GameOver music
+        // Play GameOver music if available.
         if (MusicController.Instance != null)
             MusicController.Instance.PlayGameOverMusic();
         
@@ -88,20 +118,20 @@ public class PlayerInfo : MonoBehaviour
 
         Image panelImage = null;
         Color initialPanelColor = Color.black;
-        if (gameOverPanel != null)
+        if (SingletonManager.Instance.gameOverPanel != null)
         {
-            panelImage = gameOverPanel.GetComponent<Image>();
+            panelImage = SingletonManager.Instance.gameOverPanel.GetComponent<Image>();
             if (panelImage != null)
             {
                 initialPanelColor = panelImage.color;
-                // Ensure panel starts fully transparent
+                // Ensure panel starts fully transparent.
                 Color temp = initialPanelColor;
                 temp.a = 0f;
                 panelImage.color = temp;
             }
         }
         
-        // Optionally disable enemy AI here...
+        // Optionally disable enemy AI.
         EnemyAI[] enemies = FindObjectsByType<EnemyAI>(FindObjectsSortMode.InstanceID);
         foreach (EnemyAI enemy in enemies)
         {
@@ -116,6 +146,7 @@ public class PlayerInfo : MonoBehaviour
             float t = timer / fadeDuration;
             float playerAlpha = Mathf.Lerp(initialPlayerColor.a, 0f, t);
             sr.color = new Color(initialPlayerColor.r, initialPlayerColor.g, initialPlayerColor.b, playerAlpha);
+            
             if (panelImage != null)
             {
                 float panelAlpha = Mathf.Lerp(0f, 1f, t);
@@ -126,19 +157,21 @@ public class PlayerInfo : MonoBehaviour
         sr.color = new Color(initialPlayerColor.r, initialPlayerColor.g, initialPlayerColor.b, 0f);
         if (panelImage != null)
             panelImage.color = new Color(initialPanelColor.r, initialPanelColor.g, initialPanelColor.b, 1f);
-        if (youDiedText != null)
-            youDiedText.SetActive(true);
-        if (restartButton != null)
-            restartButton.SetActive(true);
-        if (quitToMenuButton != null)
-            quitToMenuButton.SetActive(true);
-        if (quitButton != null)
-            quitButton.SetActive(true);
         
-        // Hide the toolbar and inventory button on game over.
-        if (toolbar != null)
-            toolbar.SetActive(false);
-        if (invButton != null)
-            invButton.SetActive(false);
+        // Activate game over UI objects via SingletonManager.
+        if (SingletonManager.Instance.youDiedText != null)
+            SingletonManager.Instance.youDiedText.SetActive(true);
+        if (SingletonManager.Instance.restartButton != null)
+            SingletonManager.Instance.restartButton.SetActive(true);
+        if (SingletonManager.Instance.quitToMenuButton != null)
+            SingletonManager.Instance.quitToMenuButton.SetActive(true);
+        if (SingletonManager.Instance.quitButton != null)
+            SingletonManager.Instance.quitButton.SetActive(true);
+        
+        // Fade out (or hide) the Toolbar and the ShowMainInventory button.
+        if (SingletonManager.Instance.toolbar != null)
+            SingletonManager.Instance.toolbar.SetActive(false);
+        if (SingletonManager.Instance.invButton != null)
+            SingletonManager.Instance.invButton.SetActive(false);
     }
 }

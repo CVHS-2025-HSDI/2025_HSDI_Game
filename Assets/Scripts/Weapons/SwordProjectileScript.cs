@@ -9,6 +9,7 @@ public class SwordProjectileScript : MonoBehaviour
     private float timeVisible = 0.15f;
     private bool attack = true;
     private bool isPlayer;
+    private float knockbackForce = 25f;
 
     void Start()
     {
@@ -17,7 +18,7 @@ public class SwordProjectileScript : MonoBehaviour
 
     void Update()
     {
-        //if visible for timeVisible seconds, destory
+        // If visible for timeVisible seconds, destory
         if (timer >= timeVisible)
         {
             Destroy(gameObject);
@@ -34,19 +35,26 @@ public class SwordProjectileScript : MonoBehaviour
         {
             target = collision.gameObject;
 
-            //if projectile collided with a valid target, remove 'damage' health from target
+            // If projectile collided with a valid target, remove 'damage' health from target
             if ((isPlayer && target.GetComponent<EnemyAI>() != null) || (!isPlayer && target.GetComponent<PlayerInfo>() != null))
             {
                 if (isPlayer)
                 {
                     target.GetComponent<EnemyAI>().damage(damage);
+
+                    // Add knockback vector to enemy's movement direction vector
+                    Vector2 direction = (collision.transform.position - transform.parent.transform.position).normalized;
+                    target.GetComponent<EnemyAI>().SetKnockbackForceVector(direction * knockbackForce);
                 }
                 else
                 {
-                    target.GetComponent<PlayerInfo>().damage(damage); //may change
-                }
+                    target.GetComponent<PlayerInfo>().damage(damage);
 
-                //knock back target by 'knockbackForce' in appropiate direction - IN PROGRESS
+                    // Add knockback vector to player's movement direction vector
+                    knockbackForce = 15f;
+                    Vector2 direction = (collision.transform.position - transform.parent.transform.position).normalized;
+                    target.GetComponent<Movement>().SetKnockbackForceVector(direction * knockbackForce);
+                }
             }
             attack = false;
         }
