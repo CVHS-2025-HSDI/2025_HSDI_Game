@@ -2360,6 +2360,7 @@ GameObject:
   - component: {fileID: 459359574}
   - component: {fileID: 459359573}
   - component: {fileID: 459359575}
+  - component: {fileID: 459359576}
   m_Layer: 0
   m_Name: MusicController
   m_TagString: Untagged
@@ -2494,6 +2495,19 @@ MonoBehaviour:
   audioSource: {fileID: 1139367273}
   gameOverMusic: {fileID: 8300000, guid: c943f6ecff0b27c46875f0ed1925e669, type: 3}
   fadeDuration: 4
+--- !u!114 &459359576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459359571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e33b0573ad89fa40b2b634acf36b820, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  masterMixer: {fileID: 24100000, guid: ea326f2a0d51ee5469da84d7e76abfac, type: 2}
 --- !u!1 &471451398
 GameObject:
   m_ObjectHideFlags: 0
