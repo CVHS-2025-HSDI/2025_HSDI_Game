@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class Options : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public GameObject optionsMenu;
+    public GameObject mainMenuButtons;
+    
+    public void OpenOptions() {
+        // Enable the Options panel.
+        if (optionsMenu != null)
+            optionsMenu.gameObject.SetActive(true);
+        if (mainMenuButtons != null)
+            mainMenuButtons.gameObject.SetActive(false);
     }
 }

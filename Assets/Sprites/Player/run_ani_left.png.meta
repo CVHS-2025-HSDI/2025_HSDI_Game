@@ -409,7 +409,19 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      run_ani_left_0: 861596269173294221
+      run_ani_left_1: 1171788601924430362
+      run_ani_left_10: 1373389202981843750
+      run_ani_left_11: -6654058317508155591
+      run_ani_left_2: 3299456526149013427
+      run_ani_left_3: 3862236926306969396
+      run_ani_left_4: -2290798219154294111
+      run_ani_left_5: 2941832990953636481
+      run_ani_left_6: -2523249022681020706
+      run_ani_left_7: -4660698321805499233
+      run_ani_left_8: 2797062728066825009
+      run_ani_left_9: 7058326811583649240
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
