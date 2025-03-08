@@ -103,6 +103,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponPrefab: {fileID: 8222599173819168208, guid: 1ee43d03ef4980f44acb20d2abfdbb45, type: 3}
+  DamageTextPrefab: {fileID: 1266889339534403196, guid: 43c3ca647bb317b4bbe0dd69c1843726, type: 3}
+  moveSpeed: 1.8
+  wanderSpeed: 1
+  wanderInterval: 6
+  pauseDuration: 1
+  isFrozen: 0
+  knockbackForceVector: {x: 0, y: 0}
 --- !u!58 &5332478792872480045
 CircleCollider2D:
   m_ObjectHideFlags: 0

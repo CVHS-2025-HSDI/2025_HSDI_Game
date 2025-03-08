@@ -196,6 +196,7 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 100
   weaponPrefab: {fileID: 0}
+  DamageTextPrefab: {fileID: 1266889339534403196, guid: 43c3ca647bb317b4bbe0dd69c1843726, type: 3}
 --- !u!114 &6205483453373402903
 MonoBehaviour:
   m_ObjectHideFlags: 0
