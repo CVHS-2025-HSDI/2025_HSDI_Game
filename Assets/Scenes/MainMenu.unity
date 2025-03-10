@@ -728,6 +728,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuCanvas: {fileID: 403968913}
   mainCamera: {fileID: 2041327847}
+  currentEventSystem: {fileID: 0}
 --- !u!1 &1430148866
 GameObject:
   m_ObjectHideFlags: 0
