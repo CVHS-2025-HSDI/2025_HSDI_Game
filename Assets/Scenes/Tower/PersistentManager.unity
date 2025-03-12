@@ -7219,7 +7219,7 @@ MonoBehaviour:
   inventoryItemPrefab: {fileID: 6486474336143683959, guid: 20cbb04ab19539543a30f4b515b61420, type: 3}
   equippedWeaponSlot: {fileID: 769640625}
   weaponRotationOffset: {x: 0, y: 0, z: 44}
-  swordItem: {fileID: 11400000, guid: cea2dc6305aef0044a49526f16c5be26, type: 2}
+  swordItem: {fileID: 0}
 --- !u!224 &2054766601
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7450,7 +7450,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3139837162291064116}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 649a7a442d0a6d44b8750ae171cba979, type: 2}
   m_CullingMode: 0
@@ -7632,6 +7632,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.117
       objectReference: {fileID: 0}
+    - target: {fileID: 6205483453373402903, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: frameRate
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 6332498279251299184, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_Size.x
       value: 0.29
@@ -7746,7 +7750,6 @@ PrefabInstance:
       objectReference: {fileID: 126931335}
     m_RemovedComponents:
     - {fileID: 0}
-    - {fileID: 6205483453373402903, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
