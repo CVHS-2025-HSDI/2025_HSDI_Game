@@ -79,13 +79,13 @@ public class PlayerInfo : MonoBehaviour
         isDead = true;
         if (weapon != null)
             weapon.SetActive(false);
-        
-        // Freeze movement by disabling the Movement script (assumed to be on the same GameObject)
+    
+        // Freeze movement by disabling the Movement script.
         Movement moveScript = GetComponent<Movement>();
         if (moveScript != null)
             moveScript.enabled = false;
-        
-        // Hide LorePanel under GameplayCanvas via SingletonManager.
+    
+        // Hide LorePanel.
         if (SingletonManager.Instance.gameplayCanvas != null)
         {
             Transform lorePanel = SingletonManager.Instance.gameplayCanvas.transform.Find("LorePanel");
@@ -93,6 +93,12 @@ public class PlayerInfo : MonoBehaviour
                 lorePanel.gameObject.SetActive(false);
         }
         
+        InventoryManager invManager = FindFirstObjectByType<InventoryManager>();
+        if (invManager != null)
+        {
+            invManager.ClearInventoryExceptSword();
+        }
+    
         StartCoroutine(GameOverSequence());
     }
     

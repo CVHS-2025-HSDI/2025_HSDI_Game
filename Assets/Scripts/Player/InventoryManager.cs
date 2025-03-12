@@ -3,28 +3,24 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour
 {
     public InventorySlot[] inventorySlots;
-
     public GameObject inventoryItemPrefab;
-
     int selectedSlot = -1;
-
     public Transform equippedWeaponSlot; 
-
     public Vector3 weaponRotationOffset = new Vector3(0, 0, 0);
 
+    // NEW: Store a reference to the Sword item.
+    public Item swordItem;
+
     void Start() {
-    // Find the sword item from resources (or assign in the inspector)
-    Item swordItem = Resources.Load<Item>("Items/Sword"); // Adjust path if needed
-
-    if (swordItem != null) {
-        AddItem(swordItem);
-    } else {
-        Debug.LogError("Sword item not found in Resources!");
+        // Load and store the Sword item.
+        swordItem = Resources.Load<Item>("Items/Sword"); // Adjust path if needed
+        if (swordItem != null) {
+            AddItem(swordItem);
+        } else {
+            Debug.LogError("Sword item not found in Resources!");
+        }
+        ChangeSelectedSlot(0);
     }
-
-    ChangeSelectedSlot(0);
-}
-
 
     void Update () {
         if(Input.inputString != null){
@@ -35,36 +31,30 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-void ChangeSelectedSlot(int newValue)
-{
-    if (selectedSlot >= 0) {
-        inventorySlots[selectedSlot].Deselect();
+    void ChangeSelectedSlot(int newValue)
+    {
+        if (selectedSlot >= 0) {
+            inventorySlots[selectedSlot].Deselect();
+        }
+        inventorySlots[newValue].Select();
+        selectedSlot = newValue;
+        InventoryItem selectedItem = inventorySlots[selectedSlot].GetComponentInChildren<InventoryItem>();
+        if (selectedItem != null && selectedItem.item.type == Itemtype.Weapon) {
+            EquipWeapon(selectedItem.item);
+        } else {
+            UnequipWeapon();
+        }
     }
-    inventorySlots[newValue].Select();
-    selectedSlot = newValue;
-
-    InventoryItem selectedItem = inventorySlots[selectedSlot].GetComponentInChildren<InventoryItem>();
-
-    if (selectedItem != null && selectedItem.item.type == Itemtype.Weapon) {
-        EquipWeapon(selectedItem.item);
-    } else {
-        UnequipWeapon(); // Unequip if no weapon is in the slot
-    }
-}
-
 
     public bool AddItem(Item item){
-
         foreach(InventorySlot slot in inventorySlots){
             InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
-            if(itemInSlot != null && itemInSlot.item == item && itemInSlot.count < 4  && itemInSlot.item.stackable == true){
+            if(itemInSlot != null && itemInSlot.item == item && itemInSlot.count < 4 && itemInSlot.item.stackable == true){
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
                 return true;
             }
         }
-
-
         foreach(InventorySlot slot in inventorySlots){
             InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
             if(itemInSlot == null){
@@ -72,7 +62,6 @@ void ChangeSelectedSlot(int newValue)
                 return true;
             }
         }
-
         return false;
     }
 
@@ -82,26 +71,14 @@ void ChangeSelectedSlot(int newValue)
         inventoryItem.InitialiseItem(item);
     }
 
-  
     public void EquipWeapon(Item weaponItem) {
-        // Remove previously equipped weapon
         if (equippedWeaponSlot.childCount > 0) {
             Destroy(equippedWeaponSlot.GetChild(0).gameObject);
         }
-
-        // Spawn and equip the new weapon
         GameObject newWeapon = Instantiate(weaponItem.itemPrefab, equippedWeaponSlot);
-
-        // Adjust the weapon's local position as needed.
         newWeapon.transform.localPosition = new Vector3(0.05f, 0.06f, 0);
-
-        // Set rotation offset based on the provided value.
         newWeapon.transform.localRotation = Quaternion.Euler(weaponRotationOffset);
-
-        // Adjust the scale to ensure the weapon fits your game world.
-        // You can modify these values until the weapon looks right.
         newWeapon.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
-
         SpriteRenderer sr = newWeapon.GetComponent<SpriteRenderer>();
         if (sr != null) {
             sr.sortingOrder = 1;
@@ -114,21 +91,46 @@ void ChangeSelectedSlot(int newValue)
         }
     }
 
-public void CheckWeaponEquipped(){
-    InventoryItem selectedItem = inventorySlots[selectedSlot].GetComponentInChildren<InventoryItem>();
-
-    if (selectedItem == null || selectedItem.item.type != Itemtype.Weapon)
-    {
-        UnequipWeapon();
+    public void CheckWeaponEquipped(){
+        InventoryItem selectedItem = inventorySlots[selectedSlot].GetComponentInChildren<InventoryItem>();
+        if (selectedItem == null || selectedItem.item.type != Itemtype.Weapon)
+        {
+            UnequipWeapon();
+        }
     }
-}
 
-public int GetSelectedSlotIndex(){
-    return selectedSlot;
-}
+    public int GetSelectedSlotIndex(){
+        return selectedSlot;
+    }
 
+    public void PurgeKeys()
+    {
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            InventoryItem invItem = slot.GetComponentInChildren<InventoryItem>();
+            if (invItem != null && invItem.item.type == Itemtype.Key)
+            {
+                Destroy(invItem.gameObject);
+            }
+        }
+        Debug.Log("Key items purged from inventory.");
+    }
 
-
-
-
+    // NEW: Clear all inventory items except for the Sword.
+    public void ClearInventoryExceptSword()
+    {
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            InventoryItem invItem = slot.GetComponentInChildren<InventoryItem>();
+            if (invItem != null)
+            {
+                // If this item is not the Sword item, remove it.
+                if (swordItem == null || invItem.item != swordItem)
+                {
+                    Destroy(invItem.gameObject);
+                }
+            }
+        }
+        Debug.Log("Inventory cleared, preserving the Sword.");
+    }
 }

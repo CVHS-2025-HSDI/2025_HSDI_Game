@@ -2147,6 +2147,7 @@ MonoBehaviour:
     maxHeight: 64
   totalFloors: 16
   globalSeed: 5493849
+  highestFloorReached: 1
   playerPrefab: {fileID: 3139837162291064116}
   merchantPrefab: {fileID: 7853170730201843219, guid: d9d56aad10fdeb242a9fe5ac45ab6f31, type: 3}
   inTower: 0
@@ -7204,6 +7205,7 @@ MonoBehaviour:
   inventoryItemPrefab: {fileID: 6486474336143683959, guid: 20cbb04ab19539543a30f4b515b61420, type: 3}
   equippedWeaponSlot: {fileID: 769640625}
   weaponRotationOffset: {x: 0, y: 0, z: 44}
+  swordItem: {fileID: 11400000, guid: cea2dc6305aef0044a49526f16c5be26, type: 2}
 --- !u!224 &2054766601
 RectTransform:
   m_ObjectHideFlags: 0

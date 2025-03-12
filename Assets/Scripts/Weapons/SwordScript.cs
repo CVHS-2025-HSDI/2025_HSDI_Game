@@ -96,7 +96,7 @@ public class SwordScript : MonoBehaviour
             float angle = Mathf.Atan2(enemyAttackDir.y, enemyAttackDir.x) * Mathf.Rad2Deg;
             float offsetDistance = 1.5f;
             projPos = transform.position + new Vector3(enemyAttackDir.x, enemyAttackDir.y, 0) * offsetDistance;
-            projRot = Quaternion.Euler(new Vector3(0, 0, angle));
+            projRot = Quaternion.Euler(new Vector3(0, 0, angle - 135));
 
             SwordProjectileScript sps = Instantiate(projectilePrefab, projPos, projRot)
                 .GetComponent<SwordProjectileScript>();

@@ -172,79 +172,79 @@ public class Quit : MonoBehaviour
         
         Debug.Log("Returned to Main Menu");
     }
-    
+
     /// <summary>
     /// Restarts the game with a new seed, bypassing the Main Menu.
     /// Resets the Game Over screen (alpha and children), generates a new seed,
     /// sets the game to tower mode, and starts floor generation.
     /// </summary>
     public void RestartGameWithNewSeed() {
-    if (LoadingUI.Instance != null)
-        LoadingUI.Instance.ShowLoading("Restarting...");
-    else
-        Debug.LogWarning("LoadingUI instance not found in RestartGameWithNewSeed.");
-    
-    // Reset the game over screen using SingletonManager.
-    if (SingletonManager.Instance.gameOverPanel != null) {
-        // Reset the panel's alpha to 0.
-        Image img = SingletonManager.Instance.gameOverPanel.GetComponent<Image>();
-        if (img != null) {
-            Color col = img.color;
-            col.a = 0f;
-            img.color = col;
-        }
-        // Disable all children.
-        foreach (Transform child in SingletonManager.Instance.gameOverPanel.transform) {
-            child.gameObject.SetActive(false);
-        }
-    } else {
-        Debug.LogWarning("GameOver screen not assigned!");
-    }
+        if (LoadingUI.Instance != null)
+            LoadingUI.Instance.ShowLoading("Restarting...");
+        else
+            Debug.LogWarning("LoadingUI instance not found in RestartGameWithNewSeed.");
 
-    // Generate a new seed.
-    int newSeed = Random.Range(100000, 1000000);
-    
-    if (MasterLevelManager.Instance != null) {
-        MasterLevelManager.Instance.globalSeed = newSeed;
-        MasterLevelManager.Instance.inTower = true;
-
-        // Reset the player's inventory before starting the game
-        InventoryManager inventoryManager = FindFirstObjectByType<InventoryManager>();
-        if (inventoryManager != null) {
-            //inventoryManager.ResetInventory();
-            Debug.Log("Inventory reset to default.");
+        // Reset the game over screen using SingletonManager.
+        if (SingletonManager.Instance.gameOverPanel != null) {
+            // Reset the panel's alpha to 0.
+            Image img = SingletonManager.Instance.gameOverPanel.GetComponent<Image>();
+            if (img != null) {
+                Color col = img.color;
+                col.a = 0f;
+                img.color = col;
+            }
+            // Disable all children.
+            foreach (Transform child in SingletonManager.Instance.gameOverPanel.transform) {
+                child.gameObject.SetActive(false);
+            }
         } else {
-            Debug.LogError("InventoryManager instance not found!");
+            Debug.LogWarning("GameOver screen not assigned!");
         }
 
-        // Start the game at floor 1 immediately.
-        MasterLevelManager.Instance.GenerateAndLoadFloor(1, true);
-        Debug.Log("Restarting game with new seed: " + newSeed);
-    } else {
-        Debug.LogError("MasterLevelManager instance not found!");
+        // Generate a new seed.
+        int newSeed = Random.Range(100000, 1000000);
+
+        if (MasterLevelManager.Instance != null) {
+            MasterLevelManager.Instance.globalSeed = newSeed;
+            MasterLevelManager.Instance.inTower = true;
+
+            // --- NEW CODE: Clear any existing floor data ---
+            MasterLevelManager.Instance.ClearFloorData();
+            // --------------------------------------------------
+
+            // Reset the player's inventory before starting the game.
+            InventoryManager inventoryManager = FindFirstObjectByType<InventoryManager>();
+            if (inventoryManager != null) {
+                //inventoryManager.ResetInventory();
+                Debug.Log("Inventory reset to default.");
+            } else {
+                Debug.LogError("InventoryManager instance not found!");
+            }
+
+            // Start the game at floor 1 immediately.
+            MasterLevelManager.Instance.GenerateAndLoadFloor(1, true);
+            Debug.Log("Restarting game with new seed: " + newSeed);
+        } else {
+            Debug.LogError("MasterLevelManager instance not found!");
+        }
+
+        // Reset the player state (health, movement, alpha, position)
+        ResetPlayer();
+
+        // Reset key count.
+        if (KeyManager.Instance != null) {
+            KeyManager.Instance.ResetKeys();
+            Debug.Log("Key count reset.");
+        } else {
+            Debug.LogWarning("KeyManager instance not found!");
+        }
+
+        Transform lorePanel = SingletonManager.Instance.gameplayCanvas.transform.Find("LorePanel");
+        if (lorePanel != null) {
+            lorePanel.gameObject.SetActive(true); // Bring back panel
+        }
+
+        if (LoadingUI.Instance != null)
+            LoadingUI.Instance.HideLoading();
     }
-
-    // Reset the player state (health, movement, alpha, position)
-    ResetPlayer();
-
-    // Reset key count.
-    if (KeyManager.Instance != null)
-    {
-        KeyManager.Instance.ResetKeys();
-        Debug.Log("Key count reset.");
-    }
-    else
-    {
-        Debug.LogWarning("KeyManager instance not found!");
-    }
-
-    Transform lorePanel = SingletonManager.Instance.gameplayCanvas.transform.Find("LorePanel");
-    if (lorePanel != null) {
-        lorePanel.gameObject.SetActive(true); // Bring back panel
-    }
-
-    if (LoadingUI.Instance != null)
-        LoadingUI.Instance.HideLoading();
-}
-
 }

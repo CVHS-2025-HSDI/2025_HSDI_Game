@@ -14,7 +14,8 @@ public class FloorGenerator : MonoBehaviour
     public Tilemap floorTilemap;       // Assign in Inspector
     public GameObject keyPrefab;
     public GameObject chestPrefab;
-    public Transform objectContainer;
+    public Transform objectContainer;  // For static objects (stairs, lectern, doors)
+    public Transform dynamicContainer; // For dynamic objects (keys, chests, enemies)
     public GameObject lecternPrefab;   // Lectern prefab to be placed once per floor
 
     [Header("Tile Assets")]
@@ -210,25 +211,28 @@ public class FloorGenerator : MonoBehaviour
     // If keys were collected or enemies defeated, their positions would have been removed.
     public void LoadFloorFromData(FloorData data)
     {
-        // Clear previous dynamic objects.
-        foreach (Transform child in objectContainer)
+        // Clear only dynamic objects, leaving static objects (stairs, lectern, doors) intact.
+        foreach (Transform child in dynamicContainer)
             Destroy(child.gameObject);
         foreach (Transform child in enemyContainer)
             Destroy(child.gameObject);
 
-        // Re-instantiate keys.
-        foreach (Vector2Int keyPos in data.keyPositions)
+        // Re-instantiate keys only if the floor isn't traversable.
+        if (!data.traversable)
         {
-            Vector3Int cell = new Vector3Int(keyPos.x, keyPos.y, 0);
-            Vector3 worldPos = floorTilemap.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
-            Instantiate(keyPrefab, worldPos, Quaternion.identity, objectContainer);
+            foreach (Vector2Int keyPos in data.keyPositions)
+            {
+                Vector3Int cell = new Vector3Int(keyPos.x, keyPos.y, 0);
+                Vector3 worldPos = floorTilemap.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
+                Instantiate(keyPrefab, worldPos, Quaternion.identity, dynamicContainer);
+            }
         }
         // Re-instantiate chests.
         foreach (Vector2Int chestPos in data.chestPositions)
         {
             Vector3Int cell = new Vector3Int(chestPos.x, chestPos.y, 0);
             Vector3 worldPos = floorTilemap.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
-            Instantiate(chestPrefab, worldPos, Quaternion.identity, objectContainer);
+            Instantiate(chestPrefab, worldPos, Quaternion.identity, dynamicContainer);
         }
         // Re-instantiate enemies.
         foreach (Vector2Int enemyPos in data.enemyPositions)
@@ -237,7 +241,7 @@ public class FloorGenerator : MonoBehaviour
             Vector3 worldPos = floorTilemap.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
             Instantiate(enemyPrefab, worldPos, Quaternion.identity, enemyContainer);
         }
-        // (Stairs, lectern, and door objects are assumed static and already present.)
+        // (Static objects like stairs, lectern, and door objects remain unchanged.)
         playerSpawn = data.playerSpawn;
         merchantSpawn = data.merchantSpawn;
     }
@@ -495,7 +499,7 @@ public class FloorGenerator : MonoBehaviour
             if (floorTilemap.GetTile(cellPos) == floorTile)
             {
                 Vector3 worldPos = floorTilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
-                Instantiate(keyPrefab, worldPos, Quaternion.identity, objectContainer);
+                Instantiate(keyPrefab, worldPos, Quaternion.identity, dynamicContainer);
                 keyPositions.Add(new Vector2Int(cellPos.x, cellPos.y));
                 placedKeys++;
             }
@@ -519,7 +523,7 @@ public class FloorGenerator : MonoBehaviour
                 if (floorTilemap.GetTile(cellPos) == floorTile)
                 {
                     Vector3 chestWorldPos = floorTilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
-                    Instantiate(chestPrefab, chestWorldPos, Quaternion.identity, objectContainer);
+                    Instantiate(chestPrefab, chestWorldPos, Quaternion.identity, dynamicContainer);
                     chestPositions.Add(new Vector2Int(cellPos.x, cellPos.y));
                     _placedChests.Add(cellPos);
                 }
@@ -536,13 +540,27 @@ public class FloorGenerator : MonoBehaviour
             Debug.LogWarning("[FloorGenerator] No enemyPrefab assigned!");
             return enemyPositions;
         }
+        
         int numEnemies = RandomSeed.GetRandomInt(minEnemies, maxEnemies + 1);
+        
+        // Calculate the player's world spawn position.
+        Vector3 playerSpawnWorld = floorTilemap.CellToWorld(playerSpawn) + new Vector3(0.5f, 0.5f, 0);
+        
+        // If a lectern is used, compute its cell.
+        Vector3Int lecternCell = Vector3Int.zero;
+        bool lecternExists = (lecternPrefab != null);
+        if (lecternExists)
+        {
+            lecternCell = new Vector3Int(width / 2, height / 2, 0);
+        }
+        
         for (int i = 0; i < numEnemies; i++)
         {
             bool validSpawn = false;
             Vector3 candidatePos = Vector3.zero;
             int attempts = 0;
-            float minDistance = Random.Range(3f, 6f);
+            // Use the existing enemy-enemy minimum spacing.
+            float minDistanceBetweenEnemies = Random.Range(3f, 6f);
             while (!validSpawn && attempts < 20)
             {
                 int x = RandomSeed.GetRandomInt(0, width);
@@ -551,14 +569,28 @@ public class FloorGenerator : MonoBehaviour
                 TileBase tileAtCell = floorTilemap.GetTile(cell);
                 if (tileAtCell == floorTile && !_placedDoors.Contains(cell))
                 {
-                    candidatePos = floorTilemap.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
-                    validSpawn = true;
-                    foreach (Vector2Int pos in enemyPositions)
+                    // Exclude candidate cell if it matches the lectern's cell.
+                    if (lecternExists && cell == lecternCell)
                     {
-                        if (Vector2.Distance(new Vector2(candidatePos.x, candidatePos.y), pos) < minDistance)
+                        validSpawn = false;
+                    }
+                    else
+                    {
+                        candidatePos = floorTilemap.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
+                        validSpawn = true;
+                        // Check enemy-to-enemy spacing.
+                        foreach (Vector2Int pos in enemyPositions)
+                        {
+                            if (Vector2.Distance(new Vector2(candidatePos.x, candidatePos.y), pos) < minDistanceBetweenEnemies)
+                            {
+                                validSpawn = false;
+                                break;
+                            }
+                        }
+                        // NEW: Ensure candidate is at least 6 units away from the player's spawn.
+                        if (validSpawn && Vector3.Distance(candidatePos, playerSpawnWorld) < 6f)
                         {
                             validSpawn = false;
-                            break;
                         }
                     }
                 }
@@ -573,6 +605,7 @@ public class FloorGenerator : MonoBehaviour
         }
         return enemyPositions;
     }
+
 
     private bool IsFloorTile(Vector3Int cellPos, int width, int height)
     {
