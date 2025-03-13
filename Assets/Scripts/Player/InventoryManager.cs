@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -12,19 +13,18 @@ public class InventoryManager : MonoBehaviour
 
     public Vector3 weaponRotationOffset = new Vector3(0, 0, 0);
 
-    void Start() {
-    // Find the sword item from resources (or assign in the inspector)
-    Item swordItem = Resources.Load<Item>("Items/Sword"); // Adjust path if needed
+      void Start() {
 
-    if (swordItem != null) {
-        AddItem(swordItem);
-    } else {
-        Debug.LogError("Sword item not found in Resources!");
+        Item swordItem = Resources.Load<Item>("Items/Sword"); // Adjust path if needed
+
+        if (swordItem != null) {
+            AddItem(swordItem);
+        } else {
+            Debug.LogError("Sword item not found in Resources!");
+        }
+
+        ChangeSelectedSlot(0);
     }
-
-    ChangeSelectedSlot(0);
-}
-
 
     void Update () {
         if(Input.inputString != null){
