@@ -234,8 +234,8 @@ MonoBehaviour:
   - {fileID: -86429553, guid: ee2dba66289836b4b9e7b6b7b7718e6f, type: 3}
   - {fileID: -2052197765, guid: ee2dba66289836b4b9e7b6b7b7718e6f, type: 3}
   - {fileID: 441400853, guid: ee2dba66289836b4b9e7b6b7b7718e6f, type: 3}
-  normalFrameRate: 0.05
-  sprintFrameRate: 0.032
+  normalFrameRate: 0.0625
+  sprintFrameRate: 0.05
 --- !u!1 &2696865207817329218
 GameObject:
   m_ObjectHideFlags: 0

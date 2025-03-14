@@ -29,37 +29,32 @@ public class PlayerAnimation : MonoBehaviour
 
     void Update()
     {
-        // Check for horizontal input.
+        // Use input directly for running state.
         float move = Input.GetAxisRaw("Horizontal");
         isRunning = Mathf.Abs(move) > 0.1f;
 
-        // Update direction based on input.
+        // Update facing direction based on input.
         if (move < 0)
             facingRight = false;
         else if (move > 0)
             facingRight = true;
 
-        // Determine effective frame rate based on sprinting.
         float effectiveFrameRate = normalFrameRate;
         if (movement != null && movement.IsSprinting)
             effectiveFrameRate = sprintFrameRate;
 
-        // Update running animation frames.
         if (isRunning)
         {
             timer += Time.deltaTime;
-            if (timer >= effectiveFrameRate)
+            // Use a while loop to handle cases when deltaTime is large.
+            while (timer >= effectiveFrameRate)
             {
-                timer = 0f;
-                currentFrame = (currentFrame + 1) % 12; // assuming 12 frames per cycle
-
-                if (facingRight)
-                    sr.sprite = runRightSprites[currentFrame];
-                else
-                    sr.sprite = runLeftSprites[currentFrame];
+                timer -= effectiveFrameRate;
+                currentFrame = (currentFrame + 1) % 12;
             }
+            sr.sprite = facingRight ? runRightSprites[currentFrame] : runLeftSprites[currentFrame];
         }
-        else // Idle state.
+        else
         {
             currentFrame = 0;
             timer = 0f;
