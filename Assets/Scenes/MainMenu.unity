@@ -3782,50 +3782,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae14881a7d6e8584690d21a1fb17fafc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1507728446
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1507728448}
-  - component: {fileID: 1507728447}
-  m_Layer: 0
-  m_Name: Bootstrapper
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1507728447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1507728446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 883cce0cba2161d49a8289b8c8cacda6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1507728448
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1507728446}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1551425505
 GameObject:
   m_ObjectHideFlags: 0
@@ -4390,14 +4346,16 @@ MonoBehaviour:
 
     AI Programmers
 
-    Brandon Kim
+    Brandon
+    Kim
 
     Diego Ruiz Velasco Pena
 
     Emil Badalian
 
 
-    Procedural Generation Programmers
+    Procedural Generation
+    Programmers
 
     Anton Marc Speth
 
@@ -4406,7 +4364,8 @@ MonoBehaviour:
     Vitaly Vakhteev
 
 
-    UI/UX Programmers
+    UI/UX
+    Programmers
 
     Ara Baghshetsyan
 
@@ -4415,7 +4374,8 @@ MonoBehaviour:
     Vitaly Vakhteev
 
 
-    Level Designers
+    Level
+    Designers
 
     Alex Parsamyan
 
@@ -4426,7 +4386,8 @@ MonoBehaviour:
 
     Game Artists
 
-    Evan Kim
+    Evan
+    Kim
 
     Julianne Yun
 
@@ -4437,7 +4398,8 @@ MonoBehaviour:
 
     Audio Engineer
 
-    Miles Park
+    Miles
+    Park
 
 
     Special Thanks To
@@ -6484,4 +6446,3 @@ SceneRoots:
   - {fileID: 2041327848}
   - {fileID: 403968917}
   - {fileID: 1670735127}
-  - {fileID: 1507728448}

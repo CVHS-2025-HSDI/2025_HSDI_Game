@@ -10,6 +10,21 @@ public class InventoryManager : MonoBehaviour
 
     // NEW: Store a reference to the Sword item.
     public Item swordItem;
+    
+    public static InventoryManager Instance;
+    
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start() {
         // Load and store the Sword item.
