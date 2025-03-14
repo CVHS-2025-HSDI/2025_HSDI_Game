@@ -437,11 +437,12 @@ MonoBehaviour:
   keyPrefab: {fileID: 3690001070531611220, guid: 1fe00d1c7ae947947a29b3316ce019f7, type: 3}
   chestPrefab: {fileID: 1400404957489357247, guid: b1402ac34a49503418b583e6ee8f6d41, type: 3}
   objectContainer: {fileID: 36144730}
+  dynamicContainer: {fileID: 1981720082}
   lecternPrefab: {fileID: 4647010975387710129, guid: 4707d756a2d857a4ab925c723fef0cb4, type: 3}
   floorTile: {fileID: 11400000, guid: 94dba78efeb552848a45971b0a7e2eb3, type: 2}
   wallTile: {fileID: 11400000, guid: 1d29a9d17268d8c4ba83d7e76917bb2b, type: 2}
-  minEnemies: 30
-  maxEnemies: 30
+  minEnemies: 15
+  maxEnemies: 15
   enemyContainer: {fileID: 1538610855}
   enemyPrefab: {fileID: 1727004705137683305, guid: 57d66f5c7d2dd0a458f4b82e58b24ba4, type: 3}
   doorPrefab: {fileID: 8829747558099694726, guid: f54e6807d779c7e459a39b8ebb889164, type: 3}
@@ -449,6 +450,37 @@ MonoBehaviour:
   stairUpPrefab: {fileID: 2355087977520274023, guid: 661073600ee71584db13f504290d3d01, type: 3}
   playerSpawn: {x: 0, y: 0, z: 0}
   merchantSpawn: {x: 0, y: 0, z: 0}
+--- !u!1 &1981720081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1981720082}
+  m_Layer: 0
+  m_Name: DynamicContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1981720082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1981720081}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1986409536
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,3 +658,4 @@ SceneRoots:
   - {fileID: 1602186852}
   - {fileID: 5999676797946184088}
   - {fileID: 1538610855}
+  - {fileID: 1981720082}

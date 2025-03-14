@@ -36,6 +36,10 @@ public class Movement : MonoBehaviour
     private Vector2 dir;
     // Removed desiredRotation variable since we no longer need it.
     private Vector2 knockbackForceVector;
+    
+    public bool IsSprinting {
+        get { return isSprinting; }
+    }
 
     void Start()
     {

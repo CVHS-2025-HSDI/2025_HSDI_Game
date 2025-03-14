@@ -9,4 +9,7 @@ public class FloorData {
     public Vector2Int[] roomDoors;
     public Vector2Int[] keyPositions;
     public Vector2Int[] enemyPositions;
+    
+    // New field to mark if the floor has been traversed (keys used).
+    public bool traversable = false;
 }

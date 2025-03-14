@@ -30,13 +30,21 @@ public class StairController : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
         _col = GetComponent<Collider2D>();
 
-        // For Up stairs, start locked; Down stairs are always _unlocked.
+        // For Up stairs, if the current floor has already been traversed (i.e. keys used),
+        // then immediately unlock the stair.
         if (stairType == StairType.Up)
         {
-            LockStair();
-            // Subscribe to key event
-            if (KeyManager.Instance != null)
-                KeyManager.Instance.OnAllKeysCollected += UnlockStair;
+            if (MasterLevelManager.Instance.IsFloorTraversable(currentFloor))
+            {
+                UnlockStair();
+            }
+            else
+            {
+                LockStair();
+                // Subscribe to key event so that once all keys are collected, we unlock.
+                if (KeyManager.Instance != null)
+                    KeyManager.Instance.OnAllKeysCollected += UnlockStair;
+            }
         }
         else
         {
@@ -70,7 +78,7 @@ public class StairController : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
-        // For Up stairs, only trigger if _unlocked
+        // For Up stairs, only trigger if unlocked.
         if (stairType == StairType.Up && !_unlocked)
             return;
 
@@ -98,6 +106,22 @@ public class StairController : MonoBehaviour
             else
             {
                 int newFloor = currentFloor + 1;
+                // Only purge keys if this is a new highest floor.
+                if (newFloor > MasterLevelManager.Instance.highestFloorReached)
+                {
+                    InventoryManager invManager = FindFirstObjectByType<InventoryManager>();
+                    if (invManager != null)
+                    {
+                        invManager.PurgeKeys();
+                    }
+                    MasterLevelManager.Instance.MarkCurrentFloorTraversable();
+                    MasterLevelManager.Instance.highestFloorReached = newFloor;
+                    Debug.Log($"New highest floor reached: {newFloor}. Keys purged.");
+                }
+                else
+                {
+                    Debug.Log("Revisiting an existing floor; keys are preserved.");
+                }
                 _manager.GenerateAndLoadFloor(newFloor, newFloor == 1);
             }
         }
