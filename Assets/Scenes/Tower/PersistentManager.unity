@@ -7626,7 +7626,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5192796020778820681, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.11
+      value: 0.117
+      objectReference: {fileID: 0}
+    - target: {fileID: 6332498279251299184, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: m_Size.x
+      value: 0.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 6332498279251299184, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: m_Size.y
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 6332498279251299184, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -204201036, guid: ab658b2aac3b13343816cf08f8b290d4, type: 3}
+    - target: {fileID: 6332498279251299184, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6895568877816869267, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6895568877816869267, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6895568877816869267, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3.25
       objectReference: {fileID: 0}
     - target: {fileID: 6895568877816869267, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7668,7 +7696,55 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9125553860384408186, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: m_Radius
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: HPBar
+      value: 
+      objectReference: {fileID: 1368721708}
+    - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: toolbar
+      value: 
+      objectReference: {fileID: 232055844}
+    - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: invButton
+      value: 
+      objectReference: {fileID: 261297434}
+    - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: lorePanel
+      value: 
+      objectReference: {fileID: 1903928099}
+    - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: quitButton
+      value: 
+      objectReference: {fileID: 471451398}
+    - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: youDiedText
+      value: 
+      objectReference: {fileID: 1274704325}
+    - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: weaponPrefab
+      value: 
+      objectReference: {fileID: 4832640095769577899, guid: 94b24737e7e5efa4882a67f886bef14a, type: 3}
+    - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: gameOverPanel
+      value: 
+      objectReference: {fileID: 1533009232}
+    - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: restartButton
+      value: 
+      objectReference: {fileID: 1804038892}
+    - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: quitToMenuButton
+      value: 
+      objectReference: {fileID: 126931335}
+    m_RemovedComponents:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
