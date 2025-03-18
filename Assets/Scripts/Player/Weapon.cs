@@ -54,11 +54,5 @@ public class Weapon : MonoBehaviour
         canAttack = true;
     }
 
-    // Visualize attack range in Unity Editor
-    void OnDrawGizmosSelected()
-    {
-        if (attackPoint == null) return;
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
-    }
+
 }

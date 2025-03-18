@@ -92,9 +92,9 @@ public class InventoryManager : MonoBehaviour
             Destroy(equippedWeaponSlot.GetChild(0).gameObject);
         }
         GameObject newWeapon = Instantiate(weaponItem.itemPrefab, equippedWeaponSlot);
-        newWeapon.transform.localPosition = new Vector3(0.05f, 0.06f, 0);
+        newWeapon.transform.localPosition = new Vector3(0, 0, 0);
         newWeapon.transform.localRotation = Quaternion.Euler(weaponRotationOffset);
-        newWeapon.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+        newWeapon.transform.localScale = new Vector3(5f, 5f, 5f);
         SpriteRenderer sr = newWeapon.GetComponent<SpriteRenderer>();
         if (sr != null) {
             sr.sortingOrder = 1;
