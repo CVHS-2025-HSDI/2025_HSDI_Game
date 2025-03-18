@@ -7,6 +7,8 @@ public class PlayerInfo : MonoBehaviour
     [Header("Health Settings")]
     public float maxHealth = 100f;
     public float currentHealth = 100f;
+    
+    public PlayerStats stats;
 
     // Remove local UI references – they will now be accessed through SingletonManager.
     // public GameObject gameOverPanel;
