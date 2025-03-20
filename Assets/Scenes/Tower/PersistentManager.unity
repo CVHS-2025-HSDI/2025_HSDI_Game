@@ -8896,11 +8896,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5192796020778820681, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.148
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5192796020778820681, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.117
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6332498279251299184, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_Size.x
@@ -9001,7 +9001,7 @@ PrefabInstance:
     - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: weaponPrefab
       value: 
-      objectReference: {fileID: 8222599173819168208, guid: 1ee43d03ef4980f44acb20d2abfdbb45, type: 3}
+      objectReference: {fileID: 5196012877019254049, guid: 1f03f8f5e67a2704b9b5e3e2d25f03c7, type: 3}
     - target: {fileID: 9161196265206652265, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: gameOverPanel
       value: 
