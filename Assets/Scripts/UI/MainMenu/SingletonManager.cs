@@ -13,6 +13,9 @@ public class SingletonManager : MonoBehaviour
 
     [Tooltip("Reference to the Gameplay Canvas in the scene.")]
     public Canvas gameplayCanvas;
+
+    [Tooltip("Reference to the CutsceneCanvas.")]
+    public Canvas cutsceneCanvas;
     
     [Tooltip("Reference to Loading Panel.")]
     public GameObject loadingPanel;
