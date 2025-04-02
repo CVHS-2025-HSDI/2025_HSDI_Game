@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 915ce5d89e19ad44d961277fe188314e, type: 3}
-  m_Name: Health Potion
+  m_Name: BigHealthPotion
   m_EditorClassIdentifier: 
   type: 1
   actionType: 2
   range: {x: 5, y: 4}
   stackable: 1
-  image: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  image: {fileID: 1865925488432424353, guid: 4faeac81067143246a3c43e29f49f0b6, type: 3}
+  healthAmount: 100
+  itemPrefab: {fileID: 8991703741331775527, guid: bfea552053952594a8558ec4d0193541, type: 3}

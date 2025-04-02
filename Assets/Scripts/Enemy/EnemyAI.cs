@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -23,6 +24,10 @@ public class EnemyAI : MonoBehaviour
 
     private float timer = 0f;
     public Vector2 knockbackForceVector;
+
+
+    [Header("Loot")]
+    public List<LootItem> loottable = new List<LootItem>();
 
     void Start()
     {
@@ -165,7 +170,14 @@ public class EnemyAI : MonoBehaviour
     {
         gameObject.GetComponent<CircleCollider2D>().enabled = false; // Disable contact damage and allow player to pass through
         // Freeze enemy and fade out its sprite before destroying
+       
         StartCoroutine(FreezeAndFadeOut());
+         foreach (LootItem item in loottable){
+            if(Random.Range(0f,100f) <= item.dropChance){
+                GameObject droppedLoot = Instantiate(item.itemPrefab, transform.position, Quaternion.identity);
+                break; 
+            }  
+            }
     }
 
     private IEnumerator FreezeAndFadeOut()
@@ -181,6 +193,9 @@ public class EnemyAI : MonoBehaviour
             sr.color = new Color(initialColor.r, initialColor.g, initialColor.b, alpha);
             yield return null;
         }
+
+        
+
         Destroy(gameObject);
     }
 
@@ -188,4 +203,5 @@ public class EnemyAI : MonoBehaviour
     {
         knockbackForceVector = v;
     }
+
 }

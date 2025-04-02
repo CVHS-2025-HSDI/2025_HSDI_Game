@@ -52,15 +52,16 @@ public class PlayerInfo : MonoBehaviour
                 SingletonManager.Instance.youDiedText.SetActive(false);
         }
 
-        // // Instantiate weapon and set as a child of the player.
-        // weapon = Instantiate(weaponPrefab, transform.position, weaponPrefab.transform.rotation);
-        // weapon.transform.SetParent(transform);
-        // var swordScript = weapon.GetComponent("SwordScript");
-        // if (swordScript != null)
-        // {
-        //     ((SwordScript)swordScript).SetIsPlayer(true);
-        // }
     }
+
+    public void Heal(float amount){
+    currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+    Slider HPBar = GetComponentInChildren<Slider>();
+    if (HPBar != null)
+        HPBar.value = currentHealth;
+    Debug.Log("Healed for " + amount + ", current health: " + currentHealth);
+}
+
 
     public void damage(float dmg)
     {
