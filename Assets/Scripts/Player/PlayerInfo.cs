@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class PlayerInfo : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class PlayerInfo : MonoBehaviour
 
     public GameObject weaponPrefab; // Assign in Inspector
     private GameObject weapon;
+
+    public GameObject DamageTextPrefab;
 
     void Start()
     {
@@ -67,6 +70,15 @@ public class PlayerInfo : MonoBehaviour
     {
         if (isDead) return;
         currentHealth -= dmg;
+
+        //Display damage taken
+        GameObject text = Instantiate(DamageTextPrefab, transform.position, Quaternion.identity);
+        text.GetComponent<DamageTextScript>().SetTarget(transform);
+        TMP_Text textComp = text.GetComponent<TMP_Text>();
+        textComp.text = "" + dmg;
+        RectTransform textTransform = text.GetComponent<RectTransform>();
+        textTransform.position = new Vector2(transform.position.x, transform.position.y + 0.8f);
+
         Debug.Log("Player hit for " + dmg + ", health now: " + currentHealth);
         
         Slider HPBar = GetComponentInChildren<Slider>();

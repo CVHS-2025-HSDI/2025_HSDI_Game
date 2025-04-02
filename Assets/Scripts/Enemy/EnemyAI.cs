@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 using System.Collections.Generic;
 
 public class EnemyAI : MonoBehaviour
@@ -7,6 +8,7 @@ public class EnemyAI : MonoBehaviour
     private Rigidbody2D rb;
     private GameObject playerTarget;
     public GameObject weaponPrefab; // assign in Inspector
+    public GameObject DamageTextPrefab;
     private GameObject weapon;
     public float moveSpeed = 1.8f;
     private string state = "Passive";
@@ -24,6 +26,7 @@ public class EnemyAI : MonoBehaviour
 
     private float timer = 0f;
     public Vector2 knockbackForceVector;
+
 
 
     [Header("Loot")]
@@ -159,6 +162,15 @@ public class EnemyAI : MonoBehaviour
     public void damage(float dmg)
     {
         health -= dmg;
+
+        //Display damage taken
+        GameObject text = Instantiate(DamageTextPrefab, transform.position, Quaternion.identity);
+        text.GetComponent<DamageTextScript>().SetTarget(transform);
+        TMP_Text textComp = text.GetComponent<TMP_Text>();
+        textComp.text = "" + dmg;
+        RectTransform textTransform = text.GetComponent<RectTransform>();
+        textTransform.position = new Vector2(transform.position.x, transform.position.y + 0.8f);
+
         Debug.Log("Enemy hit for " + dmg);
         if (health <= 0)
         {
