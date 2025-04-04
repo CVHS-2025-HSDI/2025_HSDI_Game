@@ -8,6 +8,11 @@ TagManager:
   - Enemy
   - EnemyTemplate
   - Container
+
+  - InventoryManager
+  - LoreUI
+  - Loading
+  - SingletonManager
   layers:
   - Default
   - TransparentFX
@@ -17,6 +22,9 @@ TagManager:
   - UI
   - Enemy
   - Player
+  - Whale
+  - 
+  - 
   - 
   - 
   - 

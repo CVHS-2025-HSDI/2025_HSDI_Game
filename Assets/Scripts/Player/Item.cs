@@ -15,6 +15,9 @@ public class Item : ScriptableObject{
 
     //[Header "BOTH"]
     public Sprite image; 
+
+    public int healthAmount = 0;
+    public GameObject itemPrefab;  
 }
     
     public enum Itemtype{
