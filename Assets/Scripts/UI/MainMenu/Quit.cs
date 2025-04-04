@@ -31,6 +31,10 @@ public class Quit : MonoBehaviour
                     SingletonManager.Instance.toolbar.SetActive(true);
                 if (SingletonManager.Instance.invButton != null)
                     SingletonManager.Instance.invButton.SetActive(true);
+                if (SingletonManager.Instance.showCharacter != null)
+                    SingletonManager.Instance.showCharacter.SetActive(true);
+                if (SingletonManager.Instance.xpText != null)
+                    SingletonManager.Instance.xpText.SetActive(true);
             }
             else
             {

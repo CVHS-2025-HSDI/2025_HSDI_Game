@@ -64,6 +64,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
+    <Compile Include="Assets\Scripts\Enemy\LootItem.cs" />
     <Compile Include="Assets\Scripts\Objects\KeyCollectible.cs" />
     <Compile Include="Assets\Scripts\Objects\KeyManager.cs" />
     <Compile Include="Assets\Scripts\Data\FloorConfig.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\Scripts\Generation\RandomSeed.cs" />
     <Compile Include="Assets\Scripts\Player\ItemPickup.cs" />
+    <Compile Include="Assets\Scripts\Weapons\XPTextScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\Weapons\DamageTextScript.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\SingletonManager.cs" />
@@ -95,7 +97,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\Scripts\Loaders\TowerSceneLoader.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
-    <Compile Include="Assets\Scripts\Player\Weapon.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenuController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
@@ -122,12 +123,13 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
     <Compile Include="Assets\Scripts\Objects\DoorController.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerXP.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Scripts\Enemy\BossManager.cs" />
     <Compile Include="Assets\Scripts\Player\Sword swing.cs" />
+    <Compile Include="Assets\Scripts\UI\CharacterStats.cs" />
     <Compile Include="Assets\Scripts\Objects\LecternTrigger.cs" />
     <Compile Include="Assets\Scripts\Player\Sword Controller.cs" />
-    <Compile Include="Assets\Scripts\UI\LevelUpMenu.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAnimation.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
