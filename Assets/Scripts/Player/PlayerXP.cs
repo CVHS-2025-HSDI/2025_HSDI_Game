@@ -4,7 +4,7 @@ using TMPro;
 public class PlayerXP : MonoBehaviour {
     public int currentXP = 0;
     public int currentLevel = 1;
-    public int xpToNextLevel = 100;
+    public int xpToNextLevel = 500;
     public int availableStatPoints = 0;
     public TMP_Text xpUIText; // Reference to an on-screen UI text element for XP
     public TMP_Text levelUIText;
@@ -37,14 +37,23 @@ public class PlayerXP : MonoBehaviour {
         currentLevel++;
         currentXP -= xpToNextLevel;
         xpToNextLevel = CalculateXPForNextLevel();
-        availableStatPoints++; // Increase available stat points (could be more than 1)
+        availableStatPoints += 5;
         Debug.Log($"Level Up! Now at level {currentLevel}. Available stat points increased to {availableStatPoints}.");
+    
+        // Update the XP UI as usual.
         UpdateXPUI();
+
+        // Directly update the CharacterStats UI if it exists.
+        CharacterStatsUI statsUI = FindFirstObjectByType<CharacterStatsUI>();
+        if (statsUI != null) {
+            statsUI.UpdateUI();
+        }
     }
 
+
     private int CalculateXPForNextLevel() {
-        // Simple formula; you can adjust this as needed.
-        return currentLevel * 100;
+        // Simple formula!
+        return currentLevel * 500;
     }
     
     private void UpdateXPUI() {

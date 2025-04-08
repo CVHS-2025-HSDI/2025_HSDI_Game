@@ -39,7 +39,7 @@ public class EnemyAI : MonoBehaviour
 
         // Find the player in the scene
         playerTarget = GameObject.FindWithTag("Player");
-        
+    
         // Instantiate weapon and set parent
         weapon = Instantiate(weaponPrefab, transform.position, weaponPrefab.transform.rotation);
         weapon.transform.SetParent(transform);
@@ -47,6 +47,15 @@ public class EnemyAI : MonoBehaviour
         {
             ((SwordScript)weapon.GetComponent("SwordScript")).SetIsPlayer(false);
         }
+        
+        int currentLevel = 1;
+        if (MasterLevelManager.Instance != null)
+        {
+            currentLevel = MasterLevelManager.Instance.highestFloorReached;
+        }
+        
+        float enemyScalingFactor = 1f + 0.2f * (currentLevel - 1);
+        health *= enemyScalingFactor;
     }
 
     void Update()
@@ -229,7 +238,7 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator FreezeAndFadeOut()
     {
-        isFrozen = true;
+        isFrozen = true; 
         float fadeDuration = 2f;
         float timer = 0f;
         Color initialColor = sr.color;
@@ -242,7 +251,6 @@ public class EnemyAI : MonoBehaviour
         }
 
         
-
         Destroy(gameObject);
     }
 

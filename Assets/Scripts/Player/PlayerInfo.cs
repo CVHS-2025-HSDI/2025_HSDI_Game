@@ -30,7 +30,8 @@ public class PlayerInfo : MonoBehaviour
 
     void Start()
     {
-        currentHealth = maxHealth;
+        currentHealth = maxHealth * PlayerStats.GetHealthMultiplier(); 
+        
         sr = GetComponent<SpriteRenderer>();
 
         // Assume HPBar is either assigned locally or found on a child.

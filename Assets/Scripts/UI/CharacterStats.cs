@@ -122,19 +122,17 @@ public class CharacterStatsUI : MonoBehaviour {
     /// <summary>
     /// Updates the UI elements based on current player stats and available points.
     /// </summary>
-    private void UpdateUI() {
+    public void UpdateUI() {
         if (playerXP != null && availablePointsText != null) {
             availablePointsText.text = "Available Points: " + playerXP.availableStatPoints.ToString();
             Debug.Log("UI updated: " + availablePointsText.text);
         }
-
-        if (PlayerStats.Instance != null) {
-            strengthValueText.text = PlayerStats.Strength.ToString();
-            tradingValueText.text = PlayerStats.Trading.ToString();
-            intelligenceValueText.text = PlayerStats.Intelligence.ToString();
-            magicValueText.text = PlayerStats.Magic.ToString();
-            spiritValueText.text = PlayerStats.Spirit.ToString();
-        }
+        
+        strengthValueText.text = PlayerStats.Strength.ToString();
+        tradingValueText.text = PlayerStats.Trading.ToString();
+        intelligenceValueText.text = PlayerStats.Intelligence.ToString();
+        magicValueText.text = PlayerStats.Magic.ToString();
+        spiritValueText.text = PlayerStats.Spirit.ToString();
     }
 
     // Optionally, if you implement events in your PlayerXP or PlayerStats,

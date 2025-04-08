@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Swordswing : MonoBehaviour
 {
-    public int attackDamage = 10;
+    public int baseDamage = 10;
     public string enemyTag = "Enemy";
 
     // If there's no collision, self-destruct after X seconds
@@ -16,7 +16,8 @@ public class Swordswing : MonoBehaviour
     {
         if (other.CompareTag(enemyTag) && other.TryGetComponent<EnemyAI>(out EnemyAI enemyScript))
         {
-            enemyScript.damage(attackDamage);
+            float finalDamage = baseDamage * PlayerStats.GetDamageMultiplier();
+            enemyScript.damage(finalDamage);
         }
         // Destroy the effect shortly after collision
         Destroy(gameObject, 0.2f);
