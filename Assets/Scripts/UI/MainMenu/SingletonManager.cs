@@ -39,6 +39,12 @@ public class SingletonManager : MonoBehaviour
     [Tooltip("Quit button.")]
     public GameObject quitButton;
     
+    [Tooltip("Final Level.")]
+    public GameObject finalLevel;
+    
+    [Tooltip("Final Floor.")]
+    public GameObject finalFloor;
+    
     [Tooltip("Toolbar under GameplayCanvas.")]
     public GameObject toolbar;
     

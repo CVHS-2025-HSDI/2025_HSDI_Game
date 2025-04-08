@@ -2,12 +2,15 @@ using UnityEngine;
 using TMPro;
 
 public class PlayerXP : MonoBehaviour {
+    public static PlayerXP Instance;  // Singleton instance
+    
     public int currentXP = 0;
     public int currentLevel = 1;
     public int xpToNextLevel = 500;
     public int availableStatPoints = 0;
     public TMP_Text xpUIText; // Reference to an on-screen UI text element for XP
     public TMP_Text levelUIText;
+
 
     // Call this method to add XP to the player
     public void AddXP(int baseXP) {
@@ -73,5 +76,14 @@ public class PlayerXP : MonoBehaviour {
         } else {
             Debug.LogWarning("xpUIText is null in UpdateXPUI!");
         }
+    }
+    
+    public void ResetXP() {
+        currentXP = 0;
+        currentLevel = 1;
+        xpToNextLevel = 500;
+        availableStatPoints = 0;
+        UpdateXPUI();
+        Debug.Log("Player XP has been reset.");
     }
 }

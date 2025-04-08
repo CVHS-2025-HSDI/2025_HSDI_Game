@@ -5,77 +5,73 @@ using UnityEngine.UI;
 
 public class Quit : MonoBehaviour
 {
-    // Removed the local gameOverScreen field.
-    // All UI elements are now referenced via SingletonManager.Instance.
 
     public void QuitGame() {
         Application.Quit();
         Debug.Log("Game is exiting");
     }
     
-    public void ResetPlayer()
-    {
-        // Find the player by tag (ensure your player prefab is tagged "Player")
-        GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
-        {
-            // Reset the player's health and dead state using PlayerInfo
-            PlayerInfo pi = player.GetComponent<PlayerInfo>();
-            if (pi != null)
-            {
-                pi.Revive();  // Reset isDead and currentHealth
-                Debug.Log("Player health and state reset.");
-            
-                // Reactivate the toolbar and inventory button via SingletonManager.
-                if (SingletonManager.Instance.toolbar != null)
-                    SingletonManager.Instance.toolbar.SetActive(true);
-                if (SingletonManager.Instance.invButton != null)
-                    SingletonManager.Instance.invButton.SetActive(true);
-                if (SingletonManager.Instance.showCharacter != null)
-                    SingletonManager.Instance.showCharacter.SetActive(true);
-                if (SingletonManager.Instance.xpText != null)
-                    SingletonManager.Instance.xpText.SetActive(true);
-            }
-            else
-            {
-                Debug.LogWarning("PlayerInfo component not found on player!");
-            }
-
-            // Re-enable the movement script.
-            Movement moveScript = player.GetComponent<Movement>();
-            if (moveScript != null)
-            {
-                moveScript.enabled = true;
-                Debug.Log("Movement script re-enabled.");
-            }
-            else
-            {
-                Debug.LogWarning("Movement script not found on player!");
-            }
-
-            // Reset the sprite's alpha so the player becomes visible again.
-            SpriteRenderer sr = player.GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                Color col = sr.color;
-                col.a = 1f;
-                sr.color = col;
-                Debug.Log("Player sprite alpha reset.");
-            }
-            else
-            {
-                Debug.LogWarning("SpriteRenderer not found on player!");
-            }
-
-            // Optionally, reposition the player at a spawn point.
-            player.transform.position = Vector3.zero;
-            Debug.Log("Player position reset.");
+public void ResetPlayer() {
+    GameObject player = GameObject.FindWithTag("Player");
+    if (player != null) {
+        // Reset health and dead state.
+        PlayerInfo pi = player.GetComponent<PlayerInfo>();
+        if (pi != null) {
+            pi.Revive();  // This resets health and state
+            Debug.Log("Player health and state reset.");
+        } else {
+            Debug.LogWarning("PlayerInfo component not found on player!");
         }
-        else
-        {
-            Debug.LogError("Player not found during reset!");
+
+        // Call ResetXP to reset XP and level.
+        PlayerXP playerXP = player.GetComponent<PlayerXP>();
+        if (playerXP != null) {
+            playerXP.ResetXP();
+        } else {
+            Debug.LogWarning("PlayerXP component not found on player!");
         }
+
+        // Reset static stats.
+        PlayerStats.ResetStats();
+
+        // Reactivate UI elements via SingletonManager.
+        if (SingletonManager.Instance.toolbar != null)
+            SingletonManager.Instance.toolbar.SetActive(true);
+        if (SingletonManager.Instance.invButton != null)
+            SingletonManager.Instance.invButton.SetActive(true);
+        if (SingletonManager.Instance.showCharacter != null)
+            SingletonManager.Instance.showCharacter.SetActive(true);
+        if (SingletonManager.Instance.xpText != null)
+            SingletonManager.Instance.xpText.SetActive(true);
+
+        // Re-enable movement script.
+        Movement moveScript = player.GetComponent<Movement>();
+        if (moveScript != null) {
+            moveScript.enabled = true;
+            Debug.Log("Movement script re-enabled.");
+        } else {
+            Debug.LogWarning("Movement script not found on player!");
+        }
+
+        // Reset the sprite alpha so the player is visible.
+        SpriteRenderer sr = player.GetComponent<SpriteRenderer>();
+        if (sr != null) {
+            Color col = sr.color;
+            col.a = 1f;
+            sr.color = col;
+            Debug.Log("Player sprite alpha reset.");
+        } else {
+            Debug.LogWarning("SpriteRenderer not found on player!");
+        }
+
+        // Optionally, reposition the player at the spawn point.
+        player.transform.position = Vector3.zero;
+        Debug.Log("Player position reset.");
+    } else {
+        Debug.LogError("Player not found during reset!");
     }
+}
+
 
     
     /// <summary>

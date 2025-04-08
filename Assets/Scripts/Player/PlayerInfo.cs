@@ -58,17 +58,17 @@ public class PlayerInfo : MonoBehaviour
 
     }
 
-    public void Heal(float amount){
-        if (currentHealth != maxHealth){
-    currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
-    Slider HPBar = GetComponentInChildren<Slider>();
-    if (HPBar != null)
-        HPBar.value = currentHealth;
-    Debug.Log("Healed for " + amount + ", current health: " + currentHealth);
-    }else{
-        return;
+    public void Heal(float amount)
+    {
+        if (currentHealth != maxHealth)
+        {
+            currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+            Slider HPBar = GetComponentInChildren<Slider>();
+            if (HPBar != null)
+                HPBar.value = currentHealth;
+            Debug.Log("Healed for " + amount + ", current health: " + currentHealth);
+        }
     }
-}
 
 
     public void damage(float dmg)
@@ -80,7 +80,7 @@ public class PlayerInfo : MonoBehaviour
         GameObject text = Instantiate(DamageTextPrefab, transform.position, Quaternion.identity);
         text.GetComponent<DamageTextScript>().SetTarget(transform);
         TMP_Text textComp = text.GetComponent<TMP_Text>();
-        textComp.text = "" + dmg;
+        textComp.text = dmg.ToString("F0");
         RectTransform textTransform = text.GetComponent<RectTransform>();
         textTransform.position = new Vector2(transform.position.x, transform.position.y + 0.8f);
 
@@ -183,6 +183,11 @@ public class PlayerInfo : MonoBehaviour
         sr.color = new Color(initialPlayerColor.r, initialPlayerColor.g, initialPlayerColor.b, 0f);
         if (panelImage != null)
             panelImage.color = new Color(initialPanelColor.r, initialPanelColor.g, initialPanelColor.b, 1f);
+
+        // GameObject finalLevel = SingletonManager.Instance.finalLevel;
+        // GameObject finalFloor = SingletonManager.Instance.finalFloor;
+        // string currentLevelDisplay = $"{PlayerXP.Instance.currentLevel}";
+        // string currentFloor = $"{MasterLevelManager.Instance.highestFloorReached}";
         
         // Activate game over UI objects via SingletonManager.
         if (SingletonManager.Instance.youDiedText != null)
@@ -193,7 +198,19 @@ public class PlayerInfo : MonoBehaviour
             SingletonManager.Instance.quitToMenuButton.SetActive(true);
         if (SingletonManager.Instance.quitButton != null)
             SingletonManager.Instance.quitButton.SetActive(true);
-        
+        // Does not work for NO REASON.
+        // Todo: Fix sometime?
+        // if (finalLevel != null)
+        // {
+        //     finalLevel.GetComponent<TextMeshProUGUI>().text = $"   FINAL LEVEL: {currentLevelDisplay}";
+        //     finalLevel.SetActive(true);
+        // }
+        // if (finalFloor != null)
+        // {
+        //     finalFloor.GetComponent<TextMeshProUGUI>().text = $"   FINAL FLOOR: {currentFloor}";
+        //     finalFloor.SetActive(true);
+        // }
+
         // Fade out (or hide) the Toolbar and the ShowMainInventory button.
         if (SingletonManager.Instance.toolbar != null)
             SingletonManager.Instance.toolbar.SetActive(false);
@@ -202,6 +219,6 @@ public class PlayerInfo : MonoBehaviour
         if (SingletonManager.Instance.showCharacter != null)
             SingletonManager.Instance.showCharacter.SetActive(false);
         if (SingletonManager.Instance.xpText != null)
-            SingletonManager.Instance.xpText.SetActive(true);
+            SingletonManager.Instance.xpText.SetActive(false);
     }
 }
