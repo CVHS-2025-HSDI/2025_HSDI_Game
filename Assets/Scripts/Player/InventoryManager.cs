@@ -9,10 +9,10 @@ public class InventoryManager : MonoBehaviour
     public Transform equippedWeaponSlot; 
     public Vector3 weaponRotationOffset = new Vector3(0, 0, 0);
 
-    // NEW: Store a reference to the Sword item.
     public Item swordItem;
     
     public static InventoryManager Instance;
+    public InventoryItem selectedItem;
     
     private void Awake()
     {

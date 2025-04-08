@@ -58,11 +58,15 @@ public class PlayerInfo : MonoBehaviour
     }
 
     public void Heal(float amount){
+        if (currentHealth != maxHealth){
     currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
     Slider HPBar = GetComponentInChildren<Slider>();
     if (HPBar != null)
         HPBar.value = currentHealth;
     Debug.Log("Healed for " + amount + ", current health: " + currentHealth);
+    }else{
+        return;
+    }
 }
 
 

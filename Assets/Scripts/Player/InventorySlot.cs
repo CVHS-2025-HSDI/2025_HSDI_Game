@@ -6,53 +6,60 @@ public class InventorySlot : MonoBehaviour, IDropHandler
 {
     public Image image;
     public Color selectedColor, notSelectedColor;
-    
-    private static InventoryItem selectedItem; // The currently selected slot
+    private InventoryItem selectedItem; // The currently selected item in this slot
 
     void Update(){
-        if (Input.GetKeyDown(KeyCode.E)){
-            UseSelectedItem();
+    if (InventoryManager.Instance.selectedItem == selectedItem && Input.GetKeyDown(KeyCode.E)){
+        
+        // selectedItem.count--;
+        // selectedItem.RefreshCount(); 
+        UseSelectedItem(); 
+    }
+}
+
+
+    public void Select(){
+        image.color = selectedColor;
+        selectedItem = GetComponentInChildren<InventoryItem>(); // Reference the item in the current slot
+        if (selectedItem != null){
+            // Update selected item in InventoryManager to the current slot's item
+            InventoryManager.Instance.selectedItem = selectedItem;
         }
     }
 
-    public void Select()
-    {
-        image.color = selectedColor;
-        selectedItem = GetComponentInChildren<InventoryItem>();
-    }
-
-    public void Deselect()
-    {
+    public void Deselect(){
         image.color = notSelectedColor;
     }
 
-    public void OnDrop(PointerEventData eventData)
-    {
+    public void OnDrop(PointerEventData eventData){
         if (transform.childCount == 0) // Ensure slot is empty before placing
         {
             InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
-            inventoryItem.parentAfterDrag = transform;
+            inventoryItem.parentAfterDrag = transform; // Reassign the parent slot of the item
         }
     }
 
-    public static void UseSelectedItem()
-{
-    if (selectedItem != null && selectedItem.item.type == Itemtype.Potion)
-    {
-        PlayerInfo player = FindFirstObjectByType<PlayerInfo>(); // Find player health
-        if (player != null)
-        {
-            player.Heal(selectedItem.item.healthAmount); // Heal player
-            selectedItem.count--; 
+   public void UseSelectedItem(){
+    if (InventoryManager.Instance.selectedItem != null){
+        InventoryItem selectedItem = InventoryManager.Instance.selectedItem;
+        if (selectedItem != null && selectedItem.item.type == Itemtype.Potion){
+            PlayerInfo player = FindFirstObjectByType<PlayerInfo>();
+            if (player != null){
+                if (player.currentHealth < player.maxHealth){
+                    player.Heal(selectedItem.item.healthAmount); // Heal the player
 
-            if (selectedItem.count <= 0)
-            {
-                Destroy(selectedItem.gameObject);
-                selectedItem = null;
-            }
-            else
-            {
-                selectedItem.RefreshCount();
+                    // Decrease item count only if used
+                    selectedItem.count--;
+                    selectedItem.RefreshCount();
+
+                    if (selectedItem.count <= 0){
+                        Destroy(selectedItem.gameObject);
+                        InventoryManager.Instance.selectedItem = null;
+                    }
+                }
+                else {
+                    Debug.Log("Player already has max health. Potion not used.");
+                }
             }
         }
     }
