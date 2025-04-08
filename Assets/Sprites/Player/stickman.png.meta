@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5cdd1fd905748f846962aafadf33c866
+guid: 3af00dffb4f64c0459c05624294430ee
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5564784822379157294
-    second: ItemTextureHealing_Vial_0
+      213: -3916041373834478992
+    second: stickman_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ItemTextureHealing_Vial_0
+      name: stickman_0
       rect:
         serializedVersion: 2
-        x: 47
-        y: 31
-        width: 146
-        height: 210
+        x: 0
+        y: 0
+        width: 200
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2d8ea9200b9e5c2b0800000000000000
-      internalID: -5564784822379157294
+      spriteID: 07afcda5e1d67a9c0800000000000000
+      internalID: -3916041373834478992
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      ItemTextureHealing_Vial_0: -5564784822379157294
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

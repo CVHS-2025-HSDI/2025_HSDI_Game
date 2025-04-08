@@ -180,16 +180,51 @@ public class EnemyAI : MonoBehaviour
 
     private void Die()
     {
-        gameObject.GetComponent<CircleCollider2D>().enabled = false; // Disable contact damage and allow player to pass through
-        // Freeze enemy and fade out its sprite before destroying
-       
-        StartCoroutine(FreezeAndFadeOut());
-         foreach (LootItem item in loottable){
-            if(Random.Range(0f,100f) <= item.dropChance){
-                GameObject droppedLoot = Instantiate(item.itemPrefab, transform.position, Quaternion.identity);
-                break; 
-            }  
+        // Award XP to the player.
+        int baseXPReward = 50; // Define a base XP reward for this enemy.
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            PlayerXP xpComponent = player.GetComponent<PlayerXP>();
+            if (xpComponent != null)
+            {
+                Debug.Log("Awarding XP to player...");
+                xpComponent.AddXP(baseXPReward);
             }
+            else
+            {
+                Debug.LogWarning("PlayerXP component not found on player!");
+            }
+        
+            // Instantiate floating XP text.
+            GameObject xpText = Instantiate(SingletonManager.Instance.XPTextPrefab, transform.position, Quaternion.identity);
+            // Assume XPTextScript handles showing the XP number and fading.
+            XPTextScript xpTextScript = xpText.GetComponent<XPTextScript>();
+            if (xpTextScript != null)
+            {
+                xpTextScript.Setup(baseXPReward);
+            }
+        }
+    
+        // Existing loot drop logic.
+        foreach (LootItem item in loottable)
+        {
+            // Optionally modify drop chance with player's trading multiplier.
+            float finalDropChance = item.dropChance;
+            if (player != null)
+            {
+                finalDropChance *= PlayerStats.GetDropMultiplier();
+            }
+            if (Random.Range(0f, 100f) <= finalDropChance)
+            {
+                Instantiate(item.itemPrefab, transform.position, Quaternion.identity);
+                break;
+            }
+        }
+    
+        // Fade and destroy enemy.
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        StartCoroutine(FreezeAndFadeOut());
     }
 
     private IEnumerator FreezeAndFadeOut()

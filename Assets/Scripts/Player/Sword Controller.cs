@@ -8,6 +8,13 @@ public class SwordController : MonoBehaviour
     public GameObject swingEffectPrefab; // Prefab for the swing effect
     public float attackCooldown = 0.5f;
     private bool canAttack = true;
+    
+    void Awake() {
+        if (SingletonManager.Instance.mainCamera == null)
+            Debug.LogError("SingletonManager mainCamera is not assigned!");
+        else
+            Debug.Log("SingletonManager mainCamera is active: " + SingletonManager.Instance.mainCamera.gameObject.activeInHierarchy);
+    }
 
     void Update()
     {
@@ -25,13 +32,30 @@ public class SwordController : MonoBehaviour
 
     void RotateSword()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // Use the camera from SingletonManager if Camera.main is null.
+        Camera cam = Camera.main;
+        if (cam == null && SingletonManager.Instance != null)
+        {
+            SingletonManager.Instance.mainCamera.gameObject.SetActive(true);
+            cam = SingletonManager.Instance.mainCamera;
+            if (cam == null)
+            {
+                Debug.LogError("No camera available for RotateSword!");
+                return;
+            }
+        }
+
+        Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0f;
 
+        if (pivotPoint == null)
+        {
+            Debug.LogError("PivotPoint is null in RotateSword!");
+            return;
+        }
+    
         Vector3 direction = (mousePos - pivotPoint.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        // If your sprite points 'up' in its default orientation, you might subtract 90
         angle -= 135;
 
         pivotPoint.rotation = Quaternion.Euler(0, 0, angle);

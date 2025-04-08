@@ -198,5 +198,9 @@ public class PlayerInfo : MonoBehaviour
             SingletonManager.Instance.toolbar.SetActive(false);
         if (SingletonManager.Instance.invButton != null)
             SingletonManager.Instance.invButton.SetActive(false);
+        if (SingletonManager.Instance.showCharacter != null)
+            SingletonManager.Instance.showCharacter.SetActive(false);
+        if (SingletonManager.Instance.xpText != null)
+            SingletonManager.Instance.xpText.SetActive(true);
     }
 }

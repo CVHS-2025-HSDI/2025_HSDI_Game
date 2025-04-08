@@ -17,5 +17,5 @@ MonoBehaviour:
   range: {x: 5, y: 4}
   stackable: 1
   image: {fileID: 1865925488432424353, guid: 4faeac81067143246a3c43e29f49f0b6, type: 3}
-  healthAmount: 100
+  healthAmount: 50
   itemPrefab: {fileID: 8991703741331775527, guid: bfea552053952594a8558ec4d0193541, type: 3}

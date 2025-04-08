@@ -4,16 +4,18 @@ using UnityEngine;
 public class SwordProjectileScript : MonoBehaviour
 {
     private GameObject target;
-    private int damage;
+    private float damage;
     private float timer = 0;
     private float timeVisible = 0.15f;
     private bool attack = true;
     private bool isPlayer;
     private float knockbackForce = 25f;
 
+    private int baseDamage = 5;
+
     void Start()
     {
-        damage = (int)((UnityEngine.Random.value * 4) + 1);
+        damage = CalculateDamage(baseDamage);
     }
 
     void Update()
@@ -27,6 +29,10 @@ public class SwordProjectileScript : MonoBehaviour
         {
             timer += Time.deltaTime;
         }
+    }
+    
+    public float CalculateDamage(int baseDamage) {
+        return baseDamage * PlayerStats.GetDamageMultiplier();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

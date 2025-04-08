@@ -43,10 +43,19 @@ public class SingletonManager : MonoBehaviour
     public GameObject toolbar;
     
     [Tooltip("ShowMainInventory button under GameplayCanvas.")]
-    public GameObject invButton; 
+    public GameObject invButton;
+    
+    [Tooltip("ShowCharacter button under GameplayCanvas.")]
+    public GameObject showCharacter;
     
     [Tooltip("Event System")]
     public GameObject eventSystem;
+    
+    [Tooltip("XP Text")]
+    public GameObject xpText;
+    
+    [Tooltip("XP Text Prefab")]
+    public GameObject XPTextPrefab;
 
     void Awake()
     {

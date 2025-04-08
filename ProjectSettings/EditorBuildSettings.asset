@@ -17,9 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Tower/TowerFloorTemplate.unity
     guid: 17d43a2e6e7569d4090dff3e66bc0b30
-  - enabled: 0
-    path: Assets/Scenes/BED.unity
-    guid: 03b19050427e2734ba3d4fce8db2925b
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
