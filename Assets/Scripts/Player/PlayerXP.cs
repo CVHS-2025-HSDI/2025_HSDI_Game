@@ -6,7 +6,7 @@ public class PlayerXP : MonoBehaviour {
     
     public int currentXP = 0;
     public int currentLevel = 1;
-    public int xpToNextLevel = 500;
+    public int xpToNextLevel = 200;
     public int availableStatPoints = 0;
     public TMP_Text xpUIText; // Reference to an on-screen UI text element for XP
     public TMP_Text levelUIText;
@@ -56,7 +56,7 @@ public class PlayerXP : MonoBehaviour {
 
     private int CalculateXPForNextLevel() {
         // Simple formula!
-        return currentLevel * 500;
+        return currentLevel * 200;
     }
     
     private void UpdateXPUI() {
