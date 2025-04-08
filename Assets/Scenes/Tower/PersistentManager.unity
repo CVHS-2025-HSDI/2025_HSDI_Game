@@ -5124,7 +5124,7 @@ MonoBehaviour:
   xpToNextLevel: 100
   availableStatPoints: 0
   xpUIText: {fileID: 154492643}
-  levelUIText: {fileID: 0}
+  levelUIText: {fileID: 1431669013}
 --- !u!114 &607713174
 MonoBehaviour:
   m_ObjectHideFlags: 0
