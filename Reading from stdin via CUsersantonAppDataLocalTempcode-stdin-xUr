@@ -1,0 +1,347 @@
+[1mdiff --git a/2025_HDSI_Game.sln b/2025_HDSI_Game.sln[m
+[1mindex 7d248a0..0469b8e 100644[m
+[1m--- a/2025_HDSI_Game.sln[m
+[1m+++ b/2025_HDSI_Game.sln[m
+[36m@@ -1,63 +1,18 @@[m
+ ﻿[m
+[31m-Microsoft Visual Studio Solution File, Format Version 11.00[m
+[31m-# Visual Studio 2010[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Collections", "Unity.Collections.csproj", "{369ee548-c1c2-7b12-23cf-e2557898fa32}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{ca433c63-bc95-7675-1cfd-56e772ec452e}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.PerformanceTesting", "Unity.PerformanceTesting.csproj", "{ff97bf2e-8d6c-d1f9-f1a8-1466bffdf68c}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Collections.CodeGen", "Unity.Collections.CodeGen.csproj", "{d923e9de-adf1-203d-d214-8efb466c52d9}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Collections.Editor", "Unity.Collections.Editor.csproj", "{2f92b388-435d-d368-bc59-e55438fa60b2}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Collections", "Unity.Collections.Player.csproj", "{5263e352-9f61-c697-4bce-efb8736555d3}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.Player.csproj", "{94a80516-1405-257a-c766-109bb1919c01}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.PerformanceTesting", "Unity.PerformanceTesting.Player.csproj", "{8b364882-3699-d466-c13d-741d37df229e}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Collections.DocCodeSamples", "Unity.Collections.DocCodeSamples.csproj", "{4db59f0b-83c1-3f26-435b-7d32760726db}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Collections.PerformanceTests", "Unity.Collections.PerformanceTests.csproj", "{20646c18-9471-ff62-1ec4-4161acc62b94}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Collections.Tests", "Unity.Collections.Tests.csproj", "{3b7f07c1-ff4a-ecb6-6f87-92bb45381b41}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Collections.Tests.Playmode", "Unity.Collections.Tests.Playmode.csproj", "{d43865b5-575b-52fe-4d3e-3ceb992f6141}"[m
+[31m-EndProject[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Collections.BurstCompatibilityGen", "Unity.Collections.BurstCompatibilityGen.csproj", "{cc07bac4-6627-d917-75b3-9de355426ed2}"[m
+[32m+[m[32mMicrosoft Visual Studio Solution File, Format Version 12.00[m
+[32m+[m[32m# Visual Studio 15[m
+[32m+[m[32mProject("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{633C43CA-95BC-7576-1CFD-56E772EC452E}"[m
+ EndProject[m
+ Global[m
+ 	GlobalSection(SolutionConfigurationPlatforms) = preSolution[m
+ 		Debug|Any CPU = Debug|Any CPU[m
+[32m+[m		[32mRelease|Any CPU = Release|Any CPU[m
+ 	EndGlobalSection[m
+ 	GlobalSection(ProjectConfigurationPlatforms) = postSolution[m
+[31m-		{369ee548-c1c2-7b12-23cf-e2557898fa32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{369ee548-c1c2-7b12-23cf-e2557898fa32}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{ca433c63-bc95-7675-1cfd-56e772ec452e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{ca433c63-bc95-7675-1cfd-56e772ec452e}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{ff97bf2e-8d6c-d1f9-f1a8-1466bffdf68c}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{ff97bf2e-8d6c-d1f9-f1a8-1466bffdf68c}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{d923e9de-adf1-203d-d214-8efb466c52d9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{d923e9de-adf1-203d-d214-8efb466c52d9}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{2f92b388-435d-d368-bc59-e55438fa60b2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{2f92b388-435d-d368-bc59-e55438fa60b2}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{5263e352-9f61-c697-4bce-efb8736555d3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{5263e352-9f61-c697-4bce-efb8736555d3}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{94a80516-1405-257a-c766-109bb1919c01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{94a80516-1405-257a-c766-109bb1919c01}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{8b364882-3699-d466-c13d-741d37df229e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{8b364882-3699-d466-c13d-741d37df229e}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{4db59f0b-83c1-3f26-435b-7d32760726db}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{4db59f0b-83c1-3f26-435b-7d32760726db}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{20646c18-9471-ff62-1ec4-4161acc62b94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{20646c18-9471-ff62-1ec4-4161acc62b94}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{3b7f07c1-ff4a-ecb6-6f87-92bb45381b41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{3b7f07c1-ff4a-ecb6-6f87-92bb45381b41}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{d43865b5-575b-52fe-4d3e-3ceb992f6141}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{d43865b5-575b-52fe-4d3e-3ceb992f6141}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{cc07bac4-6627-d917-75b3-9de355426ed2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{cc07bac4-6627-d917-75b3-9de355426ed2}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[32m+[m		[32m{633C43CA-95BC-7576-1CFD-56E772EC452E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[32m+[m		[32m{633C43CA-95BC-7576-1CFD-56E772EC452E}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[32m+[m		[32m{633C43CA-95BC-7576-1CFD-56E772EC452E}.Release|Any CPU.ActiveCfg = Release|Any CPU[m
+[32m+[m		[32m{633C43CA-95BC-7576-1CFD-56E772EC452E}.Release|Any CPU.Build.0 = Release|Any CPU[m
+ 	EndGlobalSection[m
+ 	GlobalSection(SolutionProperties) = preSolution[m
+ 		HideSolutionNode = FALSE[m
+[1mdiff --git a/Assembly-CSharp.csproj b/Assembly-CSharp.csproj[m
+[1mindex 0e4125e..de80bcd 100644[m
+[1m--- a/Assembly-CSharp.csproj[m
+[1m+++ b/Assembly-CSharp.csproj[m
+[36m@@ -1,49 +1,68 @@[m
+[31m-﻿<?xml version="1.0" encoding="utf-8"?>[m
+[31m-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">[m
+[32m+[m[32m﻿<Project ToolsVersion="Current">[m
+[32m+[m[32m  <!-- Generated file, do not modify, your changes will be overwritten (use AssetPostprocessor.OnGeneratedCSProject) -->[m
+   <PropertyGroup>[m
+[31m-    <LangVersion>9.0</LangVersion>[m
+[31m-    <_TargetFrameworkDirectories>non_empty_path_generated_by_unity.rider.package</_TargetFrameworkDirectories>[m
+[31m-    <_FullFrameworkReferenceAssemblyPaths>non_empty_path_generated_by_unity.rider.package</_FullFrameworkReferenceAssemblyPaths>[m
+[31m-    <DisableHandlePackageFileConflicts>true</DisableHandlePackageFileConflicts>[m
+[32m+[m[32m    <BaseIntermediateOutputPath>Temp\obj\$(Configuration)\$(MSBuildProjectName)</BaseIntermediateOutputPath>[m
+[32m+[m[32m    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>[m
+   </PropertyGroup>[m
+[32m+[m[32m  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />[m
+[32m+[m[32m  <ItemGroup>[m
+[32m+[m[32m    <ProjectCapability Include="Unity" />[m
+[32m+[m[32m  </ItemGroup>[m
+   <PropertyGroup>[m
+[32m+[m[32m    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>[m
+[32m+[m[32m    <EnableDefaultItems>false</EnableDefaultItems>[m
+[32m+[m[32m    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>[m
+[32m+[m[32m    <LangVersion>9.0</LangVersion>[m
+[32m+[m[32m    <Configurations>Debug;Release</Configurations>[m
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>[m
+     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>[m
+[31m-    <ProductVersion>10.0.20506</ProductVersion>[m
+[31m-    <SchemaVersion>2.0</SchemaVersion>[m
+     <RootNamespace></RootNamespace>[m
+[31m-    <ProjectGuid>{ca433c63-bc95-7675-1cfd-56e772ec452e}</ProjectGuid>[m
+[31m-    <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>[m
+     <OutputType>Library</OutputType>[m
+     <AppDesignerFolder>Properties</AppDesignerFolder>[m
+     <AssemblyName>Assembly-CSharp</AssemblyName>[m
+[31m-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>[m
+[31m-    <FileAlignment>512</FileAlignment>[m
+[32m+[m[32m    <TargetFramework>netstandard2.1</TargetFramework>[m
+     <BaseDirectory>.</BaseDirectory>[m
+   </PropertyGroup>[m
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">[m
+     <DebugSymbols>true</DebugSymbols>[m
+     <DebugType>full</DebugType>[m
+     <Optimize>false</Optimize>[m
+[31m-    <OutputPath>Temp\Bin\Debug\Assembly-CSharp\</OutputPath>[m
+[31m-    <DefineConstants>UNITY_6000_0_35;UNITY_6000_0;UNITY_6000;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_2021_2_OR_NEWER;UNITY_2021_3_OR_NEWER;UNITY_2022_1_OR_NEWER;UNITY_2022_2_OR_NEWER;UNITY_2022_3_OR_NEWER;UNITY_2023_1_OR_NEWER;UNITY_2023_2_OR_NEWER;UNITY_2023_3_OR_NEWER;UNITY_6000_0_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_EDITOR_GAME_SERVICES;ENABLE_UNITY_GAME_SERVICES_ANALYTICS_SUPPORT;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_MARSHALLING_TESTS;ENABLE_VIDEO;ENABLE_NAVIGATION_OFFMESHLINK_TO_NAVMESHLINK;ENABLE_ACCELERATOR_CLIENT_DEBUGGING;TEXTCORE_1_0_OR_NEWER;EDITOR_ONLY_NAVMESH_BUILDER_DEPRECATED;PLATFORM_STANDALONE_WIN;PLATFORM_STANDALONE;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_NVIDIA;ENABLE_AMD;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;PLATFORM_USES_EXPLICIT_MEMORY_MANAGER_INITIALIZER;PLATFORM_SUPPORTS_WAIT_FOR_PRESENTATION;PLATFORM_SUPPORTS_SPLIT_GRAPHICS_JOBS;ENABLE_MONO;NET_STANDARD_2_0;NET_STANDARD;NET_STANDARD_2_1;NETSTANDARD;NETSTANDARD2_1;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_INPUT_SYSTEM;ENABLE_LEGACY_INPUT_MANAGER;TEXTCORE_FONT_ENGINE_1_5_OR_NEWER;TEXTCORE_TEXT_ENGINE_1_5_OR_NEWER;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>[m
+[32m+[m[32m    <OutputPath>Temp\bin\Debug\</OutputPath>[m
+[32m+[m[32m    <DefineConstants>UNITY_6000_0_36;UNITY_6000_0;UNITY_6000;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_2021_2_OR_NEWER;UNITY_2021_3_OR_NEWER;UNITY_2022_1_OR_NEWER;UNITY_2022_2_OR_NEWER;UNITY_2022_3_OR_NEWER;UNITY_2023_1_OR_NEWER;UNITY_2023_2_OR_NEWER;UNITY_2023_3_OR_NEWER;UNITY_6000_0_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_EDITOR_GAME_SERVICES;ENABLE_UNITY_GAME_SERVICES_ANALYTICS_SUPPORT;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_MARSHALLING_TESTS;ENABLE_VIDEO;ENABLE_NAVIGATION_OFFMESHLINK_TO_NAVMESHLINK;ENABLE_ACCELERATOR_CLIENT_DEBUGGING;TEXTCORE_1_0_OR_NEWER;EDITOR_ONLY_NAVMESH_BUILDER_DEPRECATED;PLATFORM_STANDALONE_WIN;PLATFORM_STANDALONE;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_NVIDIA;ENABLE_AMD;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;PLATFORM_USES_EXPLICIT_MEMORY_MANAGER_INITIALIZER;PLATFORM_SUPPORTS_WAIT_FOR_PRESENTATION;PLATFORM_SUPPORTS_SPLIT_GRAPHICS_JOBS;ENABLE_MONO;NET_STANDARD_2_0;NET_STANDARD;NET_STANDARD_2_1;NETSTANDARD;NETSTANDARD2_1;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_INPUT_SYSTEM;ENABLE_LEGACY_INPUT_MANAGER;TEXTCORE_FONT_ENGINE_1_5_OR_NEWER;TEXTCORE_TEXT_ENGINE_1_5_OR_NEWER;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>[m
+[32m+[m[32m    <ErrorReport>prompt</ErrorReport>[m
+[32m+[m[32m    <WarningLevel>4</WarningLevel>[m
+[32m+[m[32m    <NoWarn>0169;USG0001</NoWarn>[m
+[32m+[m[32m    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>[m
+[32m+[m[32m  </PropertyGroup>[m
+[32m+[m[32m  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">[m
+[32m+[m[32m    <DebugType>pdbonly</DebugType>[m
+[32m+[m[32m    <Optimize>true</Optimize>[m
+[32m+[m[32m    <OutputPath>Temp\bin\Release\</OutputPath>[m
+     <ErrorReport>prompt</ErrorReport>[m
+     <WarningLevel>4</WarningLevel>[m
+[31m-    <NoWarn>0169,0649</NoWarn>[m
+[32m+[m[32m    <NoWarn>0169;USG0001</NoWarn>[m
+     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>[m
+[31m-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>[m
+   </PropertyGroup>[m
+   <PropertyGroup>[m
+[31m-    <NoConfig>true</NoConfig>[m
+[32m+[m[32m    <NoStandardLibraries>true</NoStandardLibraries>[m
+     <NoStdLib>true</NoStdLib>[m
+[31m-    <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>[m
+[31m-    <ImplicitlyExpandNETStandardFacades>false</ImplicitlyExpandNETStandardFacades>[m
+[31m-    <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>[m
+[32m+[m[32m    <NoConfig>true</NoConfig>[m
+[32m+[m[32m    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>[m
+[32m+[m[32m    <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>[m
+[32m+[m[32m  </PropertyGroup>[m
+[32m+[m[32m  <PropertyGroup>[m
+[32m+[m[32m    <UnityProjectGenerator>Package</UnityProjectGenerator>[m
+[32m+[m[32m    <UnityProjectGeneratorVersion>2.0.22</UnityProjectGeneratorVersion>[m
+[32m+[m[32m    <UnityProjectGeneratorStyle>SDK</UnityProjectGeneratorStyle>[m
+[32m+[m[32m    <UnityProjectType>Game:1</UnityProjectType>[m
+[32m+[m[32m    <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>[m
+[32m+[m[32m    <UnityVersion>6000.0.36f1</UnityVersion>[m
+   </PropertyGroup>[m
+   <ItemGroup>[m
+[31m-    <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />[m
+[31m-    <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />[m
+[31m-    <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />[m
+[32m+[m[32m    <Analyzer Include="C:\Users\anton\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.1.0\Analyzers\Microsoft.Unity.Analyzers.dll" />[m
+[32m+[m[32m    <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />[m
+[32m+[m[32m    <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />[m
+[32m+[m[32m    <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />[m
+   </ItemGroup>[m
+   <ItemGroup>[m
+     <Compile Include="Assets\Scripts\Weapons\SwordAttackRadiusScript.cs" />[m
+[36m@@ -120,11 +139,12 @@[m
+     <Compile Include="Assets\Scripts\Enemy\BossManager.cs" />[m
+     <Compile Include="Assets\Scripts\Objects\LecternTrigger.cs" />[m
+     <Compile Include="Assets\Scripts\Player\PlayerAnimation.cs" />[m
+[32m+[m[32m  </ItemGroup>[m
+[32m+[m[32m  <ItemGroup>[m
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />[m
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />[m
+     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Roboto-Bold - License.txt" />[m
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />[m
+[31m-    <None Include="Library\PackageCache\com.unity.collections@56bff8827a7e\Unity.Collections.LowLevel.ILSupport\README.txt" />[m
+     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Unity - OFL.txt" />[m
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />[m
+     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />[m
+[36m@@ -144,947 +164,1255 @@[m
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />[m
+     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />[m
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />[m
+[31m-    <None Include="Library\PackageCache\com.unity.collections@56bff8827a7e\package.json" />[m
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />[m
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />[m
+     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />[m
+[31m-    <None Include="Library\PackageCache\com.unity.collections@56bff8827a7e\ValidationExceptions.json" />[m
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />[m
+[31m-    <None Include="Assets\TextMesh Pro\Sprites\EmojiOne.json" />[m
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />[m
+     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />[m
+[32m+[m[32m  </ItemGroup>[m
+[32m+[m[32m  <ItemGroup>[m
+     <Reference Include="UnityEngine">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.AIModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.AIModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.AIModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.ARModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.ARModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.ARModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.AccessibilityModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.AccessibilityModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.AccessibilityModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.AndroidJNIModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.AndroidJNIModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.AndroidJNIModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.AnimationModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.AnimationModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.AnimationModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.AssetBundleModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.AssetBundleModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.AssetBundleModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.AudioModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.AudioModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.AudioModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.ClothModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClothModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClothModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.ClusterInputModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterInputModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterInputModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.ClusterRendererModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterRendererModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterRendererModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.ContentLoadModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.ContentLoadModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.ContentLoadModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.CoreModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.CrashReportingModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.CrashReportingModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.CrashReportingModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.DSPGraphModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.DSPGraphModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.DSPGraphModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.DirectorModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.DirectorModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.DirectorModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.GIModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.GIModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.GIModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.GameCenterModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.GameCenterModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.GameCenterModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.GraphicsStateCollectionSerializerModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.GraphicsStateCollectionSerializerModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.GraphicsStateCollectionSerializerModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.GridModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.GridModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.GridModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.HierarchyCoreModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.HierarchyCoreModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.HierarchyCoreModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.HotReloadModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.HotReloadModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.HotReloadModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.IMGUIModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.IMGUIModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.IMGUIModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.ImageConversionModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.ImageConversionModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.ImageConversionModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.InputModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.InputModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.InputModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.InputForUIModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.InputForUIModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.InputForUIModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.InputLegacyModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.InputLegacyModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.InputLegacyModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.JSONSerializeModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.JSONSerializeModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.JSONSerializeModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference Include="UnityEngine.LocalizationModule">[m
+[31m-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.LocalizationModule.dll</HintPath>[m
+[32m+[m[32m      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.LocalizationModule.dll</HintPath>[m
+[32m+[m[32m      <Private>False</Private>[m
+     </Reference>[m
+     <Reference 
