@@ -10,6 +10,9 @@ public class SingletonManager : MonoBehaviour
     [Header("Scene References")]
     [Tooltip("Reference to the main camera in the scene.")]
     public Camera mainCamera;
+    
+    [Tooltip("Reference to the bedroom cutscene camera.")]
+    public Camera bedroomCamera;
 
     [Tooltip("Reference to the Gameplay Canvas in the scene.")]
     public Canvas gameplayCanvas;

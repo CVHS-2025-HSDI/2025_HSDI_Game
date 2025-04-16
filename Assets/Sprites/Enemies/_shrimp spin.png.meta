@@ -234,7 +234,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      _shrimp spin_0: 4071711373927056837
+      _shrimp spin_1: -5902515497171632240
+      _shrimp spin_2: -8279500093811290959
+      _shrimp spin_3: 6590457499606762241
+      _shrimp spin_4: -4777291303167734674
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
