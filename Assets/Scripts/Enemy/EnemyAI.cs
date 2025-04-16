@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.Tilemaps;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -28,6 +29,10 @@ public class EnemyAI : MonoBehaviour
     private float timer = 0f;
     public Vector2 knockbackForceVector;
 
+    // For Vision
+    private Tilemap tilemap;
+    private string wallTileName = "WallSprite";
+	private float sightDistance = 6f;
 
 
     [Header("Loot")]
@@ -61,6 +66,13 @@ public class EnemyAI : MonoBehaviour
     
         float enemyScalingFactor = 1f + 0.2f * (currentLevel - 1);
         health *= enemyScalingFactor;
+
+        if(FloorGenerator.Instance!= null){
+            tilemap = FloorGenerator.Instance.floorTilemap;
+        } else {
+            Debug.Log("FloorGenerator instance not found. Tilemap will not be used for vision.");
+        }
+
     }
 
     void Update()
@@ -79,8 +91,7 @@ public class EnemyAI : MonoBehaviour
             // Example patrol logic can be added here
             // Check if the player is within 3 units; if so, switch to Aggro
             if (playerTarget != null &&
-                Mathf.Abs(playerTarget.transform.position.x - transform.position.x) <= 4 &&
-                Mathf.Abs(playerTarget.transform.position.y - transform.position.y) <= 4)
+                hasVision(sightDistance))
             {
                 changeState("Aggro");
                 Debug.Log("Changing to Aggro");
@@ -90,89 +101,116 @@ public class EnemyAI : MonoBehaviour
         {
             
             if (playerTarget != null &&
-                Mathf.Abs(playerTarget.transform.position.x - transform.position.x) >= 7 ||
-                Mathf.Abs(playerTarget.transform.position.y - transform.position.y) >= 7)
+                    !hasVision(sightDistance+1))
+                {
+                    changeState("Passive");
+                }
+            }
+        }
+
+        void FixedUpdate()
+        {
+            
+            if (isFrozen)
             {
-                changeState("Passive");
+                rb.linearVelocity = Vector2.zero;
+                return;
+            }
+
+            if (state.Equals("Aggro") && playerTarget != null)
+            {
+                Vector2 targetPos = playerTarget.transform.position;
+                Vector2 newPos = Vector2.MoveTowards(rb.position, targetPos, moveSpeed * Time.fixedDeltaTime);
+
+                // Apply knockback force if any
+                if (knockbackForceVector != Vector2.zero)
+                {
+                    newPos += knockbackForceVector * Time.fixedDeltaTime;
+                    knockbackForceVector = Vector2.Lerp(knockbackForceVector, Vector2.zero, 0.5f); // Gradually reduce the knockback force
+                }
+
+                rb.MovePosition(newPos);
+            }
+            if(state.Equals("Passive"))
+            {
+                timer += Time.fixedDeltaTime;
+                if(isPaused)
+                {
+                    if(timer>=Random.Range(1.5f,2.5f))
+                    {
+                        isPaused = false;
+                        timer = 0f;
+                        wander();
+                    }
+                }
+                else
+                {
+                    if(timer>=wanderInterval)
+                    {
+                        isPaused = true;
+                        timer = 0f;
+                        rb.linearVelocity = Vector2.zero;
+                    }
+                }
+            }
+        }
+
+        void wander(){
+            Vector2 randomDirection = Random.insideUnitCircle.normalized;
+            rb.linearVelocity = randomDirection * wanderSpeed;
+        }
+
+        public void changeState(string newState)
+        {
+            if (weapon.GetComponent("SwordScript") != null)
+            {
+                SwordScript ws = (SwordScript)weapon.GetComponent("SwordScript");
+                if (newState.Equals("Passive"))
+                {
+                    state = newState;
+                    ws.SetTarget(null);
+                }
+                else if (newState.Equals("Aggro"))
+                {
+                    state = newState;
+                    ws.SetTarget(playerTarget);
+                }
+                else if (newState.Equals("Stagger"))
+            {
+                state = newState;
+                ws.SetTarget(null);
             }
         }
     }
 
-    void FixedUpdate()
-    {
+    private bool hasVision(float distance){
+        //If Out of Range, Return False.
+        if (Vector2.Distance(playerTarget.transform.position, transform.position) > distance){
+            return false;
+        }
         
-        if (isFrozen)
-        {
-            rb.linearVelocity = Vector2.zero;
-            return;
-        }
+        //Make an all-seeing raycast
+        Vector2 direction = (playerTarget.transform.position - transform.position).normalized;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, distance);
 
-        if (state.Equals("Aggro") && playerTarget != null)
-        {
-            Vector2 targetPos = playerTarget.transform.position;
-            Vector2 newPos = Vector2.MoveTowards(rb.position, targetPos, moveSpeed * Time.fixedDeltaTime);
+        //For each hit, check if the hit object is a wall or not.
+        foreach (RaycastHit2D hit in hits){
 
-            // Apply knockback force if any
-            if (knockbackForceVector != Vector2.zero)
+            Vector3 biasedHitPoint = hit.point + (Vector2)(direction * 0.01f);
+            Vector3Int tilePosition = tilemap.WorldToCell(biasedHitPoint);
+            TileBase hitTile = tilemap.GetTile(tilePosition);
+            if (hitTile != null && hitTile.name == wallTileName)
             {
-                newPos += knockbackForceVector * Time.fixedDeltaTime;
-                knockbackForceVector = Vector2.Lerp(knockbackForceVector, Vector2.zero, 0.5f); // Gradually reduce the knockback force
-            }
-
-            rb.MovePosition(newPos);
-        }
-        if(state.Equals("Passive"))
-        {
-            timer += Time.fixedDeltaTime;
-            if(isPaused)
+                return false;
+            } 
+            else if (hit.collider.gameObject.CompareTag("Player"))
             {
-                if(timer>=Random.Range(1.5f,2.5f))
-                {
-                    isPaused = false;
-                    timer = 0f;
-                    wander();
-                }
-            }
-            else
-            {
-                if(timer>=wanderInterval)
-                {
-                    isPaused = true;
-                    timer = 0f;
-                    rb.linearVelocity = Vector2.zero;
-                }
+                // If we hit the player, return true.
+                return true;
             }
         }
+        return true;
     }
-
-    void wander(){
-        Vector2 randomDirection = Random.insideUnitCircle.normalized;
-        rb.linearVelocity = randomDirection * wanderSpeed;
-    }
-
-    public void changeState(string newState)
-    {
-        if (weapon.GetComponent("SwordScript") != null)
-        {
-            SwordScript ws = (SwordScript)weapon.GetComponent("SwordScript");
-            if (newState.Equals("Passive"))
-            {
-                state = newState;
-                ws.SetTarget(null);
-            }
-            else if (newState.Equals("Aggro"))
-            {
-                state = newState;
-                ws.SetTarget(playerTarget);
-            }
-            else if (newState.Equals("Stagger"))
-            {
-                state = newState;
-                ws.SetTarget(null);
-            }
-        }
-    }
-
     public void damage(float dmg)
     {
         health -= dmg;

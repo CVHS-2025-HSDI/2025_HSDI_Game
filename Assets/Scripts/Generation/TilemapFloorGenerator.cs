@@ -9,7 +9,7 @@ public class FloorGenerator : MonoBehaviour
     // Down stairs will be placed in a random non-boss room (if available).
     // State (keys, chests, enemies) is recorded and reloaded.
     // AUTHORS: Vitaly, Anton, Aron (modified 2/26/2025)
-
+    public static FloorGenerator Instance { get; private set; } 
     [Header("Tilemap & Prefab References")]
     public Tilemap floorTilemap;       // Assign in Inspector
     public GameObject keyPrefab;
@@ -44,6 +44,18 @@ public class FloorGenerator : MonoBehaviour
     private List<Vector3Int> _placedKeys = new List<Vector3Int>();
     private List<Vector3Int> _placedEnemies = new List<Vector3Int>();
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     // We track rooms so we can find the largest as the "boss room"
     private List<Room> _rooms = new List<Room>();
 
