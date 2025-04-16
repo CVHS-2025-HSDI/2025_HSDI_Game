@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class EnemyAI : MonoBehaviour
 {
     private Rigidbody2D rb;
+    public Sprite[] enemySprites;
     private GameObject playerTarget;
     public GameObject weaponPrefab; // assign in Inspector
     public GameObject DamageTextPrefab;
@@ -36,24 +37,28 @@ public class EnemyAI : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-
-        // Find the player in the scene
+        
+        if (enemySprites != null && enemySprites.Length > 0)
+        {
+            int randomIndex = Random.Range(0, enemySprites.Length);
+            sr.sprite = enemySprites[randomIndex];
+        }
+        
         playerTarget = GameObject.FindWithTag("Player");
-    
-        // Instantiate weapon and set parent
         weapon = Instantiate(weaponPrefab, transform.position, weaponPrefab.transform.rotation);
         weapon.transform.SetParent(transform);
+    
         if (weapon.GetComponent("SwordScript") != null)
         {
             ((SwordScript)weapon.GetComponent("SwordScript")).SetIsPlayer(false);
         }
-        
+    
         int currentLevel = 1;
         if (MasterLevelManager.Instance != null)
         {
             currentLevel = MasterLevelManager.Instance.highestFloorReached;
         }
-        
+    
         float enemyScalingFactor = 1f + 0.2f * (currentLevel - 1);
         health *= enemyScalingFactor;
     }

@@ -52,6 +52,9 @@ public class Movement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerInfo = GetComponent<PlayerInfo>();
         animator = GetComponent<Animator>();  // Get Animator component
+        Debug.Log("Start: Components initialized. Animator: " + (animator != null));
+        Debug.Log("Start: Initial stamina: " + stamina + ", Health: " + (playerInfo != null ? playerInfo.currentHealth.ToString() : "No player info"));
+
 
         // Initialize stamina UI
         if (staminaBar != null)
@@ -118,6 +121,7 @@ public class Movement : MonoBehaviour
     void UpdateAnimator()
     {
         bool isMoving = dir != Vector2.zero;
+        Debug.Log("Is Moving: " + isMoving);
         animator.SetBool("isMoving", isMoving);
 
         // Set stillRunning to true if the player is moving now and was already moving last frame.
@@ -125,22 +129,26 @@ public class Movement : MonoBehaviour
             stillRunning = true;
         else
             stillRunning = false;
+        Debug.Log("Is running: " + stillRunning);
         animator.SetBool("stillRunning", stillRunning);
 
         // Update the facing direction.
         if (dir.x > 0)
         {
+            Debug.Log("Facing Right: " + true);
             animator.SetBool("FacingRight", true);
             lastFacingRight = true;
         }
         else if (dir.x < 0)
         {
+            Debug.Log("Facing Left: " + !false);
             animator.SetBool("FacingRight", false);
             lastFacingRight = false;
         }
         else
         {
             // If no horizontal input, keep previous facing.
+            Debug.Log("Still facing right: " + lastFacingRight);
             animator.SetBool("FacingRight", lastFacingRight);
         }
 

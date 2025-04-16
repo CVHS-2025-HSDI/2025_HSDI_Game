@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: f9a37b611bd0f87458b10e8377888bc9, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -102,6 +102,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdae23a6fbac3844d8cd9c78e2d3e4da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemySprites:
+  - {fileID: 21300000, guid: 8a25ad8b3af777648ae6ea15f42930e7, type: 3}
+  - {fileID: 21300000, guid: 69fe673887bfada4d912a9f4b746b780, type: 3}
+  - {fileID: 21300000, guid: 93e1cca8b5afe7a4e823fb5b40d9cb7b, type: 3}
   weaponPrefab: {fileID: 8222599173819168208, guid: 1ee43d03ef4980f44acb20d2abfdbb45, type: 3}
   DamageTextPrefab: {fileID: 1266889339534403196, guid: 43c3ca647bb317b4bbe0dd69c1843726, type: 3}
   moveSpeed: 1.8
