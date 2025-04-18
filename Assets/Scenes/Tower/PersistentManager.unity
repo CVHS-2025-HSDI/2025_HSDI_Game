@@ -3730,6 +3730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1139367268}
+  bedroomCamera: {fileID: 0}
   gameplayCanvas: {fileID: 2353355}
   cutsceneCanvas: {fileID: 1711794580}
   loadingPanel: {fileID: 1632508400}
@@ -11900,7 +11901,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1507728447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16109,13 +16110,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -3841416973666397967, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 166486416587655812, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 166486416587655812, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1995290649423402826, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: HPBar
@@ -16135,10 +16136,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5192796020778820681, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5906538169987666184, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
-      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6332498279251299184, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}

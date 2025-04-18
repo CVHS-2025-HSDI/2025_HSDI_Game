@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gold-coin-icon-256x256-zsx53b39_0: -5972258259212351252
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
