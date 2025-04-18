@@ -17,6 +17,7 @@ public class Item : ScriptableObject{
     public Sprite image; 
 
     public int healthAmount = 0;
+    public int stackCount = 0;
     public GameObject itemPrefab;  
 }
     

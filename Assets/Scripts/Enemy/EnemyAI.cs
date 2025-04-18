@@ -20,7 +20,7 @@ public class EnemyAI : MonoBehaviour
     public float pauseDuration = 1f;
     private bool isPaused = false;
     private Vector2 wanderDirection;
-    
+
     // New: Freeze flag
     public bool isFrozen = false;
 
@@ -37,6 +37,8 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Loot")]
     public List<LootItem> loottable = new List<LootItem>();
+    [Tooltip("Max distance from transform.position that items can spawn")]
+    public float spawnRadius = 1f;
 
     void Start()
     {
@@ -89,7 +91,7 @@ public class EnemyAI : MonoBehaviour
         if (state.Equals("Passive"))
         {
             // Example patrol logic can be added here
-            // Check if the player is within 3 units; if so, switch to Aggro
+            // Check if the player is within 4 units; if so, switch to Aggro
             if (playerTarget != null &&
                 hasVision(sightDistance))
             {
@@ -99,7 +101,6 @@ public class EnemyAI : MonoBehaviour
         }
         if(state.Equals("Aggro"))
         {
-            
             if (playerTarget != null &&
                     !hasVision(sightDistance+1))
                 {
@@ -126,7 +127,7 @@ public class EnemyAI : MonoBehaviour
                 if (knockbackForceVector != Vector2.zero)
                 {
                     newPos += knockbackForceVector * Time.fixedDeltaTime;
-                    knockbackForceVector = Vector2.Lerp(knockbackForceVector, Vector2.zero, 0.5f); // Gradually reduce the knockback force
+                    knockbackForceVector = Vector2.Lerp(knockbackForceVector, Vector2.zero, 0.5f);
                 }
 
                 rb.MovePosition(newPos);
@@ -250,7 +251,6 @@ public class EnemyAI : MonoBehaviour
         
             // Instantiate floating XP text.
             GameObject xpText = Instantiate(SingletonManager.Instance.XPTextPrefab, transform.position, Quaternion.identity);
-            // Assume XPTextScript handles showing the XP number and fading.
             XPTextScript xpTextScript = xpText.GetComponent<XPTextScript>();
             if (xpTextScript != null)
             {
@@ -258,25 +258,35 @@ public class EnemyAI : MonoBehaviour
             }
         }
     
-        // Existing loot drop logic.
-        foreach (LootItem item in loottable)
+        // Loot drop: always drop the first item and one extra based on chance
+        if (loottable.Count > 0)
         {
-            // Optionally modify drop chance with player's trading multiplier.
-            float finalDropChance = item.dropChance;
-            if (player != null)
+            SpawnLootItem(loottable[0]);
+            for (int i = 1; i < loottable.Count; i++)
             {
-                finalDropChance *= PlayerStats.GetDropMultiplier();
-            }
-            if (Random.Range(0f, 100f) <= finalDropChance)
-            {
-                Instantiate(item.itemPrefab, transform.position, Quaternion.identity);
-                break;
+                LootItem item = loottable[i];
+                float finalDropChance = item.dropChance;
+                if (playerTarget != null)
+                    finalDropChance *= PlayerStats.GetDropMultiplier();
+
+                if (Random.Range(0f, 100f) <= finalDropChance)
+                {
+                    SpawnLootItem(item);
+                    break;
+                }
             }
         }
-    
+
         // Fade and destroy enemy.
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
         StartCoroutine(FreezeAndFadeOut());
+    }
+
+    private void SpawnLootItem(LootItem item)
+    {
+        Vector2 offset2D = Random.insideUnitCircle * spawnRadius;
+        Vector3 spawnPos = transform.position + (Vector3)offset2D;
+        Instantiate(item.itemPrefab, spawnPos, Quaternion.identity);
     }
 
     private IEnumerator FreezeAndFadeOut()
@@ -301,5 +311,4 @@ public class EnemyAI : MonoBehaviour
     {
         knockbackForceVector = v;
     }
-
 }

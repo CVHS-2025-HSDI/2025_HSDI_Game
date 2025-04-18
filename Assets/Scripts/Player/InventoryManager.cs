@@ -65,7 +65,7 @@ public class InventoryManager : MonoBehaviour
     public bool AddItem(Item item){
         foreach(InventorySlot slot in inventorySlots){
             InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
-            if(itemInSlot != null && itemInSlot.item == item && itemInSlot.count < 4 && itemInSlot.item.stackable == true){
+            if(itemInSlot != null && itemInSlot.item == item && itemInSlot.count < itemInSlot.item.stackCount && itemInSlot.item.stackable == true){
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
                 return true;
