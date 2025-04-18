@@ -20,6 +20,9 @@ public class EnemyAI : MonoBehaviour
     public float pauseDuration = 1f;
     private bool isPaused = false;
     private Vector2 wanderDirection;
+    private Tilemap tilemap;
+    private string wallTileName = "WallSprite";
+    private float sightDistance = 6f;
     
     // New: Freeze flag
     public bool isFrozen = false;
@@ -30,10 +33,7 @@ public class EnemyAI : MonoBehaviour
     public Vector2 knockbackForceVector;
 
     // For Vision
-    private Tilemap tilemap;
-    private string wallTileName = "WallSprite";
-	private float sightDistance = 6f;
-
+   
 
     [Header("Loot")]
     public List<LootItem> loottable = new List<LootItem>();
@@ -111,7 +111,7 @@ public class EnemyAI : MonoBehaviour
         void FixedUpdate()
         {
             
-            if (isFrozen)
+            if (isFrozen && !hasVision(sightDistance+1))
             {
                 rb.linearVelocity = Vector2.zero;
                 return;
@@ -211,6 +211,11 @@ public class EnemyAI : MonoBehaviour
         }
         return true;
     }
+
+    
+    
+
+    
     public void damage(float dmg)
     {
         health -= dmg;
