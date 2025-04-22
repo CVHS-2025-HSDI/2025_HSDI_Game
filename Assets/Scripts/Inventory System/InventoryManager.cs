@@ -63,6 +63,12 @@ public class InventoryManager : MonoBehaviour
     }
 
     public bool AddItem(Item item){
+
+           if (item == null) {
+            Debug.LogError("Tried to add a null item to inventory!");
+            return false;
+        }
+
         foreach(InventorySlot slot in inventorySlots){
             InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
             if(itemInSlot != null && itemInSlot.item == item && itemInSlot.count < itemInSlot.item.stackCount && itemInSlot.item.stackable == true){
@@ -149,4 +155,50 @@ public class InventoryManager : MonoBehaviour
         }
         Debug.Log("Inventory cleared, preserving the Sword.");
     }
+
+    public int GetTotalGold()
+{
+    int totalGold = 0;
+    foreach (InventorySlot slot in inventorySlots) // however you store your slots
+    {
+        InventoryItem item = slot.GetComponentInChildren<InventoryItem>();
+        if (item != null && item.item.type == Itemtype.Gold)
+        {
+            totalGold += item.count;
+        }
+    }
+    return totalGold;
+}
+
+public void SpendGold(int amount)
+{
+    foreach (InventorySlot slot in inventorySlots)
+    {
+        InventoryItem goldItem = slot.GetComponentInChildren<InventoryItem>();
+        if (goldItem != null && goldItem.item.type == Itemtype.Gold)
+        {
+            int available = goldItem.count;
+            if (available >= amount)
+            {
+                goldItem.count -= amount;
+                goldItem.RefreshCount();
+                if (goldItem.count <= 0)
+                {
+                    Destroy(goldItem.gameObject);
+                }
+                return;
+            }
+            else
+            {
+                goldItem.count = 0;
+                goldItem.RefreshCount();
+                Destroy(goldItem.gameObject);
+                amount -= available;
+            }
+        }
+    }
+}
+
+
+
 }

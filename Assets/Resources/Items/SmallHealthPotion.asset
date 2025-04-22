@@ -17,6 +17,7 @@ MonoBehaviour:
   range: {x: 5, y: 4}
   stackable: 1
   image: {fileID: -5564784822379157294, guid: 5cdd1fd905748f846962aafadf33c866, type: 3}
+  itemName: 'Small Health Potion '
   healthAmount: 25
   stackCount: 6
   itemPrefab: {fileID: 4288997443986801281, guid: 819adabc2ae42174996e672eb9b49559, type: 3}

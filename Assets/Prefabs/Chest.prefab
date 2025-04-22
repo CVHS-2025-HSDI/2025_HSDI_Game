@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5879561636059968795}
   - component: {fileID: 5385423170469861798}
-  - component: {fileID: 3726749070742343497}
   - component: {fileID: -6015329201241307572}
+  - component: {fileID: -798359205324285188}
+  - component: {fileID: 3726749070742343497}
   m_Layer: 0
   m_Name: Chest
   m_TagString: Untagged
@@ -89,18 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3726749070742343497
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1400404957489357247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8c0a88fae5d2c04e8bf64e69081c952, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &-6015329201241307572
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -147,3 +136,72 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2.7, y: 2.7}
   m_EdgeRadius: 0
+--- !u!61 &-798359205324285188
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400404957489357247}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.7, y: 2.7}
+    newSize: {x: 2.7, y: 2.7}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 2.9168653, y: 2.9502292}
+  m_EdgeRadius: 0
+--- !u!114 &3726749070742343497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400404957489357247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8c0a88fae5d2c04e8bf64e69081c952, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loottable:
+  - itemPrefab: {fileID: 5749503234137807272, guid: f1770140230236942aa7f2aef187f309, type: 3}
+    dropChance: 10
+  - itemPrefab: {fileID: 1246066484327741191, guid: 727e21acb3776d441909f426c3e3c2e7, type: 3}
+    dropChance: 60
+  - itemPrefab: {fileID: 8991703741331775527, guid: bfea552053952594a8558ec4d0193541, type: 3}
+    dropChance: 40
+  - itemPrefab: {fileID: 4288997443986801281, guid: 819adabc2ae42174996e672eb9b49559, type: 3}
+    dropChance: 50
+  spawnRadius: 1
+  playerTarget: {fileID: 166486416587655812, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}

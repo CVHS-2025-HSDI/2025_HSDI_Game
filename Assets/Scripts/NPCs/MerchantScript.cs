@@ -20,6 +20,13 @@ public class MerchantScript : MonoBehaviour
         }
 
     }
+    void OnTriggerExit2D(Collider2D collider){
+
+        if (collider.CompareTag("Player")){
+            shop.SetActive(false);
+        }
+
+    }
 
 }
 

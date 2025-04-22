@@ -28,6 +28,11 @@ public class PlayerStats {
         return 1f + (Spirit * 0.1f);
     }
 
+    public static float GetTradingDiscountMultiplier()
+{
+    return Trading * 0.05f; 
+}
+
     // New: Reset stats to their default values.
     public static void ResetStats() {
         Strength = 1;
