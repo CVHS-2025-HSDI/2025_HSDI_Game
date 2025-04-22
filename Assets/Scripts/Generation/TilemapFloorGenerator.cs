@@ -85,6 +85,7 @@ public class FloorGenerator : MonoBehaviour
         }
     }
 
+   
     /// <summary>
     /// Generates a new floor and returns a FloorData instance that contains all dynamic object positions.
     /// (Keys and enemies remaining on the floor will be saved in FloorData.)
