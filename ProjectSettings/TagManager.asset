@@ -11,6 +11,8 @@ TagManager:
   - InventoryManager
   - SingletonManager
   - cutscene player
+  - Bedroom
+  - BedTimeline
   layers:
   - Default
   - TransparentFX

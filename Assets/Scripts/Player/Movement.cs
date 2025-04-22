@@ -78,7 +78,7 @@ public class Movement : MonoBehaviour
         ProcessDash();
         ManageStamina();
         UpdateUI();
-        UpdateAnimator();
+        // UpdateAnimator();
     }
 
     void FixedUpdate()

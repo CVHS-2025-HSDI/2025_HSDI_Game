@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Data\FloorConfig.cs" />
     <Compile Include="Assets\Scripts\Player\InventoryItem.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemySight.cs" />
     <Compile Include="Assets\Scripts\Weapons\SwordProjectileScript.cs" />
     <Compile Include="Assets\Scripts\Sound\MusicController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\Scripts\Inventory\Chest.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\Options.cs" />
+    <Compile Include="Assets\Scripts\NPCs\MerchantScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Generation\MasterLevelManager.cs" />
     <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
