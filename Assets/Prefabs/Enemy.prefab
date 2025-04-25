@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3312850535890030477}
   - component: {fileID: 8291537959959765110}
   - component: {fileID: 8712555267834544685}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -121,6 +121,7 @@ MonoBehaviour:
     dropChance: 30
   - itemPrefab: {fileID: 4288997443986801281, guid: 819adabc2ae42174996e672eb9b49559, type: 3}
     dropChance: 80
+  spawnRadius: 1
 --- !u!58 &8291537959959765110
 CircleCollider2D:
   m_ObjectHideFlags: 0

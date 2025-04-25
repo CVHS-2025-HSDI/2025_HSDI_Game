@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7194485439587222619}
   - component: {fileID: 5928580134760373072}
   - component: {fileID: 1109213294851570788}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SwordAttackRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
