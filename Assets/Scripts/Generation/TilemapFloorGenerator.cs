@@ -445,6 +445,7 @@ public class FloorGenerator : MonoBehaviour
                 // Fix for doors spawned in walls and other stuff (hopefully)
             }
             Vector3 worldPos = floorTilemap.CellToWorld(gapCell) + new Vector3(0.5f, 0.5f, 0);
+            floorTilemap.SetTile(gapCell, floorTile);
             Instantiate(doorPrefab, worldPos, Quaternion.identity, objectContainer);
             _placedDoors.Add(gapCell);
         }
