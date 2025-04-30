@@ -16047,9 +16047,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
-
-  isLevelText: {fileID: 1140682467}
-
 --- !u!1001 &4839253349266931586
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16337,6 +16334,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 166486416587655812, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3139837162291064125}
+    - targetCorrespondingSourceObject: {fileID: 166486416587655812, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3139837162291064134}
   m_SourcePrefab: {fileID: 100100000, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
 --- !u!1001 &8147145524509945830
 PrefabInstance:
