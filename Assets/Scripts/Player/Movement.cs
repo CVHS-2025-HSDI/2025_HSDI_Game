@@ -5,7 +5,8 @@ using System.Collections;
 public class Movement : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private PlayerInfo playerInfo; // Reference to PlayerInfo component
+    private PlayerInfo playerInfo;
+    private Animator animator;  // Reference to Animator component
 
     [Header("Movement Speeds")]
     public float moveSpeed = 5f;
@@ -25,22 +26,35 @@ public class Movement : MonoBehaviour
 
     [Header("UI References")]
     public Slider staminaBar;
-    public Slider HPBar;  // This will be updated based on PlayerInfo.currentHealth
+    public Slider HPBar;
 
     // Double-tap detection for dash
     private float lastTapW, lastTapA, lastTapS, lastTapD;
     private float tapDelay = 0.3f;
     private bool isDashing;
 
-    // Movement 
+    // Movement
     private Vector2 dir;
-    // Removed desiredRotation variable since we no longer need it.
+    // To remember the last horizontal direction (true means right, false means left)
+    private bool lastFacingRight = true;
     private Vector2 knockbackForceVector;
+
+    // NEW: Tracking still-running state.
+    private bool wasRunning = false;
+    private bool stillRunning = false;
+
+    public bool IsSprinting {
+        get { return isSprinting; }
+    }
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         playerInfo = GetComponent<PlayerInfo>();
+        animator = GetComponent<Animator>();  // Get Animator component
+        Debug.Log("Start: Components initialized. Animator: " + (animator != null));
+        Debug.Log("Start: Initial stamina: " + stamina + ", Health: " + (playerInfo != null ? playerInfo.currentHealth.ToString() : "No player info"));
+
 
         // Initialize stamina UI
         if (staminaBar != null)
@@ -62,9 +76,9 @@ public class Movement : MonoBehaviour
     {
         ProcessInputs();
         ProcessDash();
-        // Removed HandleRotation() because rotation is no longer desired.
         ManageStamina();
         UpdateUI();
+        // UpdateAnimator();
     }
 
     void FixedUpdate()
@@ -83,20 +97,9 @@ public class Movement : MonoBehaviour
 
             rb.MovePosition(newPos);
         }
-        // Do not apply any rotation to the player.
-        // rb.MoveRotation(desiredRotation); // This line has been removed.
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            if (playerInfo != null)
-                playerInfo.damage(10);
-        }
-    }
-
-    private void ProcessInputs()
+    void ProcessInputs()
     {
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
@@ -112,6 +115,45 @@ public class Movement : MonoBehaviour
         {
             timeSinceStoppedSprinting += Time.deltaTime;
         }
+    }
+
+    // Update the Animator parameters including stillRunning.
+    void UpdateAnimator()
+    {
+        bool isMoving = dir != Vector2.zero;
+        Debug.Log("Is Moving: " + isMoving);
+        animator.SetBool("isMoving", isMoving);
+
+        // Set stillRunning to true if the player is moving now and was already moving last frame.
+        if (isMoving && wasRunning)
+            stillRunning = true;
+        else
+            stillRunning = false;
+        Debug.Log("Is running: " + stillRunning);
+        animator.SetBool("stillRunning", stillRunning);
+
+        // Update the facing direction.
+        if (dir.x > 0)
+        {
+            Debug.Log("Facing Right: " + true);
+            animator.SetBool("FacingRight", true);
+            lastFacingRight = true;
+        }
+        else if (dir.x < 0)
+        {
+            Debug.Log("Facing Left: " + !false);
+            animator.SetBool("FacingRight", false);
+            lastFacingRight = false;
+        }
+        else
+        {
+            // If no horizontal input, keep previous facing.
+            Debug.Log("Still facing right: " + lastFacingRight);
+            animator.SetBool("FacingRight", lastFacingRight);
+        }
+
+        // Save current moving state for next frame comparison.
+        wasRunning = isMoving;
     }
 
     private void ProcessDash()
@@ -180,7 +222,6 @@ public class Movement : MonoBehaviour
     
     public Vector2 GetMovementDirection()
     {
-        return dir;  // 'dir' is the movement vector computed in Update()
+        return dir;
     }
-
 }

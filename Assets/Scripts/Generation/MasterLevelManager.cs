@@ -9,6 +9,7 @@ public class MasterLevelManager : MonoBehaviour
     public FloorConfig floorConfig;
     public int totalFloors = 16;
     public int globalSeed = 1337420;
+    public int highestFloorReached = 1;  // Starting at floor 1.
     
     public GameObject playerPrefab;
     public GameObject merchantPrefab;
@@ -40,29 +41,22 @@ public class MasterLevelManager : MonoBehaviour
     {
         // Set the global seed.
         RandomSeed.SetSeed(globalSeed);
-
-        // Initially, if you start in the MainMenu, you don’t generate a floor.
-        // inTower remains false until EnterTower() is called.
         Debug.Log("MasterLevelManager: Waiting for player to enter the tower.");
     }
     
     void OnEnable()
     {
-        // Subscribe to Unity’s sceneLoaded event
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
     
     void OnDisable()
     {
-        // Unsubscribe to avoid memory leaks or multiple calls
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // Called from MainMenuController when Start Game is pressed.
     public void EnterTower()
     {
         inTower = true;
-        // Now start with floor 1 inside the tower.
         GenerateAndLoadFloor(1, true);
     }
 
@@ -85,7 +79,6 @@ public class MasterLevelManager : MonoBehaviour
         int floorSeed = globalSeed + floorNumber * 12345;
         RandomSeed.SetSeed(floorSeed);
 
-        // Unload the old floor if it exists.
         var oldFloor = SceneManager.GetSceneByName("TowerFloorTemplate");
         if (oldFloor.IsValid())
             SceneManager.UnloadSceneAsync(oldFloor);
@@ -104,16 +97,27 @@ public class MasterLevelManager : MonoBehaviour
                 return;
             }
 
-            FloorData data = floorGen.GenerateFloor(
-                floorConfig, 
-                _isFirstFloorLoad, 
-                _currentFloorNumber, 
-                totalFloors
-            );
-            floorsData[_currentFloorNumber] = data;
+            // Always generate the static geometry.
+            FloorData generatedData = floorGen.GenerateFloor(floorConfig, _isFirstFloorLoad, _currentFloorNumber, totalFloors);
 
-            Vector3 playerSpawnWorld = floorGen.floorTilemap.CellToWorld(data.playerSpawn) + new Vector3(0.5f, 0.5f, 0);
-            Vector3 merchantSpawnWorld = floorGen.floorTilemap.CellToWorld(data.merchantSpawn) + new Vector3(0.5f, 0.5f, 0);
+            // If saved data exists (regardless of floor number), load dynamic objects.
+            if (floorsData.ContainsKey(_currentFloorNumber))
+            {
+                FloorData savedData = floorsData[_currentFloorNumber];
+                floorGen.LoadFloorFromData(savedData);
+                // Carry over flags such as traversable.
+                generatedData.traversable = savedData.traversable;
+                Debug.Log($"[MasterLevelManager] Loaded existing FloorData for floor {_currentFloorNumber}.");
+            }
+            else
+            {
+                Debug.Log($"[MasterLevelManager] Generated new FloorData for floor {_currentFloorNumber}.");
+            }
+            
+            floorsData[_currentFloorNumber] = generatedData;
+
+            Vector3 playerSpawnWorld = floorGen.floorTilemap.CellToWorld(generatedData.playerSpawn) + new Vector3(0.5f, 0.5f, 0);
+            Vector3 merchantSpawnWorld = floorGen.floorTilemap.CellToWorld(generatedData.merchantSpawn) + new Vector3(0.5f, 0.5f, 0);
 
             player = GameObject.FindWithTag("Player");
             merchant = GameObject.FindWithTag("Merchant");
@@ -138,15 +142,12 @@ public class MasterLevelManager : MonoBehaviour
                 merchant.transform.position = merchantSpawnWorld;
             }
 
-            // Set the camera to follow the player.
             CameraFollow camFollow = FindAnyObjectByType<CameraFollow>();
             if (camFollow != null && player != null)
                 camFollow.SetTarget(player.transform);
             
-            // Hide the loading panel (assumed to be managed by LoadingUI).
             LoadingUI.Instance.HideLoading();
 
-            // Unload the MainMenu scene now that the game is ready, if we're going from the main menu
             Scene mainMenu = SceneManager.GetSceneByName("MainMenu");
             if (mainMenu.IsValid())
                 SceneManager.UnloadSceneAsync("MainMenu");
@@ -154,4 +155,29 @@ public class MasterLevelManager : MonoBehaviour
             Debug.Log($"[MasterLevelManager] Floor {_currentFloorNumber} loaded. First Floor? {_isFirstFloorLoad}");
         }
     }
+    
+    public void MarkCurrentFloorTraversable()
+    {
+        if (floorsData.ContainsKey(_currentFloorNumber))
+        {
+            floorsData[_currentFloorNumber].traversable = true;
+            Debug.Log($"Floor {_currentFloorNumber} marked as traversable.");
+        }
+    }
+    
+    public bool IsFloorTraversable(int floorNumber)
+    {
+        if (floorsData.ContainsKey(floorNumber))
+        {
+            return floorsData[floorNumber].traversable;
+        }
+        return false;
+    }
+    
+    public void ClearFloorData()
+    {
+        floorsData.Clear();
+        Debug.Log("Floor data cleared for restart.");
+    }
+
 }

@@ -3,15 +3,15 @@ using UnityEngine.SceneManagement;
 
 public class Bootstrapper : MonoBehaviour {
     [Tooltip("Name of the PersistentManager scene to load additively.")]
-    public string persistentManagerScene = "PersistentManager";
+    public string mainMenuScene = "MainMenu";
 
     [Tooltip("Name of the MainTower scene to load additively.")]
     public string mainTowerScene = "MainTower";
 
     void Awake() {
         // Load PersistentManager scene if not loaded.
-        if (!IsSceneLoaded(persistentManagerScene)) {
-            SceneManager.LoadScene(persistentManagerScene, LoadSceneMode.Additive);
+        if (!IsSceneLoaded(mainMenuScene)) {
+            SceneManager.LoadScene(mainMenuScene, LoadSceneMode.Additive);
         }
         // Load MainTower scene if not loaded.
         if (!IsSceneLoaded(mainTowerScene)) {

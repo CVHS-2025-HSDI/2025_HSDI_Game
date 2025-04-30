@@ -8,11 +8,12 @@ TagManager:
   - Enemy
   - EnemyTemplate
   - Container
-
   - InventoryManager
-  - LoreUI
-  - Loading
   - SingletonManager
+  - cutscene player
+  - Bedroom
+  - BedTimeline
+  - FloorTileMap
   layers:
   - Default
   - TransparentFX
@@ -20,9 +21,6 @@ TagManager:
   - 
   - Water
   - UI
-  - Enemy
-  - Player
-  - Whale
   - 
   - 
   - 

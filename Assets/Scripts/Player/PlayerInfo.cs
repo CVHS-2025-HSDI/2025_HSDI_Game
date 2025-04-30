@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class PlayerInfo : MonoBehaviour
 {
     [Header("Health Settings")]
     public float maxHealth = 100f;
     public float currentHealth = 100f;
+    
+    public PlayerStats stats;
 
     // Remove local UI references – they will now be accessed through SingletonManager.
     // public GameObject gameOverPanel;
@@ -23,9 +26,12 @@ public class PlayerInfo : MonoBehaviour
     public GameObject weaponPrefab; // Assign in Inspector
     private GameObject weapon;
 
+    public GameObject DamageTextPrefab;
+
     void Start()
     {
-        currentHealth = maxHealth;
+        currentHealth = maxHealth * PlayerStats.GetHealthMultiplier(); 
+        
         sr = GetComponent<SpriteRenderer>();
 
         // Assume HPBar is either assigned locally or found on a child.
@@ -50,20 +56,34 @@ public class PlayerInfo : MonoBehaviour
                 SingletonManager.Instance.youDiedText.SetActive(false);
         }
 
-        // Instantiate weapon and set as a child of the player.
-        weapon = Instantiate(weaponPrefab, transform.position, weaponPrefab.transform.rotation);
-        weapon.transform.SetParent(transform);
-        var swordScript = weapon.GetComponent("SwordScript");
-        if (swordScript != null)
+    }
+
+    public void Heal(float amount)
+    {
+        if (currentHealth != maxHealth)
         {
-            ((SwordScript)swordScript).SetIsPlayer(true);
+            currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+            Slider HPBar = GetComponentInChildren<Slider>();
+            if (HPBar != null)
+                HPBar.value = currentHealth;
+            Debug.Log("Healed for " + amount + ", current health: " + currentHealth);
         }
     }
+
 
     public void damage(float dmg)
     {
         if (isDead) return;
         currentHealth -= dmg;
+
+        //Display damage taken
+        GameObject text = Instantiate(DamageTextPrefab, transform.position, Quaternion.identity);
+        text.GetComponent<DamageTextScript>().SetTarget(transform);
+        TMP_Text textComp = text.GetComponent<TMP_Text>();
+        textComp.text = dmg.ToString("F0");
+        RectTransform textTransform = text.GetComponent<RectTransform>();
+        textTransform.position = new Vector2(transform.position.x, transform.position.y + 0.8f);
+
         Debug.Log("Player hit for " + dmg + ", health now: " + currentHealth);
         
         Slider HPBar = GetComponentInChildren<Slider>();
@@ -79,13 +99,13 @@ public class PlayerInfo : MonoBehaviour
         isDead = true;
         if (weapon != null)
             weapon.SetActive(false);
-        
-        // Freeze movement by disabling the Movement script (assumed to be on the same GameObject)
+    
+        // Freeze movement by disabling the Movement script.
         Movement moveScript = GetComponent<Movement>();
         if (moveScript != null)
             moveScript.enabled = false;
-        
-        // Hide LorePanel under GameplayCanvas via SingletonManager.
+    
+        // Hide LorePanel.
         if (SingletonManager.Instance.gameplayCanvas != null)
         {
             Transform lorePanel = SingletonManager.Instance.gameplayCanvas.transform.Find("LorePanel");
@@ -93,6 +113,12 @@ public class PlayerInfo : MonoBehaviour
                 lorePanel.gameObject.SetActive(false);
         }
         
+        InventoryManager invManager = FindFirstObjectByType<InventoryManager>();
+        if (invManager != null)
+        {
+            invManager.ClearInventoryExceptSword();
+        }
+    
         StartCoroutine(GameOverSequence());
     }
     
@@ -157,6 +183,11 @@ public class PlayerInfo : MonoBehaviour
         sr.color = new Color(initialPlayerColor.r, initialPlayerColor.g, initialPlayerColor.b, 0f);
         if (panelImage != null)
             panelImage.color = new Color(initialPanelColor.r, initialPanelColor.g, initialPanelColor.b, 1f);
+
+        // GameObject finalLevel = SingletonManager.Instance.finalLevel;
+        // GameObject finalFloor = SingletonManager.Instance.finalFloor;
+        // string currentLevelDisplay = $"{PlayerXP.Instance.currentLevel}";
+        // string currentFloor = $"{MasterLevelManager.Instance.highestFloorReached}";
         
         // Activate game over UI objects via SingletonManager.
         if (SingletonManager.Instance.youDiedText != null)
@@ -167,11 +198,27 @@ public class PlayerInfo : MonoBehaviour
             SingletonManager.Instance.quitToMenuButton.SetActive(true);
         if (SingletonManager.Instance.quitButton != null)
             SingletonManager.Instance.quitButton.SetActive(true);
-        
+        // Does not work for NO REASON.
+        // Todo: Fix sometime?
+        // if (finalLevel != null)
+        // {
+        //     finalLevel.GetComponent<TextMeshProUGUI>().text = $"   FINAL LEVEL: {currentLevelDisplay}";
+        //     finalLevel.SetActive(true);
+        // }
+        // if (finalFloor != null)
+        // {
+        //     finalFloor.GetComponent<TextMeshProUGUI>().text = $"   FINAL FLOOR: {currentFloor}";
+        //     finalFloor.SetActive(true);
+        // }
+
         // Fade out (or hide) the Toolbar and the ShowMainInventory button.
         if (SingletonManager.Instance.toolbar != null)
             SingletonManager.Instance.toolbar.SetActive(false);
         if (SingletonManager.Instance.invButton != null)
             SingletonManager.Instance.invButton.SetActive(false);
+        if (SingletonManager.Instance.showCharacter != null)
+            SingletonManager.Instance.showCharacter.SetActive(false);
+        if (SingletonManager.Instance.xpText != null)
+            SingletonManager.Instance.xpText.SetActive(false);
     }
 }

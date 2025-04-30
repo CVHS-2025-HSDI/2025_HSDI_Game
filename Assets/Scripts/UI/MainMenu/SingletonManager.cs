@@ -11,8 +11,14 @@ public class SingletonManager : MonoBehaviour
     [Tooltip("Reference to the main camera in the scene.")]
     public Camera mainCamera;
 
+    [Tooltip("Bedroom Camera.")] 
+    public Camera bedroomCamera;
+    
     [Tooltip("Reference to the Gameplay Canvas in the scene.")]
     public Canvas gameplayCanvas;
+
+    [Tooltip("Reference to the CutsceneCanvas.")]
+    public Canvas cutsceneCanvas;
     
     [Tooltip("Reference to Loading Panel.")]
     public GameObject loadingPanel;
@@ -36,14 +42,29 @@ public class SingletonManager : MonoBehaviour
     [Tooltip("Quit button.")]
     public GameObject quitButton;
     
+    [Tooltip("Final Level.")]
+    public GameObject finalLevel;
+    
+    [Tooltip("Final Floor.")]
+    public GameObject finalFloor;
+    
     [Tooltip("Toolbar under GameplayCanvas.")]
     public GameObject toolbar;
     
     [Tooltip("ShowMainInventory button under GameplayCanvas.")]
-    public GameObject invButton; 
+    public GameObject invButton;
+    
+    [Tooltip("ShowCharacter button under GameplayCanvas.")]
+    public GameObject showCharacter;
     
     [Tooltip("Event System")]
     public GameObject eventSystem;
+    
+    [Tooltip("XP Text")]
+    public GameObject xpText;
+    
+    [Tooltip("XP Text Prefab")]
+    public GameObject XPTextPrefab;
 
     void Awake()
     {
