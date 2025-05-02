@@ -1,15 +1,23 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;   // NEW
 
 public class KeyManager : MonoBehaviour
 {
     public static KeyManager Instance;
 
-    public int keysNeeded = 4; // Number of keys per floor
-    public int keysCollected = 0;
+    [Header("Key settings")]
+    public int keysNeeded = 4;
 
-    // Event fired when all keys are collected
+    // how many unique keys the player has so far
+    public int KeysCollected => _collectedKeyIds.Count;
+
+    // event when target reached
     public event Action OnAllKeysCollected;
+    
+    /// <summary>IDs of every key that has ever been picked up on this floor.</summary>
+    private readonly HashSet<int> _collectedKeyIds = new HashSet<int>();
+    // ----------------------------------------------------------------
 
     private void Awake()
     {
@@ -24,19 +32,23 @@ public class KeyManager : MonoBehaviour
         }
     }
 
-    public void CollectKey()
+    /// <summary>
+    /// Called by KeyCollectible whenever the player collides with a key.
+    /// </summary>
+    public void CollectKey(int keyId)
     {
-        keysCollected++;
-        Debug.Log("Key collected: " + keysCollected);
-        if (keysCollected >= keysNeeded)
-        {
+        // Ignore repeats of the *same* key
+        if (!_collectedKeyIds.Add(keyId)) return;
+
+        Debug.Log($"Key {keyId} collected   ({KeysCollected}/{keysNeeded})");
+
+        if (KeysCollected >= keysNeeded)
             OnAllKeysCollected?.Invoke();
-        }
     }
 
-    // Call this when a new floor is generated
+    /// <summary>Call when a new floor is generated.</summary>
     public void ResetKeys()
     {
-        keysCollected = 0;
+        _collectedKeyIds.Clear();
     }
 }

@@ -43,6 +43,8 @@ public class FloorGenerator : MonoBehaviour
     private List<Vector3Int> _placedChests = new List<Vector3Int>();
     private List<Vector3Int> _placedKeys = new List<Vector3Int>();
     private List<Vector3Int> _placedEnemies = new List<Vector3Int>();
+    
+    private int _nextKeyId = 0;
 
     private void Awake()
     {
@@ -502,20 +504,27 @@ public class FloorGenerator : MonoBehaviour
 
     private List<Vector2Int> GenerateKeys(int width, int height, int keyCount)
     {
-        List<Vector2Int> keyPositions = new List<Vector2Int>();
-        int placedKeys = 0;
+        List<Vector2Int> keyPositions = new();
+        int placed = 0;
         int attempts = 0;
-        while (placedKeys < keyCount && attempts < 100)
+
+        while (placed < keyCount && attempts < 100)
         {
-            int keyX = RandomSeed.GetRandomInt(0, width);
-            int keyY = RandomSeed.GetRandomInt(0, height);
-            Vector3Int cellPos = new Vector3Int(keyX, keyY, 0);
-            if (floorTilemap.GetTile(cellPos) == floorTile)
+            int x = RandomSeed.GetRandomInt(0, width);
+            int y = RandomSeed.GetRandomInt(0, height);
+            Vector3Int cell = new(x, y, 0);
+
+            if (floorTilemap.GetTile(cell) == floorTile)
             {
-                Vector3 worldPos = floorTilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
-                Instantiate(keyPrefab, worldPos, Quaternion.identity, dynamicContainer);
-                keyPositions.Add(new Vector2Int(cellPos.x, cellPos.y));
-                placedKeys++;
+                Vector3 world = floorTilemap.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
+
+                // --- instantiate and set its unique ID -----------------
+                GameObject keyObj = Instantiate(keyPrefab, world, Quaternion.identity, dynamicContainer);
+                if (keyObj.TryGetComponent(out KeyCollectible kc))
+                    kc.keyId = _nextKeyId++;
+
+                keyPositions.Add(new Vector2Int(cell.x, cell.y));
+                placed++;
             }
             attempts++;
         }
