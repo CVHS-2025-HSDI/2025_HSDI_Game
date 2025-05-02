@@ -1,16 +1,15 @@
 using UnityEngine;
 
+/// <summary>Attached to every key prefab dropped in the world.</summary>
 public class KeyCollectible : MonoBehaviour
 {
+    [HideInInspector] public int keyId;     // assigned by FloorGenerator
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Check if the player enters the trigger
-        if (other.CompareTag("Player"))
-        {
-            // Notify the KeyManager that a key has been collected.
-            KeyManager.Instance.CollectKey();
-            // Destroy this key
-            Destroy(gameObject);
-        }
+        if (!other.CompareTag("Player")) return;
+
+        KeyManager.Instance.CollectKey(keyId);
+        Destroy(gameObject);                // remove key from scene – it’s now in inventory
     }
 }
