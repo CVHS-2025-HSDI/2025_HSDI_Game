@@ -14,6 +14,9 @@ public class SingletonManager : MonoBehaviour
     [Tooltip("Bedroom Camera.")] 
     public Camera bedroomCamera;
     
+    [Tooltip("Town Camera.")] 
+    public Camera townCamera;
+
     [Tooltip("Reference to the Gameplay Canvas in the scene.")]
     public Canvas gameplayCanvas;
 

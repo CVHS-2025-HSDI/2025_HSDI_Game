@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 1349149970}
   m_Layer: 0
   m_Name: FloorTilemap
-  m_TagString: Untagged
+  m_TagString: FloorTileMap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -246,15 +246,71 @@ Tilemap:
   m_Enabled: 1
   m_Tiles: {}
   m_AnimatedTiles: {}
-  m_TileAssetArray: []
-  m_TileSpriteArray: []
-  m_TileMatrixArray: []
-  m_TileColorArray: []
+  m_TileAssetArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  m_TileSpriteArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  m_TileMatrixArray:
+  - m_RefCount: 0
+    m_Data:
+      e00: 2.4419749e+19
+      e01: 0
+      e02: 1e-45
+      e03: 4.408126e-39
+      e10: 4.5911e-41
+      e11: 0
+      e12: 0
+      e13: 8.18e-43
+      e20: 2.3584683e+19
+      e21: 4.408126e-39
+      e22: 2.565849e-29
+      e23: 25.62172
+      e30: 4.5911e-41
+      e31: 8.18e-43
+      e32: 8.21e-43
+      e33: 8.18e-43
+  m_TileColorArray:
+  - m_RefCount: 0
+    m_Data: {r: 6.6915e-41, g: 6.6915e-41, b: 6.6915e-41, a: 6.6915e-41}
+  - m_RefCount: 0
+    m_Data: {r: 0.88000023, g: 0.5899795, b: 0.59628123, a: 1}
+  - m_RefCount: 0
+    m_Data: {r: 0.9192593, g: 0.5237564, b: 0.64008147, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: 0, y: 0, z: 0}
-  m_Size: {x: 0, y: 0, z: 1}
+  m_Size: {x: 122, y: 89, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -322,6 +378,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1384610931}
   - component: {fileID: 1384610930}
+  - component: {fileID: 1384610932}
   m_Layer: 0
   m_Name: TilemapGrid
   m_TagString: Untagged
@@ -357,6 +414,18 @@ Transform:
   - {fileID: 1349149967}
   m_Father: {fileID: 1986409537}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1384610932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384610929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15a6c5381bbe61c4d91889cfb4a0d42c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1538610854
 GameObject:
   m_ObjectHideFlags: 0

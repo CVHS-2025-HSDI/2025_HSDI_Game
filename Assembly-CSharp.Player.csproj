@@ -54,7 +54,10 @@
     <Compile Include="Assets\Scripts\Enemy\EnemyAI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Data\FloorData.cs" />
+    <Compile Include="Assets\Scripts\TileGuide.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
+    <Compile Include="Assets\Scripts\NPCs\ShopManager.cs" />
+    <Compile Include="Assets\Scripts\NPCs\ShopItem.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\OptionsMenuController.cs" />
     <Compile Include="Assets\Scripts\UI\LorePanelController.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\Credits.cs" />
@@ -67,7 +70,6 @@
     <Compile Include="Assets\Scripts\Objects\KeyCollectible.cs" />
     <Compile Include="Assets\Scripts\Objects\KeyManager.cs" />
     <Compile Include="Assets\Scripts\Data\FloorConfig.cs" />
-    <Compile Include="Assets\Scripts\Player\InventoryItem.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemySight.cs" />
     <Compile Include="Assets\Scripts\Weapons\SwordProjectileScript.cs" />
@@ -90,7 +92,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\Weapons\DamageTextScript.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\SingletonManager.cs" />
-    <Compile Include="Assets\Scripts\Player\InventoryManager.cs" />
+    <Compile Include="Assets\Scripts\Inventory System\InventoryManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
@@ -115,15 +117,16 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\Quit.cs" />
-    <Compile Include="Assets\Scripts\Player\Item.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
+    <Compile Include="Assets\Scripts\Inventory System\InventoryItem.cs" />
     <Compile Include="Assets\Scripts\NPCs\MerchantController.cs" />
+    <Compile Include="Assets\Scripts\Inventory System\Item.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
-    <Compile Include="Assets\Scripts\Player\InventorySlot.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
     <Compile Include="Assets\Scripts\Objects\DoorController.cs" />
+    <Compile Include="Assets\Scripts\Inventory System\InventorySlot.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerXP.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Scripts\Enemy\BossManager.cs" />

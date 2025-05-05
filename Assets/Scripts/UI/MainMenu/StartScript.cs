@@ -100,14 +100,29 @@ public class StartScript : MonoBehaviour
         if (mgr != null)
         {
             Debug.Log("[Cutscene] Restoring main camera + UI");
-            mgr.mainCamera.gameObject.SetActive(true);
+            mgr.townCamera.gameObject.SetActive(true);
+            mgr.mainCamera.gameObject.SetActive(false);
             mgr.bedroomCamera.gameObject.SetActive(false);
             mgr.cutsceneCanvas.gameObject.SetActive(false);
         }
 
+        // tp to town
+        if (SingletonManager.Instance != null && LoadingUI.Instance != null)
+        {
+            var ui = SingletonManager.Instance.gameplayCanvas.gameObject;
+            ui.SetActive(true);
+            // LoadingUI.Instance.ShowLoading("Loading Town...");
+            if (currentEventSystem != null)
+                currentEventSystem.SetActive(false);
+            var eventSys = SingletonManager.Instance.eventSystem;
+            if (eventSys != null)
+                eventSys.SetActive(true);
+        }
+
+        // make this run after the player enters the tower
         // ---- 8) continue to game ----
-        Debug.Log("[Cutscene] Calling SetupGameplayAndTower");
-        SetupGameplayAndTower();
+        // Debug.Log("[Cutscene] Calling SetupGameplayAndTower");
+        // SetupGameplayAndTower();
     }
     
     private void SetupGameplayAndTower()

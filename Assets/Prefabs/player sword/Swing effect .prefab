@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4642663763829480226}
   - component: {fileID: 557442575654155776}
   - component: {fileID: 4955318724803313644}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: 'Swing effect '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e0cecfd9dbb2b04bba5987976ecd08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDamage: 10
+  baseDamage: 10
   enemyTag: Enemy
 --- !u!212 &557442575654155776
 SpriteRenderer:
