@@ -65,18 +65,32 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     }
 }
 
+public void RemoveItem()
+{
+    InventoryItem inventoryItem = GetComponentInChildren<InventoryItem>();
+    if (inventoryItem == null) return;
 
-
-    public void RemoveItem()
+    if (inventoryItem.item.stackable)
     {
-        InventoryItem inventoryItem = GetComponentInChildren<InventoryItem>();
-        if (inventoryItem != null)
+        inventoryItem.count--;
+        inventoryItem.RefreshCount();
+
+        if (inventoryItem.count <= 0)
         {
-            if (inventoryItem.item.type == Itemtype.Weapon)
-            {
-                FindFirstObjectByType<InventoryManager>().UnequipWeapon(); // Unequip if it's a weapon
-            }
-            Destroy(inventoryItem.gameObject); // Remove the item
+            Destroy(inventoryItem.gameObject);
+            InventoryManager.Instance.selectedItem = null;
         }
     }
+    else
+    {
+        if (inventoryItem.item.type == Itemtype.Weapon)
+        {
+            InventoryManager.Instance.UnequipWeapon(); // Unequip if it's a weapon
+        }
+
+        Destroy(inventoryItem.gameObject);
+        InventoryManager.Instance.selectedItem = null;
+    }
+}
+
 }

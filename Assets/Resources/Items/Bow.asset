@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 915ce5d89e19ad44d961277fe188314e, type: 3}
-  m_Name: Arrow
+  m_Name: Bow
   m_EditorClassIdentifier: 
-  type: 2
-  actionType: 0
+  type: 0
+  actionType: 1
   range: {x: 5, y: 4}
-  stackable: 1
-  image: {fileID: -3497705377561342267, guid: 229f6611d0e398147ab3194376be1620, type: 3}
-  itemName: Arrow
+  stackable: 0
+  image: {fileID: 6989642852348889387, guid: 3aaddc71ef03780439edae9d9559afba, type: 3}
+  itemName: 
   healthAmount: 0
-  stackCount: 10
-  itemPrefab: {fileID: 6166950606944293447, guid: 4d09939f85d6a8349b16f122a8348975, type: 3}
-  worldDropPrefab: {fileID: 0}
+  stackCount: 0
+  itemPrefab: {fileID: 5580773922336161148, guid: 33d79ee6fd555b648be28e8763d222ed, type: 3}
+  worldDropPrefab: {fileID: 5749503234137807272, guid: 00e03b1b3ca14f245a13417cff281260, type: 3}

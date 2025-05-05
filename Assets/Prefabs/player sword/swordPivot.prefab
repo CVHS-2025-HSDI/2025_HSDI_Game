@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 8945993860284358731}
   - component: {fileID: 827605261905201211}
   - component: {fileID: 2475183834484375976}
-  - component: {fileID: 5467848064172013400}
   m_Layer: 0
   m_Name: swordPivot
   m_TagString: Untagged
@@ -136,17 +135,7 @@ MonoBehaviour:
   pivotPoint: {fileID: 8945993860284358731}
   swordTip: {fileID: 8541359632931669630}
   swingEffectPrefab: {fileID: 4320908611566085904, guid: 210c2ee0176c06b478e777bce268aba5, type: 3}
-  attackCooldown: 0.5
---- !u!114 &5467848064172013400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4328871481032048104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1cc0df023bcc714f9af30473a95dd1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: cea2dc6305aef0044a49526f16c5be26, type: 2}
+  damage: 10
+  attackSpeed: 0.5
+  durability: 10
+  inventoryItem: {fileID: 1575411319988125711, guid: 20cbb04ab19539543a30f4b515b61420, type: 3}

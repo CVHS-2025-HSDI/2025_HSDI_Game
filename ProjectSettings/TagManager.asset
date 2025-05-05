@@ -13,6 +13,7 @@ TagManager:
   - cutscene player
   - Bedroom
   - BedTimeline
+  - Arrow
   layers:
   - Default
   - TransparentFX

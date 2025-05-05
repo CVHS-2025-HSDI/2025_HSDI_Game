@@ -115,12 +115,13 @@ MonoBehaviour:
   isFrozen: 0
   knockbackForceVector: {x: 0, y: 0}
   loottable:
+  - itemPrefab: {fileID: 8991703741331775527, guid: bfea552053952594a8558ec4d0193541, type: 3}
+    dropChance: 20
+  - itemPrefab: {fileID: 4288997443986801281, guid: 819adabc2ae42174996e672eb9b49559, type: 3}
+    dropChance: 50
   - itemPrefab: {fileID: 1246066484327741191, guid: 727e21acb3776d441909f426c3e3c2e7, type: 3}
     dropChance: 100
-  - itemPrefab: {fileID: 8991703741331775527, guid: bfea552053952594a8558ec4d0193541, type: 3}
-    dropChance: 30
-  - itemPrefab: {fileID: 4288997443986801281, guid: 819adabc2ae42174996e672eb9b49559, type: 3}
-    dropChance: 80
+  spawnRadius: 1
 --- !u!58 &8291537959959765110
 CircleCollider2D:
   m_ObjectHideFlags: 0

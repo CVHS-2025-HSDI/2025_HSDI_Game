@@ -1,19 +1,22 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
     public InventorySlot[] inventorySlots;
     public GameObject inventoryItemPrefab;
-    int selectedSlot = -1;
-    public Transform equippedWeaponSlot; 
-    public Vector3 weaponRotationOffset = new Vector3(0, 0, 0);
+    public Transform equippedWeaponSlot;
+    public Vector3 weaponRotationOffset = Vector3.zero;
+
+    public static InventoryManager Instance;
 
     public Item swordItem;
-    
-    public static InventoryManager Instance;
+    public ItemPickup swordPickUpPrefab;
+
+    private int selectedSlot = -1;
     public InventoryItem selectedItem;
-    
+
     private void Awake()
     {
         if (Instance == null)
@@ -27,178 +30,322 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    void Start() {
-        // Load and store the Sword item.
-        swordItem = Resources.Load<Item>("Items/Sword"); // Adjust path if needed
-        if (swordItem != null) {
+    private void Start()
+    {
+        swordItem = Resources.Load<Item>("Items/Sword");
+        if (swordItem != null)
             AddItem(swordItem);
-        } else {
+        else
             Debug.LogError("Sword item not found in Resources!");
-        }
+
         ChangeSelectedSlot(0);
     }
 
-    void Update () {
-        if(Input.inputString != null){
-            bool isNum = int.TryParse(Input.inputString, out int number);
-            if(isNum && number > 0 && number < 10){
-                ChangeSelectedSlot(number - 1);
-            }
-        }
-    }
-
-    void ChangeSelectedSlot(int newValue)
+    private void Update()
     {
-        if (selectedSlot >= 0) {
-            inventorySlots[selectedSlot].Deselect();
-        }
-        inventorySlots[newValue].Select();
-        selectedSlot = newValue;
-        InventoryItem selectedItem = inventorySlots[selectedSlot].GetComponentInChildren<InventoryItem>();
-        if (selectedItem != null && selectedItem.item.type == Itemtype.Weapon) {
-            EquipWeapon(selectedItem.item);
-        } else {
-            UnequipWeapon();
-        }
+        HandleSlotInput();
+
+        if (Input.GetKeyDown(KeyCode.Q))
+            DropSelectedItem();
     }
 
-    public bool AddItem(Item item){
+    #region Slot Handling
 
-           if (item == null) {
-            Debug.LogError("Tried to add a null item to inventory!");
-            return false;
-        }
+    private void HandleSlotInput()
+    {
+        if (Input.inputString != null && int.TryParse(Input.inputString, out int number) && number > 0 && number <= inventorySlots.Length)
+            ChangeSelectedSlot(number - 1);
+    }
 
-        foreach(InventorySlot slot in inventorySlots){
-            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
-            if(itemInSlot != null && itemInSlot.item == item && itemInSlot.count < itemInSlot.item.stackCount && itemInSlot.item.stackable == true){
-                itemInSlot.count++;
-                itemInSlot.RefreshCount();
+    private void ChangeSelectedSlot(int newIndex)
+    {
+        if (selectedSlot >= 0)
+            inventorySlots[selectedSlot].Deselect();
+
+        inventorySlots[newIndex].Select();
+        selectedSlot = newIndex;
+
+        InventoryItem item = GetSelectedInventoryItem();
+        selectedItem = item;
+
+        if (item != null && item.item.type == Itemtype.Weapon)
+            EquipWeapon(item.item);
+        else
+            UnequipWeapon();
+    }
+
+    private InventoryItem GetSelectedInventoryItem()
+    {
+        if (selectedSlot < 0 || selectedSlot >= inventorySlots.Length) return null;
+        return inventorySlots[selectedSlot].GetComponentInChildren<InventoryItem>();
+    }
+
+    #endregion
+
+    #region Item Management
+
+    public bool AddItem(Item item, int damage = -1, float attackSpeed = -1, int durability = -1)
+    {
+        if (item == null) return false;
+
+        foreach (var slot in inventorySlots)
+        {
+            var existing = slot.GetComponentInChildren<InventoryItem>();
+            if (existing != null && existing.item == item && existing.item.stackable && existing.count < item.stackCount)
+            {
+                existing.count++;
+                existing.RefreshCount();
                 return true;
             }
         }
-        foreach(InventorySlot slot in inventorySlots){
-            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
-            if(itemInSlot == null){
-                SpawnNewItem(item, slot);
+
+        foreach (var slot in inventorySlots)
+        {
+            if (slot.GetComponentInChildren<InventoryItem>() == null)
+            {
+                SpawnNewItem(item, slot, damage, attackSpeed, durability);
                 return true;
             }
         }
+
         return false;
     }
 
-    void SpawnNewItem(Item item, InventorySlot slot){
-        GameObject newItemGo = Instantiate(inventoryItemPrefab, slot.transform);
-        InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
-        inventoryItem.InitialiseItem(item);
+    private void SpawnNewItem(Item item, InventorySlot slot, int damage = -1, float attackSpeed = -1, int durability = -1)
+    {
+        GameObject newItemObj = Instantiate(inventoryItemPrefab, slot.transform);
+        InventoryItem inventoryItem = newItemObj.GetComponent<InventoryItem>();
+        inventoryItem.InitialiseItem(item, damage, attackSpeed, durability);
     }
 
-    public void EquipWeapon(Item weaponItem) {
-        if (equippedWeaponSlot.childCount > 0) {
-            Destroy(equippedWeaponSlot.GetChild(0).gameObject);
-        }
-        GameObject newWeapon = Instantiate(weaponItem.itemPrefab, equippedWeaponSlot);
-        newWeapon.transform.localPosition = new Vector3(0, 0, 0);
-        newWeapon.transform.localRotation = Quaternion.Euler(weaponRotationOffset);
-        newWeapon.transform.localScale = new Vector3(3f, 3f, 3f);
-        SpriteRenderer sr = newWeapon.GetComponent<SpriteRenderer>();
-        if (sr != null) {
-            sr.sortingOrder = 1;
-        }
+
+    public void RemoveSelectedItemFromInventory()
+    {
+        InventoryItem invItem = GetSelectedInventoryItem();
+        if (invItem == null) return;
+
+        Destroy(invItem.gameObject);
+        UnequipWeapon();
+        ChangeSelectedSlot((selectedSlot + 1) % inventorySlots.Length);
     }
 
-    public void UnequipWeapon() {
-        foreach (Transform child in equippedWeaponSlot) {
-            Destroy(child.gameObject);
-        }
-    }
+    public void DropSelectedItem(float radius = 1.5f)
+    {
+        InventoryItem invItem = GetSelectedInventoryItem();
+        if (invItem == null) return;
 
-    public void CheckWeaponEquipped(){
-        InventoryItem selectedItem = inventorySlots[selectedSlot].GetComponentInChildren<InventoryItem>();
-        if (selectedItem == null || selectedItem.item.type != Itemtype.Weapon)
+        Item itemData = invItem.item;
+        GameObject prefab = itemData.worldDropPrefab != null ? itemData.worldDropPrefab : itemData.itemPrefab;
+
+        if (prefab != null)
         {
-            UnequipWeapon();
+            Transform player = GameObject.FindGameObjectWithTag("Player").transform;
+            Vector3 dropPos = player.position + new Vector3(Random.Range(-radius, radius), Random.Range(-radius, radius), 0f);
+
+            GameObject dropped = Instantiate(prefab, dropPos, Quaternion.identity);
+            ItemPickup pickup = dropped.GetComponent<ItemPickup>();
+
+            if (pickup){
+                pickup.item = itemData;
+
+                if (itemData.type == Itemtype.Weapon)
+                {
+                    pickup.savedDamage = invItem.damage;
+                    pickup.savedAttackSpeed = invItem.attackSpeed;
+                    pickup.savedDurability = invItem.durability;
+
+                    SwordController sc = dropped.GetComponent<SwordController>();
+                    if (sc != null)
+                    {
+                        sc.damage = invItem.damage;
+                        sc.attackSpeed = invItem.attackSpeed;
+                        sc.durability = invItem.durability;
+                    }
+                }
+            }
+        }
+
+
+
+        if (invItem.count > 1)
+        {
+            invItem.count--;
+            invItem.RefreshCount();
+        }
+        else
+        {
+            Destroy(invItem.gameObject);
+            ChangeSelectedSlot((selectedSlot + 1) % inventorySlots.Length);
         }
     }
 
-    public int GetSelectedSlotIndex(){
-        return selectedSlot;
+    #endregion
+
+    #region Weapon Handling
+
+    public void EquipWeapon(Item weaponItem)
+    {
+        if (equippedWeaponSlot.childCount > 0)
+            Destroy(equippedWeaponSlot.GetChild(0).gameObject);
+
+        InventoryItem invItem = GetSelectedInventoryItem();
+        if (invItem == null) return;
+
+        GameObject weapon = Instantiate(weaponItem.itemPrefab, equippedWeaponSlot);
+
+        weapon.transform.localPosition = Vector3.zero;
+        weapon.transform.localRotation = Quaternion.Euler(weaponRotationOffset);
+
+        if (weapon.TryGetComponent(out SpriteRenderer sr))
+            sr.sortingOrder = 1;
+
+        if (weapon.TryGetComponent(out SwordController sword))
+        {
+            sword.inventoryItem = invItem;
+            sword.damage = invItem.damage;
+            sword.attackSpeed = invItem.attackSpeed;
+            sword.durability = invItem.durability;
+            weapon.transform.localScale = new Vector3(3f, 3f, 3f);
+        }
+        else if (weapon.TryGetComponent(out BowController bow))
+        {
+            bow.inventoryItem = invItem;
+            bow.damage = invItem.damage;
+            bow.attackSpeed = invItem.attackSpeed;
+            bow.durability = invItem.durability;
+        }
+    }
+
+    public void UnequipWeapon()
+    {
+        foreach (Transform child in equippedWeaponSlot)
+            Destroy(child.gameObject);
+    }
+
+    public void CheckWeaponEquipped()
+    {
+        InventoryItem item = GetSelectedInventoryItem();
+        if (item == null || item.item.type != Itemtype.Weapon)
+            UnequipWeapon();
+    }
+
+    #endregion
+
+    #region Utility Methods
+
+public bool HasItem(string itemName)
+{
+    foreach (InventorySlot slot in inventorySlots)
+    {
+        InventoryItem item = slot.GetComponentInChildren<InventoryItem>();
+        if (item != null)
+        {
+            Debug.Log($"Found item in slot: {item.item.itemName}, count: {item.count}");
+            if (item.item.itemName == itemName)
+            {
+                Debug.Log("Arrow match found!");
+                return true;
+            }
+        }
+    }
+    Debug.Log("No matching item found in inventory for " + itemName);
+    return false;
+}
+
+
+public InventoryItem item => GetComponentInChildren<InventoryItem>();
+
+public void ReduceStackOrRemove(string itemName)
+{
+    foreach (InventorySlot slot in inventorySlots)
+    {
+        InventoryItem item = slot.GetComponentInChildren<InventoryItem>();
+        if (item != null && item.item.itemName == itemName)
+        {
+            Debug.Log($"Reducing count of {item.item.itemName} from {item.count}");
+
+            item.count--;
+            item.RefreshCount();
+
+            if (item.count <= 0)
+            {
+                Destroy(item.gameObject);
+                if (InventoryManager.Instance.selectedItem == item)
+                {
+                    InventoryManager.Instance.selectedItem = null;
+                }
+            }
+            return;
+        }
+    }
+
+    Debug.LogWarning($"Arrow item '{itemName}' not found in inventory when trying to reduce count.");
+}
+
+
+
+
+
+    public int GetTotalGold()
+    {
+        int total = 0;
+        foreach (var slot in inventorySlots)
+        {
+            InventoryItem item = slot.GetComponentInChildren<InventoryItem>();
+            if (item != null && item.item.type == Itemtype.Gold)
+                total += item.count;
+        }
+        return total;
+    }
+
+    public bool TrySpendGold(int amount)
+    {
+        if (GetTotalGold() < amount) return false;
+        SpendGold(amount);
+        return true;
+    }
+
+    public void SpendGold(int amount)
+    {
+        foreach (var slot in inventorySlots)
+        {
+            InventoryItem goldItem = slot.GetComponentInChildren<InventoryItem>();
+            if (goldItem != null && goldItem.item.type == Itemtype.Gold)
+            {
+                int take = Mathf.Min(amount, goldItem.count);
+                goldItem.count -= take;
+                amount -= take;
+                goldItem.RefreshCount();
+
+                if (goldItem.count <= 0)
+                    Destroy(goldItem.gameObject);
+
+                if (amount <= 0) return;
+            }
+        }
     }
 
     public void PurgeKeys()
     {
-        foreach (InventorySlot slot in inventorySlots)
+        foreach (var slot in inventorySlots)
         {
-            InventoryItem invItem = slot.GetComponentInChildren<InventoryItem>();
-            if (invItem != null && invItem.item.type == Itemtype.Key)
-            {
-                Destroy(invItem.gameObject);
-            }
+            InventoryItem item = slot.GetComponentInChildren<InventoryItem>();
+            if (item != null && item.item.type == Itemtype.Key)
+                Destroy(item.gameObject);
         }
-        Debug.Log("Key items purged from inventory.");
     }
 
-    // NEW: Clear all inventory items except for the Sword.
     public void ClearInventoryExceptSword()
     {
-        foreach (InventorySlot slot in inventorySlots)
+        foreach (var slot in inventorySlots)
         {
-            InventoryItem invItem = slot.GetComponentInChildren<InventoryItem>();
-            if (invItem != null)
-            {
-                // If this item is not the Sword item, remove it.
-                if (swordItem == null || invItem.item != swordItem)
-                {
-                    Destroy(invItem.gameObject);
-                }
-            }
-        }
-        Debug.Log("Inventory cleared, preserving the Sword.");
-    }
-
-    public int GetTotalGold()
-{
-    int totalGold = 0;
-    foreach (InventorySlot slot in inventorySlots) // however you store your slots
-    {
-        InventoryItem item = slot.GetComponentInChildren<InventoryItem>();
-        if (item != null && item.item.type == Itemtype.Gold)
-        {
-            totalGold += item.count;
+            InventoryItem item = slot.GetComponentInChildren<InventoryItem>();
+            if (item != null && item.item != swordItem)
+                Destroy(item.gameObject);
         }
     }
-    return totalGold;
-}
 
-public void SpendGold(int amount)
-{
-    foreach (InventorySlot slot in inventorySlots)
-    {
-        InventoryItem goldItem = slot.GetComponentInChildren<InventoryItem>();
-        if (goldItem != null && goldItem.item.type == Itemtype.Gold)
-        {
-            int available = goldItem.count;
-            if (available >= amount)
-            {
-                goldItem.count -= amount;
-                goldItem.RefreshCount();
-                if (goldItem.count <= 0)
-                {
-                    Destroy(goldItem.gameObject);
-                }
-                return;
-            }
-            else
-            {
-                goldItem.count = 0;
-                goldItem.RefreshCount();
-                Destroy(goldItem.gameObject);
-                amount -= available;
-            }
-        }
-    }
-}
+    public int GetSelectedSlotIndex() => selectedSlot;
 
-
-
+    #endregion
 }
