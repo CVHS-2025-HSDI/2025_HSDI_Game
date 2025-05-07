@@ -15,7 +15,6 @@ TagManager:
   - BedTimeline
   - Arrow
   - FloorTileMap
->>>>>>> 3e66c7d552a4602899c740cfbeda540499a435e8
   layers:
   - Default
   - TransparentFX

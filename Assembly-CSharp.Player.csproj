@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\NPCs\ShopManager.cs" />
     <Compile Include="Assets\Scripts\NPCs\ShopItem.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\OptionsMenuController.cs" />
+    <Compile Include="Assets\Arrow.cs" />
     <Compile Include="Assets\Scripts\UI\LorePanelController.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\Credits.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\Load.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenuController.cs" />
+    <Compile Include="Assets\BowController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\Scripts\Inventory\Chest.cs" />
