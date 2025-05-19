@@ -130,6 +130,7 @@ public void ResetPlayer() {
         while (!op.isDone) {
             yield return null;
         }
+        SceneManager.UnloadSceneAsync("TowerFloorTemplate");
         
         // Optionally, set MainMenu as the active scene.
         Scene mainMenuScene = SceneManager.GetSceneByName("MainMenu");
@@ -207,6 +208,7 @@ public void ResetPlayer() {
         if (MasterLevelManager.Instance != null) {
             MasterLevelManager.Instance.globalSeed = newSeed;
             MasterLevelManager.Instance.inTower = true;
+            MasterLevelManager.Instance.highestFloorReached = 1;
 
             // --- NEW CODE: Clear any existing floor data ---
             MasterLevelManager.Instance.ClearFloorData();

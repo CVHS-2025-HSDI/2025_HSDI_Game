@@ -184,10 +184,10 @@ public class PlayerInfo : MonoBehaviour
         if (panelImage != null)
             panelImage.color = new Color(initialPanelColor.r, initialPanelColor.g, initialPanelColor.b, 1f);
 
-        // GameObject finalLevel = SingletonManager.Instance.finalLevel;
-        // GameObject finalFloor = SingletonManager.Instance.finalFloor;
-        // string currentLevelDisplay = $"{PlayerXP.Instance.currentLevel}";
-        // string currentFloor = $"{MasterLevelManager.Instance.highestFloorReached}";
+        GameObject finalLevel = SingletonManager.Instance.finalLevel;
+        GameObject finalFloor = SingletonManager.Instance.finalFloor;
+        string currentLevelDisplay = $"{PlayerXP.Instance.currentLevel}";
+        string currentFloor = $"{MasterLevelManager.Instance.highestFloorReached}";
         
         // Activate game over UI objects via SingletonManager.
         if (SingletonManager.Instance.youDiedText != null)
@@ -198,18 +198,16 @@ public class PlayerInfo : MonoBehaviour
             SingletonManager.Instance.quitToMenuButton.SetActive(true);
         if (SingletonManager.Instance.quitButton != null)
             SingletonManager.Instance.quitButton.SetActive(true);
-        // Does not work for NO REASON.
-        // Todo: Fix sometime?
-        // if (finalLevel != null)
-        // {
-        //     finalLevel.GetComponent<TextMeshProUGUI>().text = $"   FINAL LEVEL: {currentLevelDisplay}";
-        //     finalLevel.SetActive(true);
-        // }
-        // if (finalFloor != null)
-        // {
-        //     finalFloor.GetComponent<TextMeshProUGUI>().text = $"   FINAL FLOOR: {currentFloor}";
-        //     finalFloor.SetActive(true);
-        // }
+        if (finalLevel != null)
+        {
+            finalLevel.GetComponent<TextMeshProUGUI>().text = $"   FINAL LEVEL: {currentLevelDisplay}";
+            finalLevel.SetActive(true);
+        }
+        if (finalFloor != null)
+        {
+            finalFloor.GetComponent<TextMeshProUGUI>().text = $"   FINAL FLOOR: {currentFloor}";
+            finalFloor.SetActive(true);
+        }
 
         // Fade out (or hide) the Toolbar and the ShowMainInventory button.
         if (SingletonManager.Instance.toolbar != null)

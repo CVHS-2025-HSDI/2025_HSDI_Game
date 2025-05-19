@@ -72,6 +72,7 @@ public class MasterLevelManager : MonoBehaviour
             LoadingUI.Instance.ShowLoading("Loading floor " + floorNumber + "...");
         else
             Debug.LogError("LoadingUI instance is null in GenerateAndLoadFloor!");
+        highestFloorReached = Mathf.Max(highestFloorReached, floorNumber);
         _currentFloorNumber = floorNumber;
         _isFirstFloorLoad = isFirstFloor;
 
