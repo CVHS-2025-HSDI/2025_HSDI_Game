@@ -125,7 +125,7 @@ public class StartScript : MonoBehaviour
         // SetupGameplayAndTower();
     }
     
-    private void SetupGameplayAndTower()
+    public void SetupGameplayAndTower()
     {
         // --- 7) Enable the GameplayCanvas & elements ---
         if (SingletonManager.Instance != null && LoadingUI.Instance != null)
