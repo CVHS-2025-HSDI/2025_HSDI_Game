@@ -13,8 +13,8 @@ TagManager:
   - cutscene player
   - Bedroom
   - BedTimeline
-  - Arrow
   - FloorTileMap
+  - BuildingTilemap
   layers:
   - Default
   - TransparentFX
