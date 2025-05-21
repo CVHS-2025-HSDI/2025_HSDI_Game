@@ -518,7 +518,7 @@ MonoBehaviour:
   stairDownPrefab: {fileID: 2355087977520274023, guid: 6568ae18cea45424d8ad17db6475e8da, type: 3}
   stairUpPrefab: {fileID: 2355087977520274023, guid: 661073600ee71584db13f504290d3d01, type: 3}
   playerSpawn: {x: 0, y: 0, z: 0}
-  merchantSpawn: {x: 0, y: 0, z: 0}
+  merchantSpawn: {x: -73, y: 75, z: 0}
 --- !u!1 &1981720081
 GameObject:
   m_ObjectHideFlags: 0
