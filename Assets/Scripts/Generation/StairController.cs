@@ -89,7 +89,7 @@ public class StairController : MonoBehaviour
             if (currentFloor == 1)
             {
                 Debug.Log("Exiting the tower...");
-                SceneManager.LoadScene("TownScene");
+                SceneManager.LoadScene("Townsville", LoadSceneMode.Additive);
             }
             else
             {

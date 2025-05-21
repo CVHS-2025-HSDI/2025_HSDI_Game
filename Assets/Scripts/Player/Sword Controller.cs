@@ -19,7 +19,7 @@ public class SwordController : MonoBehaviour
 
     void Update()
     {
-        if (SceneManager.GetSceneByName("MainMenu").isLoaded || SceneManager.GetActiveScene().name != "PersistentManager")
+        if (SceneManager.GetSceneByName("MainMenu").isLoaded)
             return;
 
         RotateSword();
