@@ -35,7 +35,7 @@ public class FloorGenerator : MonoBehaviour
 
     // Spawn points set during generation
     [HideInInspector] public Vector3Int playerSpawn;
-    [HideInInspector] public Vector3Int merchantSpawn;
+    public Vector3Int merchantSpawn;
 
     // Tracking special elements
     private List<Vector3Int> _placedStairs = new List<Vector3Int>();
@@ -170,10 +170,10 @@ public class FloorGenerator : MonoBehaviour
         // Choose spawn rooms.
         Room spawnRoom = ChooseRandomRoomExcluding(bossRoom);
         playerSpawn = new Vector3Int(spawnRoom.Center.x, spawnRoom.Center.y, 0);
-        Room merchantRoom = ChooseRandomRoomExcluding(bossRoom, spawnRoom);
-        if (merchantRoom == null)
-            merchantRoom = spawnRoom;
-        merchantSpawn = new Vector3Int(merchantRoom.Center.x, merchantRoom.Center.y, 0);
+        //Room merchantRoom = ChooseRandomRoomExcluding(bossRoom, spawnRoom);
+        //if (merchantRoom == null)
+            //merchantRoom = spawnRoom;
+        //merchantSpawn = new Vector3Int(merchantRoom.Center.x, merchantRoom.Center.y, 0);
 
         // Place stairs.
         if (bossRoom != null)
