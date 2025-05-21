@@ -3876,8 +3876,8 @@ MonoBehaviour:
   restartButton: {fileID: 1804038892}
   quitToMenuButton: {fileID: 126931335}
   quitButton: {fileID: 471451398}
-  finalLevel: {fileID: 0}
-  finalFloor: {fileID: 0}
+  finalLevel: {fileID: 1431860026}
+  finalFloor: {fileID: 1883532354}
   toolbar: {fileID: 232055844}
   invButton: {fileID: 261297434}
   showCharacter: {fileID: 793829753}
@@ -16085,7 +16085,7 @@ MonoBehaviour:
   availableStatPoints: 0
   xpUIText: {fileID: 154492643}
   levelUIText: {fileID: 1431669013}
-  isLevelText: {fileID: 0}
+  isLevelText: {fileID: 1140682467}
 --- !u!95 &3139837162291064134
 Animator:
   serializedVersion: 7

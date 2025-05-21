@@ -20,5 +20,5 @@ MonoBehaviour:
   itemName: 
   healthAmount: 0
   stackCount: 0
-  itemPrefab: {fileID: 4328871481032048104, guid: 9baf404ac76ad4144bc2f107c54dce91, type: 3}
+  itemPrefab: {fileID: 5196012877019254049, guid: 9baf404ac76ad4144bc2f107c54dce91, type: 3}
   worldDropPrefab: {fileID: 5749503234137807272, guid: f1770140230236942aa7f2aef187f309, type: 3}
