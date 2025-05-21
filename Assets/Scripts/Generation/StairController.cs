@@ -89,7 +89,9 @@ public class StairController : MonoBehaviour
             if (currentFloor == 1)
             {
                 Debug.Log("Exiting the tower...");
+                // Todo: Address this properly
                 SceneManager.LoadScene("Townsville", LoadSceneMode.Additive);
+                SingletonManager.Instance.player.gameObject.transform.position = new Vector3(-149.5f, -19.5f, 0);
             }
             else
             {
