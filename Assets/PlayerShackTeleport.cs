@@ -34,7 +34,7 @@ public class PlayerTowerTeleporter : MonoBehaviour
             Debug.Log("player triggered collision");
             
             Bounds bounds = playerCollider.bounds;
-            Vector3Int cellPos = new Vector3Int(x, y, 0);
+            //Vector3Int cellPos = new Vector3Int(x, y, 0); // Was causing an error, uncomment when needed
         }
     
 }

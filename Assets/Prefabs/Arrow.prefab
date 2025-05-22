@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 771489370865028411}
   - component: {fileID: 3107999259731420941}
   - component: {fileID: 5813857544654884842}
-  m_Layer: 7
+  m_Layer: 2
   m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,7 +156,7 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 1, y: 0.5}
     oldSize: {x: 3.15, y: 1.77}
     newSize: {x: 3.15, y: 1.77}
     adaptiveTilingThreshold: 0.5
@@ -220,7 +220,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 1, y: 0.5}
     oldSize: {x: 3.15, y: 1.77}
     newSize: {x: 3.15, y: 1.77}
     adaptiveTilingThreshold: 0.5
@@ -257,3 +257,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 9d16a67d9c696114a825042c27c76a36, type: 2}
+  savedDamage: 0
+  savedAttackSpeed: 0
+  savedDurability: 0

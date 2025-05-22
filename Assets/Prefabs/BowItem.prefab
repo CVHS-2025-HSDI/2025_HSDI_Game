@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5645300946753306679}
   - component: {fileID: 7114496356265529884}
   - component: {fileID: 8504914404161802724}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BowItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,6 +102,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: f180889243c1ca14081d909fb24dff71, type: 2}
+  savedDamage: 0
+  savedAttackSpeed: 0
+  savedDurability: 0
 --- !u!60 &8504914404161802724
 PolygonCollider2D:
   m_ObjectHideFlags: 0
