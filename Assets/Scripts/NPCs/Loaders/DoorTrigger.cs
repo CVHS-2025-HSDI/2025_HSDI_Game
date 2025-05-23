@@ -33,9 +33,16 @@ public class DoorTrigger : MonoBehaviour
             LoadingUI.Instance.ShowLoading("Entering " + sceneToLoad + "…");
 
         // 2) Load the target scene additively
-        var asyncLoad = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
-        while (!asyncLoad.isDone)
-            yield return null;
+        if (sceneToLoad.Equals("TowerFloorTemplate"))
+        {
+            startTowerMode = true; // Not loading TowerFloorTemplate since it will be loaded by MasterLevelManager
+        }
+        else
+        {
+            var asyncLoad = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+            while (!asyncLoad.isDone)
+                yield return null;
+        }
 
         // 3) Make the new scene active so that FindGameObject calls target it
         Scene newScene = SceneManager.GetSceneByName(sceneToLoad);

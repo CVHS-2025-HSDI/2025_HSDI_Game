@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8164515768931883316}
   - component: {fileID: 4808596797054702999}
   - component: {fileID: 6068152263723172062}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,3 +138,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: c9505e6bd0268eb4dbaf4ef6b0c7a88b, type: 2}
+  savedDamage: 0
+  savedAttackSpeed: 0
+  savedDurability: 0

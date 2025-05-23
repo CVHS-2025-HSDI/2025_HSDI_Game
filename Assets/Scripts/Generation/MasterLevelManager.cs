@@ -21,6 +21,8 @@ public class MasterLevelManager : MonoBehaviour
     private int _currentFloorNumber;
     private bool _isFirstFloorLoad = false;
 
+    FloorGenerator floorGen;
+
     // Flag to indicate whether we’re inside the tower.
     public bool inTower = false;
 
@@ -79,25 +81,33 @@ public class MasterLevelManager : MonoBehaviour
         // Use a floor-specific seed.
         int floorSeed = globalSeed + floorNumber * 12345;
         RandomSeed.SetSeed(floorSeed);
-
-        var oldFloor = SceneManager.GetSceneByName("TowerFloorTemplate");
-        if (oldFloor.IsValid())
-            SceneManager.UnloadSceneAsync(oldFloor);
-
-        SceneManager.LoadScene("TowerFloorTemplate", LoadSceneMode.Additive);
+        
+        Generate();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "TowerFloorTemplate")
         {
-            FloorGenerator floorGen = FindAnyObjectByType<FloorGenerator>();
+            floorGen = FindAnyObjectByType<FloorGenerator>();
             if (floorGen == null)
             {
                 Debug.LogError("[MasterLevelManager] No FloorGenerator found in TowerFloorTemplate!");
                 return;
             }
+            Generate();
+        }
+    }
 
+    private void Generate()
+    {
+        if (!SceneManager.GetSceneByName("TowerFloorTemplate").isLoaded)
+        {
+            SceneManager.LoadScene("TowerFloorTemplate", LoadSceneMode.Additive);
+            return;
+        }
+        else
+        {
             // Always generate the static geometry.
             FloorData generatedData = floorGen.GenerateFloor(floorConfig, _isFirstFloorLoad, _currentFloorNumber, totalFloors);
 

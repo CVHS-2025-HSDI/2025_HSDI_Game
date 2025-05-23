@@ -5,22 +5,42 @@ using System.Linq;
 
 public class TileGuide : MonoBehaviour
 {
-    private List<Vector3> walkableTileLocations = new List<Vector3>();
+    private Dictionary<int, Dictionary<Vector3, List<Vector3>>> FloorGuides;
+    private Dictionary<Vector3, List<Vector3>> guide;
+    private FloorGenerator floorGenerator;
     private TileBase WalkableTile;
     private Tilemap tilemap;
+    private List<Vector3> walkableTileLocations = new List<Vector3>();
     private List<List<Vector3>> neighborLocations = new List<List<Vector3>>();
     private float BlockDistance = 1;
     private int i = 0;
-    private Dictionary<Vector3, List<Vector3>> guide;
 
-    void Start()
+    public void GenerateGuide(int floorNumber)
     {
-        WalkableTile = ((FloorGenerator)transform.parent.GetComponentInParent<FloorGenerator>()).floorTile;
+        // Assign variables here since this is called before Start()
+        if (FloorGuides == null)
+        {
+            FloorGuides = new Dictionary<int, Dictionary<Vector3, List<Vector3>>>();
+            floorGenerator = (FloorGenerator)transform.parent.GetComponentInParent<FloorGenerator>();
+            WalkableTile = floorGenerator.floorTile;
+            tilemap = (Tilemap)gameObject.GetComponentInChildren<Tilemap>();
+        }
 
-        //assign tilemap
-        tilemap = (Tilemap)GameObject.FindWithTag("FloorTileMap").GetComponent("Tilemap");
+        // Check if guide for current floor has already been generated, if so use it
+        if (FloorGuides.ContainsKey(floorNumber))
+        {
+            guide = FloorGuides[floorNumber];
+            Debug.Log("Using previously generated guide for Floor " + floorNumber);
+            return;
+        }
 
-        //create list of walkable tile locations
+        // Reset values for each new floor guide
+        guide = null;
+        walkableTileLocations.Clear();
+        neighborLocations.Clear();
+        i = 0;
+
+        // Create list of walkable tile locations
         foreach (var pos in tilemap.cellBounds.allPositionsWithin)
         {
             Vector3Int localPlace = new Vector3Int(pos.x, pos.y, pos.z);
@@ -37,7 +57,20 @@ public class TileGuide : MonoBehaviour
             }
         }
 
-        //create list of neighbor walkable locations for each walkable tile location
+        // Remove obstacles from walkable locations
+        string obstaclesLog = "Obstacles at ";
+        List<Vector3> obstacleLocations = floorGenerator.GetObstacleLocations();
+        foreach (Vector3 pos in obstacleLocations)
+        {
+            if (walkableTileLocations.Contains(pos))
+            {
+                walkableTileLocations.Remove(pos);
+                obstaclesLog = obstaclesLog + (new Vector2(pos.x, pos.y)) + ", ";
+            }
+        }
+        Debug.Log(obstaclesLog);
+
+        // Create list of neighbor walkable locations for each walkable location
         foreach (Vector3 pos in walkableTileLocations)
         {
             neighborLocations.Add(new List<Vector3>());
@@ -66,8 +99,15 @@ public class TileGuide : MonoBehaviour
             i++;
         }
 
-        //create dictionary
+        // Create dictionary
         guide = walkableTileLocations.Zip(neighborLocations, (Vector3 k, List<Vector3> v) => (k, v)).ToDictionary(x => x.k, x => x.v);
+
+        // Save newly generated guide
+        if (!FloorGuides.ContainsKey(floorNumber))
+        {
+            FloorGuides.Add(floorNumber, guide);
+            Debug.Log("Created save of FloorGuide for floor " + floorNumber);
+        }
     }
 
     public Dictionary<Vector3, List<Vector3>> GetGuide()

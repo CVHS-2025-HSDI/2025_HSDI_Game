@@ -35,7 +35,7 @@ public class FloorGenerator : MonoBehaviour
 
     // Spawn points set during generation
     [HideInInspector] public Vector3Int playerSpawn;
-    [HideInInspector] public Vector3Int merchantSpawn;
+    public Vector3Int merchantSpawn;
 
     // Tracking special elements
     private List<Vector3Int> _placedStairs = new List<Vector3Int>();
@@ -45,6 +45,9 @@ public class FloorGenerator : MonoBehaviour
     private List<Vector3Int> _placedEnemies = new List<Vector3Int>();
     
     private int _nextKeyId = 0;
+
+    // Obstacles
+    private List<Vector3> Obstacles = new List<Vector3>();
 
     private void Awake()
     {
@@ -105,6 +108,14 @@ public class FloorGenerator : MonoBehaviour
         _placedEnemies.Clear();
         _rooms.Clear();
         KeyManager.Instance.ResetKeys();
+
+        // Reset any previous objects
+        foreach (Transform child in dynamicContainer)
+            Destroy(child.gameObject);
+        foreach (Transform child in enemyContainer)
+            Destroy(child.gameObject);
+        foreach (Transform child in objectContainer)
+            Destroy(child.gameObject);
 
         // Fill grid with floor.
         for (int x = 0; x < width; x++)
@@ -170,10 +181,12 @@ public class FloorGenerator : MonoBehaviour
         // Choose spawn rooms.
         Room spawnRoom = ChooseRandomRoomExcluding(bossRoom);
         playerSpawn = new Vector3Int(spawnRoom.Center.x, spawnRoom.Center.y, 0);
-        Room merchantRoom = ChooseRandomRoomExcluding(bossRoom, spawnRoom);
-        if (merchantRoom == null)
-            merchantRoom = spawnRoom;
-        merchantSpawn = new Vector3Int(merchantRoom.Center.x, merchantRoom.Center.y, 0);
+        //Room merchantRoom = ChooseRandomRoomExcluding(bossRoom, spawnRoom);
+        //if (merchantRoom == null)
+        //merchantRoom = spawnRoom;
+        //merchantSpawn = new Vector3Int(merchantRoom.Center.x, merchantRoom.Center.y, 0);
+        //Vector3 merchantWorldPos = floorTilemap.CellToWorld(merchantSpawn) + new Vector3(0.5f, 0.5f, 0);
+        //Obstacles.Add(merchantWorldPos);
 
         // Place stairs.
         if (bossRoom != null)
@@ -198,6 +211,7 @@ public class FloorGenerator : MonoBehaviour
             {
                 Vector3 lecternWorldPos = floorTilemap.CellToWorld(lecternCell) + new Vector3(0.5f, 0.5f, 0);
                 Instantiate(lecternPrefab, lecternWorldPos, Quaternion.identity, objectContainer);
+                Obstacles.Add(lecternWorldPos);
             }
         }
 
@@ -207,6 +221,9 @@ public class FloorGenerator : MonoBehaviour
         List<Vector2Int> enemyPositions = GenerateEnemies(width, height);
 
         floorTilemap.RefreshAllTiles();
+
+        TileGuide tileguide = (TileGuide)transform.GetChild(0).GetComponentInChildren<TileGuide>();
+        tileguide.GenerateGuide(floorNumber);
 
         FloorData data = new FloorData
         {
@@ -500,6 +517,7 @@ public class FloorGenerator : MonoBehaviour
             sc.totalFloors = totalFloors;
         }
         _placedStairs.Add(cellPos);
+        Obstacles.Add(worldPos);
     }
 
     private List<Vector2Int> GenerateKeys(int width, int height, int keyCount)
@@ -549,6 +567,7 @@ public class FloorGenerator : MonoBehaviour
                     Instantiate(chestPrefab, chestWorldPos, Quaternion.identity, dynamicContainer);
                     chestPositions.Add(new Vector2Int(cellPos.x, cellPos.y));
                     _placedChests.Add(cellPos);
+                    Obstacles.Add(chestWorldPos);
                 }
             }
         }
@@ -635,5 +654,10 @@ public class FloorGenerator : MonoBehaviour
         if (cellPos.x < 0 || cellPos.x >= width || cellPos.y < 0 || cellPos.y >= height)
             return false;
         return floorTilemap.GetTile(cellPos) == floorTile;
+    }
+
+    public List<Vector3> GetObstacleLocations()
+    {
+        return Obstacles;
     }
 }
