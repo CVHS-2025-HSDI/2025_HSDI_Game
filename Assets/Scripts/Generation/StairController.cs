@@ -20,7 +20,7 @@ public class StairController : MonoBehaviour
     public Sprite unlockedSprite;
 
     private MasterLevelManager _manager;
-    private bool _unlocked;
+    public bool _unlocked;
     private SpriteRenderer _sr;
     private Collider2D _col;
 
@@ -57,8 +57,6 @@ public class StairController : MonoBehaviour
         _unlocked = false;
         if (_sr != null && lockedSprite != null)
             _sr.sprite = lockedSprite;
-        if (_col != null)
-            _col.enabled = false; // Prevent the player from using the stair
     }
 
     private void UnlockStair()

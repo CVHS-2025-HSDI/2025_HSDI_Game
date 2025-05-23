@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6264316122984505924}
   - component: {fileID: 4852790009565287536}
   - component: {fileID: 6765996355242279020}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Small Health potion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,6 +102,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 6f2b1124162c3054aa1f611b55c6da33, type: 2}
+  savedDamage: 0
+  savedAttackSpeed: 0
+  savedDurability: 0
 --- !u!60 &6765996355242279020
 PolygonCollider2D:
   m_ObjectHideFlags: 0

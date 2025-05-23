@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      placeholer-removebg-preview_0: 3367990100573674801
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
