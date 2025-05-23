@@ -86,10 +86,12 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\ScrollingCredits.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
+    <Compile Include="Assets\Scripts\NPCs\Loaders\TowerSceneLoader.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\Scripts\Generation\RandomSeed.cs" />
     <Compile Include="Assets\Scripts\Player\ItemPickup.cs" />
     <Compile Include="Assets\Scripts\Weapons\XPTextScript.cs" />
+    <Compile Include="Assets\Scripts\NPCs\Loaders\DoorTrigger.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\Weapons\DamageTextScript.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\SingletonManager.cs" />
@@ -98,8 +100,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
-    <Compile Include="Assets\Scripts\Loaders\LoaderManager.cs" />
-    <Compile Include="Assets\Scripts\Loaders\TowerSceneLoader.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenuController.cs" />
@@ -115,6 +115,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInfo.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerStats.cs" />
+    <Compile Include="Assets\PlayerShackTeleport.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu\StartScript.cs" />
     <Compile Include="Assets\Scripts\Objects\LecternManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
-    <Compile Include="Assets\Scripts\Loaders\DoorTrigger.cs" />
+    <Compile Include="Assets\Scripts\NPCs\Loaders\LoaderManager.cs" />
     <Compile Include="Assets\Scripts\Objects\DoorController.cs" />
     <Compile Include="Assets\Scripts\Inventory System\InventorySlot.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerXP.cs" />
