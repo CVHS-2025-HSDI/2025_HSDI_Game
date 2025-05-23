@@ -70,6 +70,10 @@ public class PlayerInfo : MonoBehaviour
         }
     }
 
+    public void Teleport()
+    {
+        gameObject.transform.position = new Vector3(-153f, -6.6f, 0);
+    }
 
     public void damage(float dmg)
     {
@@ -85,11 +89,11 @@ public class PlayerInfo : MonoBehaviour
         textTransform.position = new Vector2(transform.position.x, transform.position.y + 0.8f);
 
         Debug.Log("Player hit for " + dmg + ", health now: " + currentHealth);
-        
+
         Slider HPBar = GetComponentInChildren<Slider>();
         if (HPBar != null)
             HPBar.value = currentHealth;
-            
+
         if (currentHealth <= 0)
             Die();
     }

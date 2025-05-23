@@ -3869,6 +3869,7 @@ MonoBehaviour:
   townCamera: {fileID: 1139367268}
   gameplayCanvas: {fileID: 2353355}
   cutsceneCanvas: {fileID: 1711794580}
+  player: {fileID: 0}
   loadingPanel: {fileID: 1632508400}
   lorePanel: {fileID: 1903928099}
   gameOverPanel: {fileID: 1533009232}
@@ -16286,7 +16287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6895568877816869267, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -149.3
+      value: -149.78
       objectReference: {fileID: 0}
     - target: {fileID: 6895568877816869267, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}
       propertyPath: m_LocalPosition.y

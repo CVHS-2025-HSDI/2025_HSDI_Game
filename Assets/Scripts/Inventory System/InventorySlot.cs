@@ -45,21 +45,28 @@ public class InventorySlot : MonoBehaviour, IDropHandler
         if (selectedItem != null && selectedItem.item.type == Itemtype.Potion){
             PlayerInfo player = FindFirstObjectByType<PlayerInfo>();
             if (player != null){
-                if (player.currentHealth < player.maxHealth){
-                    player.Heal(selectedItem.item.healthAmount); // Heal the player
+                if (selectedItem.item.itemName == "Teleport Potion")
+                        {
+                            player.Teleport(); 
+                        }
+                if (player.currentHealth < player.maxHealth)
+                    {
+                        player.Heal(selectedItem.item.healthAmount); // Heal the player
 
-                    // Decrease item count only if used
-                    selectedItem.count--;
-                    selectedItem.RefreshCount();
+                        // Decrease item count only if used
+                        selectedItem.count--;
+                        selectedItem.RefreshCount();
 
-                    if (selectedItem.count <= 0){
-                        Destroy(selectedItem.gameObject);
-                        InventoryManager.Instance.selectedItem = null;
+                        if (selectedItem.count <= 0)
+                        {
+                            Destroy(selectedItem.gameObject);
+                            InventoryManager.Instance.selectedItem = null;
+                        }
                     }
-                }
-                else {
-                    Debug.Log("Player already has max health. Potion not used.");
-                }
+                    else
+                    {
+                        Debug.Log("Player already has max health. Potion not used.");
+                    }
             }
         }
     }
