@@ -72386,9 +72386,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1546028588}
-  - component: {fileID: 1546028586}
   - component: {fileID: 1546028590}
   - component: {fileID: 1546028589}
+  - component: {fileID: 1546028591}
   m_Layer: 0
   m_Name: DoorTrigger
   m_TagString: Untagged
@@ -72396,21 +72396,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1546028586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1546028585}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d83fd0d51660ce48a8ad2488f6d03c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneToLoad: TowerFloorTemplate
-  startTowerMode: 0
-  fadeDuration: 0.5
 --- !u!4 &1546028588
 Transform:
   m_ObjectHideFlags: 0
@@ -72499,6 +72484,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1546028591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1546028585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d83fd0d51660ce48a8ad2488f6d03c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneToLoad: TowerFloorTemplate
+  startTowerMode: 0
+  fadeDuration: 0.5
 --- !u!1 &1822615637
 GameObject:
   m_ObjectHideFlags: 0
