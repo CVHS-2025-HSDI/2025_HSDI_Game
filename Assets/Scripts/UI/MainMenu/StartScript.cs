@@ -115,6 +115,7 @@ public class StartScript : MonoBehaviour
             if (currentEventSystem != null)
                 currentEventSystem.SetActive(false);
             var eventSys = SingletonManager.Instance.eventSystem;
+            EnableGameplayUI();
             if (eventSys != null)
                 eventSys.SetActive(true);
         }
@@ -125,7 +126,7 @@ public class StartScript : MonoBehaviour
         // SetupGameplayAndTower();
     }
     
-    public void SetupGameplayAndTower()
+    private void SetupGameplayAndTower()
     {
         // --- 7) Enable the GameplayCanvas & elements ---
         if (SingletonManager.Instance != null && LoadingUI.Instance != null)
@@ -168,5 +169,32 @@ public class StartScript : MonoBehaviour
             mlm.GenerateAndLoadFloor(1, true);
         }
         else Debug.LogError("MasterLevelManager instance not found!");
+    }
+    
+    private void EnableGameplayUI()
+    {
+        var sm = SingletonManager.Instance;
+        if (sm == null) return;
+
+        // 1) Gameplay canvas + the pieces we care about
+        var gameplayCanvas = sm.gameplayCanvas;
+        if (gameplayCanvas != null)
+        {
+            gameplayCanvas.gameObject.SetActive(true);
+
+            // turn on individual elements only
+            gameplayCanvas.transform.Find("SprintSlider") ?.gameObject.SetActive(true);
+            gameplayCanvas.transform.Find("HealthSlider") ?.gameObject.SetActive(true);
+            gameplayCanvas.transform.Find("ShowMainInventory") ?.gameObject.SetActive(true);
+            gameplayCanvas.transform.Find("Toolbar") ?.gameObject.SetActive(true);
+            gameplayCanvas.transform.Find("LorePanel") ?.gameObject.SetActive(true);
+        }
+
+        sm.showCharacter?.gameObject.SetActive(true);
+        sm.xpText       ?.gameObject.SetActive(true);
+
+        // 2) event-system swap
+        if (currentEventSystem != null) currentEventSystem.SetActive(false);
+        sm.eventSystem                             ?.SetActive(true);
     }
 }
