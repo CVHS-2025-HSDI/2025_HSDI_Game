@@ -196,12 +196,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loottable:
   - itemPrefab: {fileID: 5749503234137807272, guid: f1770140230236942aa7f2aef187f309, type: 3}
-    dropChance: 10
-  - itemPrefab: {fileID: 1246066484327741191, guid: 727e21acb3776d441909f426c3e3c2e7, type: 3}
-    dropChance: 60
+    dropChance: 5
+  - itemPrefab: {fileID: 5580773922336161148, guid: 33d79ee6fd555b648be28e8763d222ed, type: 3}
+    dropChance: 5
   - itemPrefab: {fileID: 8991703741331775527, guid: bfea552053952594a8558ec4d0193541, type: 3}
     dropChance: 40
   - itemPrefab: {fileID: 4288997443986801281, guid: 819adabc2ae42174996e672eb9b49559, type: 3}
     dropChance: 50
+  - itemPrefab: {fileID: 1246066484327741191, guid: 727e21acb3776d441909f426c3e3c2e7, type: 3}
+    dropChance: 60
+  - itemPrefab: {fileID: 6166950606944293447, guid: 4d09939f85d6a8349b16f122a8348975, type: 3}
+    dropChance: 80
   spawnRadius: 1
   playerTarget: {fileID: 166486416587655812, guid: 8ee982dd704729248a0aa4a6e5658b36, type: 3}

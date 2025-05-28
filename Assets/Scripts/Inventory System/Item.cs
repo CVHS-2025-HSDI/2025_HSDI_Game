@@ -8,7 +8,7 @@ public class Item : ScriptableObject{
     ///[Header ("GAMEPLAY")]
     public Itemtype type;
     public Actiontype actionType;
-        public Vector2Int range = new Vector2Int(5,4);
+    public Vector2Int range = new Vector2Int(5,4);
 
     //[Header ("ONLY UI")] 
     public bool stackable = true;
@@ -19,6 +19,7 @@ public class Item : ScriptableObject{
     public int healthAmount = 0;
     public int stackCount = 0;
     public GameObject itemPrefab;  
+    public GameObject worldDropPrefab; 
 }
     
     public enum Itemtype{

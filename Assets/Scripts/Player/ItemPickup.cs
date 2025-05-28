@@ -3,6 +3,12 @@ using UnityEngine;
 public class ItemPickup : MonoBehaviour
 {
     public Item item; // Assign the item in the Inspector
+
+
+    public int savedDamage;
+    public float savedAttackSpeed;
+    public int savedDurability;
+
     private InventoryManager _inventory;
     private void Start()
     {
@@ -19,7 +25,16 @@ public class ItemPickup : MonoBehaviour
     {
         if (other.CompareTag("Player") && _inventory != null) // Ensure only the player picks up items
         {
-            bool added = _inventory.AddItem(item);
+            bool added;
+            if (savedDurability > 0)
+            {
+                added = _inventory.AddItem(item, savedDamage, savedAttackSpeed, savedDurability);
+            }
+            else
+            {
+                added = _inventory.AddItem(item);
+            }
+
             if (added)
             {
                 Destroy(gameObject); // Remove the item from the world

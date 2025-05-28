@@ -16,4 +16,9 @@ MonoBehaviour:
   actionType: 0
   range: {x: 5, y: 4}
   stackable: 1
-  image: {fileID: 0}
+  image: {fileID: -3497705377561342267, guid: 229f6611d0e398147ab3194376be1620, type: 3}
+  itemName: Arrow
+  healthAmount: 0
+  stackCount: 10
+  itemPrefab: {fileID: 6166950606944293447, guid: 4d09939f85d6a8349b16f122a8348975, type: 3}
+  worldDropPrefab: {fileID: 0}

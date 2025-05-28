@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7225729355845519015}
   - component: {fileID: 7577068939160663475}
   - component: {fileID: 186013309401913621}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: HealthItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,3 +174,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 88a66972e6caa5f47a1e40408f2f200f, type: 2}
+  savedDamage: 0
+  savedAttackSpeed: 0
+  savedDurability: 0

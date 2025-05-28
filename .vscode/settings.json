@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "2025_HDSI_Game.sln"
+    "dotnet.defaultSolution": "2025_HSDI_Game.sln"
 }

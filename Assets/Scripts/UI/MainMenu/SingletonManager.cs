@@ -14,11 +14,17 @@ public class SingletonManager : MonoBehaviour
     [Tooltip("Bedroom Camera.")] 
     public Camera bedroomCamera;
     
+    [Tooltip("Town Camera.")] 
+    public Camera townCamera;
+
     [Tooltip("Reference to the Gameplay Canvas in the scene.")]
     public Canvas gameplayCanvas;
 
     [Tooltip("Reference to the CutsceneCanvas.")]
     public Canvas cutsceneCanvas;
+    
+    [Tooltip("Reference to the Player.")]
+    public GameObject player;
     
     [Tooltip("Reference to Loading Panel.")]
     public GameObject loadingPanel;

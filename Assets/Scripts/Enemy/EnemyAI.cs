@@ -73,25 +73,18 @@ public class EnemyAI : MonoBehaviour
 
         // Get TileGuide
         GameObject tilemap = GameObject.FindWithTag("FloorTileMap");
-        if (tilemap == null)
-        {
-            Debug.Log("Tilemap not found, apply tag");
-        }
-        else
-        {
-            tileGuide = (TileGuide)tilemap.GetComponentInParent<TileGuide>();
-            if (tileGuide == null)
-            {
-                Debug.Log("TileGuide script not found, apply to floor grid");
-            }
-        }
+        tileGuide = (TileGuide)tilemap.GetComponentInParent<TileGuide>();
     }
 
     void Update()
     {
-        if (guide == null && tileGuide != null && tileGuide.GetGuide() != null) // Wait for guide to be generated
+        if (guide == null && tileGuide.GetGuide() != null) // Wait for guide to be generated
         {
             guide = tileGuide.GetGuide();
+        }
+        else if (tileGuide.GetGuide() == null)
+        {
+            Debug.Log("GUIDE NOT YET GENERATED");
         }
 
         if (isFrozen)
@@ -151,15 +144,10 @@ public class EnemyAI : MonoBehaviour
 
             if (isPathFinding) // pathfinding aggro state
             {
-                if (path == null)
-                {
-                    Debug.Log("Null path, exit pathfind");
-                    isPathFinding = false;
-                    return;
-                }
                 if ((it == path.Count - 1 && Mathf.Abs(nextPos.x - Pos.x) <= 0.1 && Mathf.Abs(nextPos.y - Pos.y) <= 0.1) || TargetSight) // if desitnation reached or target sighted, exit pathfind
                 {
                     isPathFinding = false;
+                    Debug.Log("exit pathfind");
                 }
 
                 // move along best route to player
@@ -176,13 +164,20 @@ public class EnemyAI : MonoBehaviour
                 if (!TargetSight) // if lost sight of player, enter pathfinding
                 {
                     rb.linearVelocity = Vector2.zero;
-                    isPathFinding = true;
                     path = FindPathBFS(Pos, targetPos, guide);
-                    it = 0;
-                    if ((path[0].x > Pos.x && path[1].x < Pos.x) || (path[0].x < Pos.x && path[1].x > Pos.x) ||
-                        (path[0].y > Pos.y && path[1].y < Pos.y) || (path[0].y < Pos.y && path[1].y > Pos.y)) // make sure we don't move backwards
+                    if (path == null)
                     {
-                        it = 1;
+                        Debug.Log("Null path, cannot enter pathfinding");
+                    }
+                    else
+                    {
+                        isPathFinding = true;
+                        it = 0;
+                        if (path[1] != null && ((path[0].x > Pos.x && path[1].x < Pos.x) || (path[0].x < Pos.x && path[1].x > Pos.x) ||
+                            (path[0].y > Pos.y && path[1].y < Pos.y) || (path[0].y < Pos.y && path[1].y > Pos.y))) // make sure we don't move backwards
+                        {
+                            it = 1;
+                        }
                     }
                 }
 
@@ -296,6 +291,30 @@ public class EnemyAI : MonoBehaviour
         else
         {
             start.y = -0.5f + (float)((int)start.y);
+        }
+
+        if (!graph.ContainsKey(start)) // fix start location if invalid
+        {
+            Vector3 PushDirection = ((goal) - (start)).normalized;
+            if (PushDirection.x > 0)
+            {
+                PushDirection.x = 1;
+            }
+            else
+            {
+                PushDirection.x = -1;
+            }
+            if (PushDirection.y > 0)
+            {
+                PushDirection.y = 1;
+            }
+            else
+            {
+                PushDirection.y = -1;
+            }
+            start.x = start.x + PushDirection.x;
+            start.y = start.y + PushDirection.y;
+            Debug.Log("INVALID location, pushed back");
         }
 
         queue.Enqueue(start);
