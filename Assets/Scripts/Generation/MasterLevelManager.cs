@@ -128,10 +128,10 @@ public class MasterLevelManager : MonoBehaviour
             floorsData[_currentFloorNumber] = generatedData;
 
             Vector3 playerSpawnWorld = floorGen.floorTilemap.CellToWorld(generatedData.playerSpawn) + new Vector3(0.5f, 0.5f, 0);
-            Vector3 merchantSpawnWorld = floorGen.floorTilemap.CellToWorld(generatedData.merchantSpawn) + new Vector3(0.5f, 0.5f, 0);
+            // Vector3 merchantSpawnWorld = floorGen.floorTilemap.CellToWorld(generatedData.merchantSpawn) + new Vector3(0.5f, 0.5f, 0);
 
             player = GameObject.FindWithTag("Player");
-            merchant = GameObject.FindWithTag("Merchant");
+            // merchant = GameObject.FindWithTag("Merchant");
 
             if (player == null)
             {
@@ -143,15 +143,15 @@ public class MasterLevelManager : MonoBehaviour
                 player.transform.position = playerSpawnWorld;
             }
             
-            if (merchant == null && _isFirstFloorLoad)
-            {
-                merchant = Instantiate(merchantPrefab, merchantSpawnWorld, Quaternion.identity);
-                merchant.tag = "Merchant";
-            }
-            else if (_isFirstFloorLoad)
-            {
-                merchant.transform.position = merchantSpawnWorld;
-            }
+            // if (merchant == null && _isFirstFloorLoad)
+            // {
+            //     merchant = Instantiate(merchantPrefab, merchantSpawnWorld, Quaternion.identity);
+            //     merchant.tag = "Merchant";
+            // }
+            // else if (_isFirstFloorLoad)
+            // {
+            //     merchant.transform.position = merchantSpawnWorld;
+            // }
 
             CameraFollow camFollow = FindAnyObjectByType<CameraFollow>();
             if (camFollow != null && player != null)

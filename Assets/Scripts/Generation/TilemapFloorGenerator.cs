@@ -507,18 +507,27 @@ public class FloorGenerator : MonoBehaviour
 
     private void CreateStairObject(Vector3Int cellPos, GameObject prefab, StairType stairType, int floorNumber, int totalFloors)
     {
+        // only place stairs on actual floor tiles
+        if (floorTilemap.GetTile(cellPos) != floorTile)
+        {
+            Debug.LogWarning($"[FloorGenerator] Tried to place {stairType} stair at {cellPos}, but it's not a floor tile.");
+            return;
+        }
+        
         Vector3 worldPos = floorTilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
         GameObject stairObj = Instantiate(prefab, worldPos, Quaternion.identity, objectContainer);
-        StairController sc = stairObj.GetComponent<StairController>();
-        if (sc != null)
+
+        if (stairObj.TryGetComponent<StairController>(out var sc))
         {
-            sc.stairType = stairType;
+            sc.stairType    = stairType;
             sc.currentFloor = floorNumber;
-            sc.totalFloors = totalFloors;
+            sc.totalFloors  = totalFloors;
         }
+
         _placedStairs.Add(cellPos);
         Obstacles.Add(worldPos);
     }
+
 
     private List<Vector2Int> GenerateKeys(int width, int height, int keyCount)
     {
